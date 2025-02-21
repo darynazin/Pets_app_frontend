@@ -44,30 +44,38 @@ export const deleteAppointment = (appointmentId) =>
 // Image Upload APIs
 export const uploadPetImage = async (petId, file) => {
   const formData = new FormData();
-  formData.append("image", file);
+  formData.append("file", file);
   return api.post(`/pets/${petId}/image`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+    headers: {},
+    withCredentials: true,
   });
 };
 
 export const uploadUserImage = async (userId, file) => {
   const formData = new FormData();
-  formData.append("image", file);
-  return api.post(`/users/${userId}/image`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+  formData.append("file", file);
+  return api.post(`/pets/${petId}/image`, formData, {
+    headers: {},
+    withCredentials: true,
   });
 };
 
 export const uploadDoctorImage = async (doctorId, file) => {
   const formData = new FormData();
-  formData.append("image", file);
-  return api.post(`/doctors/${doctorId}/image`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+  formData.append("file", file);
+  return api.post(`/pets/${petId}/image`, formData, {
+    headers: {},
+    withCredentials: true,
   });
 };
+
+// Error interceptor
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);

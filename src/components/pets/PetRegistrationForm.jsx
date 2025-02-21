@@ -26,14 +26,6 @@ const PetRegistrationForm = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -44,7 +36,16 @@ const PetRegistrationForm = () => {
       const petId = response.data._id;
 
       if (imageFile) {
-        await uploadPetImage(petId, imageFile);
+        try {
+          const imageResponse = await uploadPetImage(petId, imageFile);
+          console.log(
+            "Image uploaded successfully:",
+            imageResponse.data.imageUrl
+          );
+        } catch (imageError) {
+          console.error("Image upload failed:", imageError);
+          setError("Pet created but image upload failed");
+        }
       }
 
       await fetchPets();
@@ -53,6 +54,25 @@ const PetRegistrationForm = () => {
       setError(err.response?.data?.message || "Failed to register pet");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
+        setError("Please upload a valid image file (JPEG, PNG)");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        setError("File size should be less than 5MB");
+        return;
+      }
+
+      setImageFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setError("");
     }
   };
 
