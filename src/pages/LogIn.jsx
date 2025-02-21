@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 function LogIn() {
   const navigate = useNavigate();
-  const { login, register } = useUser();
+  const { login, register, fetchUser } = useUser();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,6 +21,7 @@ function LogIn() {
   const handleLogin = async (e) => {
     e.preventDefault();
     login(formData);
+    fetchUser();
     navigate("/mypets")
   };
 
