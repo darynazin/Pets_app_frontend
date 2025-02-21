@@ -24,6 +24,8 @@ function App() {
                   <Route path="/login" element={<LogIn />} />
                   <Route path="/mypets" element={<MyPets />} />
                   <Route path="/emergency" element={<Emergency />} />
+                  {/* <Route path="/pet/:id" element={<PetUpdate />} />
+                  <Route path="/appointments/:id" element={<AppointmentUpdate />} /> */}
                 </Route>
               </Routes>
             </Router>

@@ -24,22 +24,29 @@ function Header() {
           </Link>
         </div>
         <div className="navbar-end">
-          <Link to="/" className="link link-hover px-4 min-w-max">
-            Are you a vet?
-          </Link>
           {user ? (
-            <button onClick={logout} className="btn btn-neutral">
+            <button
+              onClick={() => {
+                logout;
+              }}
+              className="btn btn-neutral"
+            >
               Logout
             </button>
           ) : (
-            <div className="flex gap-2">
-              <Link to="/login" className="btn btn-neutral">
-                Log In
+            <>
+              <Link to="/" className="link link-hover px-4 min-w-max">
+                Are you a vet?
               </Link>
-              <Link to="/signup" className="btn btn-neutral">
-                Sign Up
-              </Link>
-            </div>
+              <div className="flex gap-2">
+                <Link to="/login" className="btn btn-neutral">
+                  Log In
+                </Link>
+                <Link to="/signup" className="btn btn-neutral">
+                  Sign Up
+                </Link>
+              </div>
+            </>
           )}
         </div>
       </div>
