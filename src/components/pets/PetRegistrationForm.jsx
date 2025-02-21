@@ -14,7 +14,7 @@ const PetRegistrationForm = () => {
     additionalNotes: "",
   });
   const [imageFile, setImageFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null); // Add this state
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -42,16 +42,25 @@ const PetRegistrationForm = () => {
             "Image uploaded successfully:",
             imageResponse.data.imageUrl
           );
+
+          if (!imageResponse.data.imageUrl) {
+            throw new Error("No image URL received from server");
+          }
         } catch (imageError) {
           console.error("Image upload failed:", imageError);
-          setError("Pet created but image upload failed");
+          setError(
+            `Pet created but image upload failed: ${imageError.message}`
+          );
         }
       }
 
       await fetchPets();
       navigate("/mypets");
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to register pet");
+      const errorMessage =
+        err.response?.data?.message || err.message || "Failed to register pet";
+      setError(errorMessage);
+      console.error("Registration error:", err);
     } finally {
       setLoading(false);
     }

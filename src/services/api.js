@@ -45,7 +45,7 @@ export const deleteAppointment = (appointmentId) =>
 export const uploadPetImage = async (petId, file) => {
   const formData = new FormData();
   formData.append("file", file);
-  return api.post(`/pets/${petId}/image`, formData, {
+  return api.post(`/upload/pets/${petId}/image`, formData, {
     headers: {},
     withCredentials: true,
   });
@@ -54,7 +54,7 @@ export const uploadPetImage = async (petId, file) => {
 export const uploadUserImage = async (userId, file) => {
   const formData = new FormData();
   formData.append("file", file);
-  return api.post(`/pets/${petId}/image`, formData, {
+  return api.post(`/upload/users/${userId}/image`, formData, {
     headers: {},
     withCredentials: true,
   });
@@ -63,7 +63,7 @@ export const uploadUserImage = async (userId, file) => {
 export const uploadDoctorImage = async (doctorId, file) => {
   const formData = new FormData();
   formData.append("file", file);
-  return api.post(`/pets/${petId}/image`, formData, {
+  return api.post(`/upload/doctors/${doctorId}/image`, formData, {
     headers: {},
     withCredentials: true,
   });
