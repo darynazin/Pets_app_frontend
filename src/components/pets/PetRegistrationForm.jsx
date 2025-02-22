@@ -10,7 +10,7 @@ const PetRegistrationForm = () => {
     name: "",
     species: "",
     breed: "",
-    age: "",
+    birthDate: "",
     additionalNotes: "",
   });
   const [imageFile, setImageFile] = useState(null);
@@ -32,7 +32,11 @@ const PetRegistrationForm = () => {
     setError("");
 
     try {
-      const response = await createPet(formData);
+      const petData = {
+        ...formData,
+        age: calculateAge(formData.birthDate),
+      };
+      const response = await createPet(petData);
       const petId = response.data._id;
 
       if (imageFile) {
@@ -83,6 +87,22 @@ const PetRegistrationForm = () => {
       setPreviewUrl(URL.createObjectURL(file));
       setError("");
     }
+  };
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
   };
 
   return (
@@ -152,16 +172,24 @@ const PetRegistrationForm = () => {
 
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Age</span>
+          <span className="label-text">Birth Date</span>
         </label>
         <input
-          type="number"
-          name="age"
-          value={formData.age}
+          type="date"
+          name="birthDate"
+          value={formData.birthDate}
           onChange={handleInputChange}
           className="input input-bordered"
+          max={new Date().toISOString().split("T")[0]} // Prevents future dates
           required
         />
+        {formData.birthDate && (
+          <label className="label">
+            <span className="label-text-alt">
+              Calculated Age: {calculateAge(formData.birthDate)} years
+            </span>
+          </label>
+        )}
       </div>
 
       <div className="form-control">
