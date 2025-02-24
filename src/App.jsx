@@ -4,7 +4,7 @@ import SignUp from "./pages/SignUp.jsx";
 import LogIn from "./pages/LogIn.jsx";
 import MyPets from "./pages/MyPets.jsx";
 import Emergency from "./pages/Emergency";
-import PetRegistrationPage from "./pages/PetRegistrationPage.jsx";
+// import PetRegistrationPage from "./pages/PetRegistrationPage.jsx";
 import Layout from "./components/Layout.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
@@ -13,31 +13,31 @@ import { AppointmentProvider } from "./contexts/AppointmentContext.jsx";
 
 function App() {
   return (
-    <UserProvider>
-      <DoctorProvider>
-        <PetProvider>
-          <AppointmentProvider>
-            <Router>
+    <Router>
+      <UserProvider>
+        <DoctorProvider>
+          <PetProvider>
+            <AppointmentProvider>
               <Routes>
                 <Route path="/" element={<Layout />}>
                   <Route index element={<Home />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/login" element={<LogIn />} />
                   <Route path="/mypets" element={<MyPets />} />
-                  <Route
+                  {/* <Route
                     path="/mypets/register"
                     element={<PetRegistrationPage />}
-                  />
+                  /> */}
                   <Route path="/emergency" element={<Emergency />} />
                   {/* <Route path="/pet/:id" element={<PetUpdate />} />
                   <Route path="/appointments/:id" element={<AppointmentUpdate />} /> */}
                 </Route>
               </Routes>
-            </Router>
-          </AppointmentProvider>
-        </PetProvider>
-      </DoctorProvider>
-    </UserProvider>
+            </AppointmentProvider>
+          </PetProvider>
+        </DoctorProvider>
+      </UserProvider>
+    </Router>
   );
 }
 

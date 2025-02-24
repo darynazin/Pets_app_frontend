@@ -1,92 +1,70 @@
-const AuthForm = ({
-  isRegistering,
-  formData,
-  setFormData,
-  onSubmit,
-  toggleForm,
-}) => {
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Link } from "react-router-dom";
+
+const AuthForm = ({ isRegistering, onSubmit, error }) => {
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
-      <h2 className="text-2xl font-semibold text-center">
-        {isRegistering ? 'Register' : 'Login'}
-      </h2>
+    <Formik
+      initialValues={{ name: "", email: "", password: "", image: null }}
+      onSubmit={onSubmit}
+    >
+      {({ setFieldValue, isSubmitting }) => (
+        <Form className="space-y-6">
+          <h2 className="text-2xl font-semibold text-center">
+            {isRegistering ? "Register" : "Login"}
+          </h2>
+          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+          {isRegistering && (
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label>
+              <Field type="text" name="name" className="w-full input input-bordered" />
+              <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
+            </div>
+          )}
 
-      {isRegistering && (
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Name</span>
-          </label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Name"
-            className="w-full input input-bordered"
-            required
-          />
-        </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
+            <Field type="email" name="email" className="w-full input input-bordered" />
+            <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Password</span>
+            </label>
+            <Field type="password" name="password" className="w-full input input-bordered" />
+            <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          {isRegistering && (
+            <label className="form-control w-full max-w-s mb-4">
+              <div className="label">
+                <span className="label-text">Pick a photo</span>
+              </div>
+              <input
+                type="file"
+                className="file-input file-input-bordered file-input-primary w-full max-w-s"
+                onChange={(e) => setFieldValue("image", e.target.files[0])}
+              />
+            </label>
+          )}
+
+          <button type="submit" className="w-full btn btn-primary" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : isRegistering ? "Register" : "Login"}
+          </button>
+          <p className="mt-4 text-center">
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-blue-800">
+            Sign up
+          </Link>{" "}
+          here!{" "}
+        </p>
+        </Form>
       )}
-
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text">Email</span>
-        </label>
-        <input
-          type="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          placeholder="Email"
-          className="w-full input input-bordered"
-          required
-        />
-      </div>
-
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text">Password</span>
-        </label>
-        <input
-          type="password"
-          value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
-          placeholder="Password"
-          className="w-full input input-bordered"
-          required
-        />
-      </div>
-
-      {isRegistering && (
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Profile Image URL</span>
-          </label>
-          <input
-            type="text"
-            value={formData.image}
-            onChange={(e) =>
-              setFormData({ ...formData, image: e.target.value })
-            }
-            placeholder="Image URL"
-            className="w-full input input-bordered"
-          />
-        </div>
-      )}
-
-      <button type="submit" className="w-full btn btn-primary">
-        {isRegistering ? 'Register' : 'Login'}
-      </button>
-
-      <p
-        className="mt-2 text-center cursor-pointer text-blue-500"
-        onClick={toggleForm}
-      >
-        {isRegistering
-          ? 'Already have an account? Login'
-          : 'Do not have an account? Register'}
-      </p>
-    </form>
+    </Formik>
   );
 };
 
