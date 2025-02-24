@@ -21,6 +21,13 @@ export const UserProvider = ({ children }) => {
   const fetchUser = async () => {
     try {
       setLoading(true);
+      
+      const sessionResponse = await getSession();
+      if (!sessionResponse.data.authenticated) {
+        setUser(null);
+        return;
+      }
+  
       const { data } = await getUser();
       setUser(data);
     } catch (err) {
@@ -36,12 +43,15 @@ export const UserProvider = ({ children }) => {
       try {
         const response = await getSession();
         if (response.data.authenticated) {
-          setUser(response.data.user);
+          fetchUser();
         } else {
           setUser(null);
+          setLoading(false);
         }
       } catch (error) {
+        console.error( error);
         setUser(null);
+        setLoading(false);
       }
     };
     checkSession();
