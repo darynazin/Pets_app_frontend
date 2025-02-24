@@ -35,7 +35,6 @@ export const UserProvider = ({ children }) => {
     const checkSession = async () => {
       try {
         const response = await getSession();
-        console.log(response.data.user);
         if (response.data.authenticated) {
           setUser(response.data.user);
         } else {
@@ -52,10 +51,10 @@ export const UserProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await loginUser(credentials);
-      setUser(response.data.session.user);
-      setMessage("Login successful!");
+      setUser(response.data.user);
       navigate("/mypets");
     } catch (err) {
+      console.error("Login failed:", err);
       setError("Invalid email or password", err);
     } finally {
       setLoading(false);

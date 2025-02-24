@@ -3,10 +3,6 @@ import { useUser } from '../contexts/UserContext';
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import AuthForm from '../components/AuthForm';
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
 
 function SignUp() {
   const navigate = useNavigate();
