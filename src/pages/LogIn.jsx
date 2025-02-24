@@ -15,7 +15,6 @@ function LogIn() {
 
   const handleLogin = async (values) => {
     await login(values);
-    if (!error) fetchUser();
   };
 
   return (

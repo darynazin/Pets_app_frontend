@@ -10,6 +10,7 @@ import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
 import { AppointmentProvider } from "./contexts/AppointmentContext.jsx";
+import SearchVet from "./pages/SearchVet.jsx";
 
 function App() {
   return (
@@ -24,10 +25,8 @@ function App() {
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/login" element={<LogIn />} />
                   <Route path="/mypets" element={<MyPets />} />
-                  <Route
-                    path="/mypets/register"
-                    element={<PetRegistrationPage />}
-                  />
+                  <Route path="/" element={<PetRegistrationPage />} />
+                  <Route path="/search" element={<SearchVet />} />
                   <Route path="/emergency" element={<Emergency />} />
                   {/* <Route path="/pet/:id" element={<PetUpdate />} />
                   <Route path="/appointments/:id" element={<AppointmentUpdate />} /> */}

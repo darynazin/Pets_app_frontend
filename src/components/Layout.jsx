@@ -8,20 +8,20 @@ const Layout = () => {
   const { loading } = useUser();  // Destructure loading state
   const [isReady, setIsReady] = useState(false);
 
-  // useEffect(() => {
-  //   if (!loading) {
-  //     setIsReady(true);
-  //   }
-  // }, [loading]);
+  useEffect(() => {
+    if (!loading) {
+      setIsReady(true);
+    }
+  }, [loading]);
 
-  // if (!isReady) {
-  //   return <div>Loading...</div>;
-  // }
+  if (!isReady) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <Outlet />
+      <Outlet className="flex-grow flex" />
       <Footer />
     </div>
   );
