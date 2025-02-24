@@ -33,19 +33,13 @@ const PetRegistrationForm = () => {
 
     try {
       const response = await createPet(formData);
+      console.log("Pet created:", response.data);
       const petId = response.data._id;
 
       if (imageFile) {
         try {
           const imageResponse = await uploadPetImage(petId, imageFile);
-          console.log(
-            "Image uploaded successfully:",
-            imageResponse.data.imageUrl
-          );
-
-          if (!imageResponse.data.imageUrl) {
-            throw new Error("No image URL received from server");
-          }
+          console.log("Image upload response:", imageResponse.data);
         } catch (imageError) {
           console.error("Image upload failed:", imageError);
           setError(

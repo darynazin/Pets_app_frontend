@@ -46,8 +46,11 @@ export const deleteAppointment = (appointmentId) =>
 export const uploadPetImage = async (petId, file) => {
   const formData = new FormData();
   formData.append("file", file);
+
   return api.post(`/upload/pets/${petId}/image`, formData, {
-    headers: {},
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     withCredentials: true,
   });
 };
@@ -69,14 +72,3 @@ export const uploadDoctorImage = async (doctorId, file) => {
     withCredentials: true,
   });
 };
-
-// // Error interceptor
-// api.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response?.status === 401) {
-//       window.location.href = "/login";
-//     }
-//     return Promise.reject(error);
-//   }
-// );
