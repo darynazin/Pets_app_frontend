@@ -7,7 +7,25 @@ const api = axios.create({
 });
 
 // User APIs
-export const registerUser = (userData) => api.post("/users", userData);
+export const registerUser = (userData) => {
+  const formData = new FormData();
+
+  Object.keys(userData).forEach((key) => {
+    if (key !== "image") {
+      formData.append(key, userData[key]);
+    }
+  });
+
+  if (userData.image) {
+    formData.append("file", userData.image);
+  }
+
+  return api.post("/users", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 export const loginUser = (credentials) => api.post("/users/login", credentials);
 export const logoutUser = () => api.post("/users/logout");
 export const getUser = () => api.get("/users/me");
@@ -30,6 +48,7 @@ export const createPet = (petData) => api.post("/pets", petData);
 export const getMyPets = () => api.get("/pets");
 export const getPetById = (petId) => api.get(`/pets/${petId}`);
 export const updatePet = (petData) => api.put("/pets", petData);
+export const deletePet = (petId) => api.delete(`/pets/${petId}`);
 
 // Appointment APIs
 export const getUserAppointments = () => api.get("/appointments");

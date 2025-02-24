@@ -9,6 +9,7 @@ import {
   updateUser,
   deleteUser,
   getSession,
+  uploadUserImage,
 } from "../services/api";
 
 const UserContext = createContext();
@@ -74,11 +75,23 @@ export const UserProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       setLoading(true);
-      await registerUser(userData);
+
+      const response = await registerUser(userData);
+      const userId = response.data._id;
+
+      if (userData.image) {
+        try {
+          await uploadUserImage(userId, userData.image);
+        } catch (imageError) {
+          console.error("Image upload failed:", imageError);
+        }
+      }
+
       const { data } = await getUser();
       setUser(data);
     } catch (err) {
       console.error("Registration failed:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
