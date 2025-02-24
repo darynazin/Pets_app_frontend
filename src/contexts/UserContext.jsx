@@ -35,6 +35,7 @@ export const UserProvider = ({ children }) => {
     const checkSession = async () => {
       try {
         const response = await getSession();
+        console.log(response.data.user);
         if (response.data.authenticated) {
           setUser(response.data.user);
         } else {
