@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createPet, uploadPetImage } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { usePet } from "../../contexts/PetContext";
+import { formatDateForInput, formatDateForAPI } from "../../utils/dateUtils";
 
 const PetRegistrationForm = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const PetRegistrationForm = () => {
     name: "",
     species: "",
     breed: "",
-    age: "",
+    birthDate: formatDateForInput(new Date()),
     additionalNotes: "",
   });
   const [imageFile, setImageFile] = useState(null);
@@ -32,7 +33,11 @@ const PetRegistrationForm = () => {
     setError("");
 
     try {
-      const response = await createPet(formData);
+      const petData = {
+        ...formData,
+        birthDate: formatDateForAPI(formData.birthDate),
+      };
+      const response = await createPet(petData);
       console.log("Pet created:", response.data);
       const petId = response.data._id;
 
@@ -146,14 +151,15 @@ const PetRegistrationForm = () => {
 
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Age</span>
+          <span className="label-text">Birth Date</span>
         </label>
         <input
-          type="number"
-          name="age"
-          value={formData.age}
+          type="date"
+          name="birthDate"
+          value={formData.birthDate}
           onChange={handleInputChange}
           className="input input-bordered"
+          max={new Date().toISOString().split("T")[0]}
           required
         />
       </div>

@@ -48,6 +48,7 @@ export const createPet = (petData) => api.post("/pets", petData);
 export const getMyPets = () => api.get("/pets");
 export const getPetById = (petId) => api.get(`/pets/${petId}`);
 export const updatePet = (petData) => api.put("/pets", petData);
+export const deletePet = (petId) => api.delete(`/pets/${petId}`);
 
 // Appointment APIs
 export const getUserAppointments = () => api.get("/appointments");

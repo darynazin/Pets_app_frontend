@@ -1,5 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getMyPets, createPet, updatePet, getPetById } from "../services/api";
+import {
+  getMyPets,
+  createPet,
+  updatePet,
+  getPetById,
+  deletePet as apiDeletePet,
+} from "../services/api";
 
 const PetContext = createContext();
 
@@ -23,7 +29,7 @@ export const PetProvider = ({ children }) => {
     try {
       setLoading(true);
       const { data } = await createPet(petData);
-      setPets((prevPets) => [...prevPets, data]); // Add the new pet to the state
+      setPets((prevPets) => [...prevPets, data]);
     } catch (err) {
       console.error("Failed to add pet:", err);
     } finally {
@@ -37,7 +43,7 @@ export const PetProvider = ({ children }) => {
       const { data } = await updatePet(petData);
       setPets((prevPets) =>
         prevPets.map((pet) => (pet._id === data._id ? data : pet))
-      ); // Update the pet in the state
+      );
     } catch (err) {
       console.error("Failed to edit pet:", err);
     } finally {
@@ -57,9 +63,31 @@ export const PetProvider = ({ children }) => {
     }
   };
 
+  const deletePet = async (petId) => {
+    try {
+      setLoading(true);
+      await apiDeletePet(petId);
+      setPets((prevPets) => prevPets.filter((pet) => pet._id !== petId));
+      return true;
+    } catch (err) {
+      console.error("Failed to delete pet:", err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <PetContext.Provider
-      value={{ fetchPets, pets, loading, addPet, editPet, fetchPetById }}
+      value={{
+        fetchPets,
+        pets,
+        loading,
+        addPet,
+        editPet,
+        fetchPetById,
+        deletePet,
+      }}
     >
       {children}
     </PetContext.Provider>
