@@ -13,6 +13,7 @@ export const logoutUser = () => api.post("/users/logout");
 export const getUser = () => api.get("/users/me");
 export const updateUser = (userData) => api.put("/users", userData);
 export const deleteUser = () => api.delete("/users");
+export const getSession = () => api.get("/users/session");
 
 // Doctor APIs
 export const registerDoctor = (doctorData) => api.post("/doctors", doctorData);
@@ -69,13 +70,13 @@ export const uploadDoctorImage = async (doctorId, file) => {
   });
 };
 
-// Error interceptor
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      window.location.href = "/login";
-    }
-    return Promise.reject(error);
-  }
-);
+// // Error interceptor
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       window.location.href = "/login";
+//     }
+//     return Promise.reject(error);
+//   }
+// );

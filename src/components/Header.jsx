@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const { user, logout } = useUser();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -13,9 +15,11 @@ function Header() {
         </Link>
         <div className="navbar-center">
           <a className="link link-hover p-4 text-xl">ASK VetAI</a>
+          {user && (
           <Link to="/mypets" className="link link-hover p-4 text-xl">
             MY PETS
           </Link>
+          )}
           <Link
             to="/emergency"
             className="link link-hover p-4 text-xl  text-red-500"
@@ -27,7 +31,8 @@ function Header() {
           {user ? (
             <button
               onClick={() => {
-                logout;
+                logout();
+                navigate("/");
               }}
               className="btn btn-neutral"
             >

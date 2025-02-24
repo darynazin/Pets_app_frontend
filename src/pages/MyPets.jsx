@@ -52,28 +52,36 @@ function MyPets() {
       <div className="appointmentside flex-1 space-y-8">
         <div>
           <h2 className="text-2xl font-bold mb-6">Upcoming Appointments</h2>
-          <div className="space-y-4">
-            {upcomingAppointments.map((appointment) => (
-              <AppointmentCard
-                key={appointment._id}
-                appointment={appointment}
-                status="Upcoming"
-              />
-            ))}
-          </div>
+          {upcomingAppointments.length > 0 ? (
+            <div className="space-y-4">
+              {upcomingAppointments.map((appointment) => (
+                <AppointmentCard
+                  key={appointment._id}
+                  appointment={appointment}
+                  status="Upcoming"
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No upcoming appointments.</p>
+          )}
         </div>
 
         <div>
           <h2 className="text-2xl font-bold mb-6">Past Appointments</h2>
-          <div className="space-y-4">
-            {pastAppointments.map((appointment) => (
-              <AppointmentCard
-                key={appointment._id}
-                appointment={appointment}
-                status="Past"
-              />
-            ))}
-          </div>
+          {pastAppointments.length > 0 ? (
+            <div className="space-y-4">
+              {pastAppointments.map((appointment) => (
+                <AppointmentCard
+                  key={appointment._id}
+                  appointment={appointment}
+                  status="Past"
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No past appointments.</p>
+          )}
         </div>
       </div>
     </div>

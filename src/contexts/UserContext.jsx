@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   getUser,
   loginUser,
@@ -6,35 +8,55 @@ import {
   registerUser,
   updateUser,
   deleteUser,
+  getSession,
 } from "../services/api";
 
 const UserContext = createContext();
-
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+      const { data } = await getUser();
+      setUser(data);
+    } catch (err) {
+      setError(err.message || "Failed to fetch user");
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const fetchUser = async () => {
+  useEffect(() => {
+    const checkSession = async () => {
       try {
-        const { data } = await getUser();
-        setUser(data);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
+        const response = await getSession();
+        console.log(response.data.user);
+        if (response.data.authenticated) {
+          setUser(response.data.user);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
         setUser(null);
-      } finally {
-        setLoading(false);
       }
     };
+    checkSession();
+  }, []);
 
   const login = async (credentials) => {
     try {
       setLoading(true);
-      await loginUser(credentials);
-      const { data } = await getUser();
-      setUser(data);
+      const response = await loginUser(credentials);
+      setUser(response.data.session.user);
+      setMessage("Login successful!");
+      navigate("/mypets");
     } catch (err) {
-      console.error("Login failed:", err);
+      setError("Invalid email or password", err);
     } finally {
       setLoading(false);
     }
@@ -91,7 +113,17 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ fetchUser, user, loading, login, register, logout, update, remove }}
+      value={{
+        fetchUser,
+        user,
+        loading,
+        login,
+        register,
+        logout,
+        update,
+        remove,
+        error,
+      }}
     >
       {children}
     </UserContext.Provider>
@@ -99,8 +131,27 @@ export const UserProvider = ({ children }) => {
 };
 
 export const useUser = () => {
-  const { fetchUser, user, loading, login, register, logout, update, remove } =
-    useContext(UserContext);
+  const {
+    fetchUser,
+    user,
+    loading,
+    login,
+    register,
+    logout,
+    update,
+    remove,
+    error,
+  } = useContext(UserContext);
 
-  return { fetchUser, user, loading, login, register, logout, update, remove };
+  return {
+    fetchUser,
+    user,
+    loading,
+    login,
+    register,
+    logout,
+    update,
+    remove,
+    error,
+  };
 };
