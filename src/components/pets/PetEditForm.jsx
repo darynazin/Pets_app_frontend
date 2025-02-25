@@ -76,12 +76,12 @@ const PetEditForm = ({ pet }) => {
     try {
       setLoading(true);
       await deletePet(formData._id);
-      navigate("/mypets");
+      // Navigate immediately after successful deletion
+      navigate("/mypets", { replace: true }); // Using replace to prevent back navigation
     } catch (err) {
       setError("Failed to delete pet");
       console.error("Delete failed:", err);
-    } finally {
-      setLoading(false);
+      setLoading(false); // Only set loading false on error
     }
   };
 

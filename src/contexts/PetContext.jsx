@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getMyPets,
   createPet,
@@ -12,6 +13,7 @@ const PetContext = createContext();
 export const PetProvider = ({ children }) => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchPets = async () => {
     try {
@@ -53,13 +55,16 @@ export const PetProvider = ({ children }) => {
 
   const fetchPetById = async (petId) => {
     try {
-      setLoading(true);
-      const { data } = await getPetById(petId);
-      return data; // Return the pet data
+      if (!petId) return null;
+      const response = await getPetById(petId);
+      // Check if the response itself is null (404 case from api.js)
+      if (!response || !response.data) {
+        return null;
+      }
+      return response.data;
     } catch (err) {
-      console.error("Failed to fetch pet by ID:", err);
-    } finally {
-      setLoading(false);
+      console.error("Failed to fetch pet:", err);
+      return null;
     }
   };
 
@@ -67,7 +72,11 @@ export const PetProvider = ({ children }) => {
     try {
       setLoading(true);
       await apiDeletePet(petId);
+      // Remove the pet from local state immediately
       setPets((prevPets) => prevPets.filter((pet) => pet._id !== petId));
+      // Clear any cached data
+      await fetchPets();
+      navigate("/mypets", { replace: true });
       return true;
     } catch (err) {
       console.error("Failed to delete pet:", err);
@@ -95,8 +104,8 @@ export const PetProvider = ({ children }) => {
 };
 
 export const usePet = () => {
-  const { fetchPets, pets, loading, addPet, editPet, fetchPetById } =
+  const { fetchPets, pets, loading, addPet, editPet, fetchPetById, deletePet } =
     useContext(PetContext);
 
-  return { fetchPets, pets, loading, addPet, editPet, fetchPetById };
+  return { fetchPets, pets, loading, addPet, editPet, fetchPetById, deletePet };
 };
