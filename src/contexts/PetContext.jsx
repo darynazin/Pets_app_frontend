@@ -52,6 +52,7 @@ export const PetProvider = ({ children }) => {
       setError(err.message || "Failed to edit pet");
     } finally {
       setLoading(false);
+      navigate("/mypets");
     }
   };
 
@@ -69,6 +70,13 @@ export const PetProvider = ({ children }) => {
     }
   };
 
+  const uploadImage = async (petId, file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    responce = await uploadPetImage(petId, formData);
+  };
+
   const deletePet = async (petId) => {
     try {
       setLoading(true);
@@ -84,6 +92,7 @@ export const PetProvider = ({ children }) => {
       throw err;
     } finally {
       setLoading(false);
+      navigate("/mypets", { replace: true });
     }
   };
 
@@ -95,11 +104,15 @@ export const PetProvider = ({ children }) => {
         pet,
         setPet,
         loading,
+        setLoading,
         addPet,
         editPet,
         fetchPetById,
         deletePet,
         error,
+        uploadImage,
+        setError,
+        uploadImage
       }}
     >
       {children}
@@ -112,25 +125,31 @@ export const usePet = () => {
     fetchPets,
     pets,
     loading,
+    setLoading,
     addPet,
     editPet,
     fetchPetById,
     pet,
     setPet,
     error,
+    setError,
     deletePet,
+    uploadImage,
   } = useContext(PetContext);
 
   return {
     fetchPets,
     pets,
     loading,
+    setLoading,
     addPet,
     editPet,
     fetchPetById,
     pet,
     setPet,
     error,
+    setError,
     deletePet,
+    uploadImage,
   };
 };
