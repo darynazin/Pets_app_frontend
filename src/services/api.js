@@ -46,9 +46,23 @@ export const deleteDoctor = () => api.delete("/doctors");
 // Pet APIs
 export const createPet = (petData) => api.post("/pets", petData);
 export const getMyPets = () => api.get("/pets");
-export const getPetById = (petId) => api.get(`/pets/${petId}`);
+export const getPetById = async (petId) => {
+  try {
+    const response = await api.get(`/pets/${petId}`);
+    return response;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      // Return null response instead of throwing
+      return null;
+    }
+    throw error;
+  }
+};
 export const updatePet = (petData) => api.put("/pets", petData);
-export const deletePet = (petId) => api.delete(`/pets/${petId}`);
+export const deletePet = async (petId) => {
+  const response = await api.delete(`/pets/${petId}`);
+  return response;
+};
 
 // Appointment APIs
 export const getUserAppointments = () => api.get("/appointments");
