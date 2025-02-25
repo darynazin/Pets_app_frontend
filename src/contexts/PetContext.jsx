@@ -13,14 +13,16 @@ const PetContext = createContext();
 export const PetProvider = ({ children }) => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [pet, setPet] = useState(null);
 
   const fetchPets = async () => {
     try {
       const { data } = await getMyPets();
       setPets(data);
     } catch (err) {
-      console.error("Failed to fetch pets:", err);
+      setError(err.message || "Failed to fetch pets");
       setPets([]); // Empty the pets list on error
     } finally {
       setLoading(false);
@@ -33,7 +35,7 @@ export const PetProvider = ({ children }) => {
       const { data } = await createPet(petData);
       setPets((prevPets) => [...prevPets, data]);
     } catch (err) {
-      console.error("Failed to add pet:", err);
+      setError(err.message || "Failed to add pet");
     } finally {
       setLoading(false);
     }
@@ -47,25 +49,32 @@ export const PetProvider = ({ children }) => {
         prevPets.map((pet) => (pet._id === data._id ? data : pet))
       );
     } catch (err) {
-      console.error("Failed to edit pet:", err);
+      setError(err.message || "Failed to edit pet");
     } finally {
       setLoading(false);
+      navigate("/mypets");
     }
   };
 
   const fetchPetById = async (petId) => {
     try {
-      if (!petId) return null;
+      setLoading(true);
       const response = await getPetById(petId);
-      // Check if the response itself is null (404 case from api.js)
-      if (!response || !response.data) {
-        return null;
-      }
-      return response.data;
+      setPet(response.data);
     } catch (err) {
-      console.error("Failed to fetch pet:", err);
-      return null;
+      console.error("Error:", err);
+      setError(err || "Failed to fetch pet");
+      setPet(null);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const uploadImage = async (petId, file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    responce = await uploadPetImage(petId, formData);
   };
 
   const deletePet = async (petId) => {
@@ -83,6 +92,7 @@ export const PetProvider = ({ children }) => {
       throw err;
     } finally {
       setLoading(false);
+      navigate("/mypets", { replace: true });
     }
   };
 
@@ -91,11 +101,18 @@ export const PetProvider = ({ children }) => {
       value={{
         fetchPets,
         pets,
+        pet,
+        setPet,
         loading,
+        setLoading,
         addPet,
         editPet,
         fetchPetById,
         deletePet,
+        error,
+        uploadImage,
+        setError,
+        uploadImage
       }}
     >
       {children}
@@ -104,8 +121,35 @@ export const PetProvider = ({ children }) => {
 };
 
 export const usePet = () => {
-  const { fetchPets, pets, loading, addPet, editPet, fetchPetById, deletePet } =
-    useContext(PetContext);
+  const {
+    fetchPets,
+    pets,
+    loading,
+    setLoading,
+    addPet,
+    editPet,
+    fetchPetById,
+    pet,
+    setPet,
+    error,
+    setError,
+    deletePet,
+    uploadImage,
+  } = useContext(PetContext);
 
-  return { fetchPets, pets, loading, addPet, editPet, fetchPetById, deletePet };
+  return {
+    fetchPets,
+    pets,
+    loading,
+    setLoading,
+    addPet,
+    editPet,
+    fetchPetById,
+    pet,
+    setPet,
+    error,
+    setError,
+    deletePet,
+    uploadImage,
+  };
 };

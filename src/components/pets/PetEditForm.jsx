@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePet } from "../../contexts/PetContext";
-import { uploadPetImage } from "../../services/api";
 import { formatDateForInput } from "../../utils/dateUtils";
 
 const PetEditForm = ({ pet }) => {
   const navigate = useNavigate();
-  const { editPet, deletePet } = usePet();
+  const { editPet, deletePet, loading, setLoading, error, setError, uploadImage } = usePet();
   const [formData, setFormData] = useState({
     _id: pet._id,
     name: pet.name,
@@ -19,8 +18,6 @@ const PetEditForm = ({ pet }) => {
   });
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(pet.image);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -47,19 +44,19 @@ const PetEditForm = ({ pet }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
       if (imageFile) {
-        const imageResponse = await uploadPetImage(pet._id, imageFile);
+        const imageResponse = uploadImage(pet._id, imageFile);
         formData.image = imageResponse.data.imageUrl;
       }
 
-      await editPet(formData);
-      navigate("/mypets");
+      editPet(formData);
+      
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update pet");
       console.error("Update failed:", err);
@@ -68,16 +65,16 @@ const PetEditForm = ({ pet }) => {
     }
   };
 
-  const handleDeletePet = async () => {
+  const handleDeletePet = () => {
     if (!window.confirm("Are you sure you want to delete this pet?")) {
       return;
     }
 
     try {
       setLoading(true);
-      await deletePet(formData._id);
+      deletePet(formData._id);
       // Navigate immediately after successful deletion
-      navigate("/mypets", { replace: true }); // Using replace to prevent back navigation
+       // Using replace to prevent back navigation
     } catch (err) {
       setError("Failed to delete pet");
       console.error("Delete failed:", err);

@@ -46,23 +46,9 @@ export const deleteDoctor = () => api.delete("/doctors");
 // Pet APIs
 export const createPet = (petData) => api.post("/pets", petData);
 export const getMyPets = () => api.get("/pets");
-export const getPetById = async (petId) => {
-  try {
-    const response = await api.get(`/pets/${petId}`);
-    return response;
-  } catch (error) {
-    if (error.response?.status === 404) {
-      // Return null response instead of throwing
-      return null;
-    }
-    throw error;
-  }
-};
+export const getPetById = (petId) => api.get(`/pets/${petId}`);
 export const updatePet = (petData) => api.put("/pets", petData);
-export const deletePet = async (petId) => {
-  const response = await api.delete(`/pets/${petId}`);
-  return response;
-};
+export const deletePet = (petId) => api.delete(`/pets/${petId}`);
 
 // Appointment APIs
 export const getUserAppointments = () => api.get("/appointments");
@@ -76,11 +62,8 @@ export const deleteAppointment = (appointmentId) =>
   api.delete(`/appointments/${appointmentId}`);
 
 // Image Upload APIs
-export const uploadPetImage = async (petId, file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  return api.post(`/upload/pets/${petId}/image`, formData, {
+export const uploadPetImage = (petId, formData) => {
+  api.post(`/upload/pets/${petId}/image`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
