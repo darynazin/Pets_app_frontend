@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePet } from "../../contexts/PetContext";
 import { uploadPetImage } from "../../services/api";
+import { formatDateForInput } from "../../utils/dateUtils";
 
 const PetEditForm = ({ pet }) => {
   const navigate = useNavigate();
@@ -11,7 +12,8 @@ const PetEditForm = ({ pet }) => {
     name: pet.name,
     species: pet.species,
     breed: pet.breed,
-    birthDate: pet.birthDate || new Date().toISOString().split("T")[0],
+    birthDate:
+      formatDateForInput(pet.birthDate) || formatDateForInput(new Date()), // Format the date
     additionalNotes: pet.additionalNotes || "",
     image: pet.image,
   });
