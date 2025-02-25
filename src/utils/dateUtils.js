@@ -1,5 +1,5 @@
 export const formatDateForInput = (date) => {
-  if (!date) return "";
+  if (!date) return null;
   return new Date(date).toISOString().split("T")[0];
 };
 
