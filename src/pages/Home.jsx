@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDoctor } from "../contexts/DoctorContext";
 
 function Home() {
   const [openIndex, setOpenIndex] = useState(null);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const { setSearchTerm } = useDoctor();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (search.trim()) {
-      navigate(`/search?query=${encodeURIComponent(search.trim())}`);
+      navigate("/search");
+      setSearchTerm(search);
     }
   };
 
@@ -39,7 +42,6 @@ function Home() {
         "Yes, all the veterinarians and clinics listed on our platform go through a strict verification process. We ensure that every vet is fully licensed and certified according to local regulations. Additionally, we review customer feedback and ratings regularly to maintain a high standard of service. You can view each vet's qualifications, experience, and specialties on their profile, along with genuine reviews from pet owners who have previously visited them. This ensures that you have complete transparency and can make an informed decision when choosing the right vet for your pet’s needs.",
     },
   ];
-  
 
   return (
     <div className="flex flex-col gap-36 flex-grow p-10">
@@ -113,9 +115,12 @@ function Home() {
 
       <div className="bg-gray-50 p-10 rounded-lg flex flex-col md:flex-row gap-10">
         <div className="md:w-1/3 flex flex-col">
-          <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold mb-4">
+            Frequently Asked Questions
+          </h2>
           <p className="text-gray-600 mb-6">
-            Frequently asked questions ordered by popularity. If you still have any doubts, feel free to ask!
+            Frequently asked questions ordered by popularity. If you still have
+            any doubts, feel free to ask!
           </p>
           <button className="border border-black px-5 py-2 rounded-lg hover:bg-gray-200 self-start">
             Contact us
@@ -131,9 +136,13 @@ function Home() {
             >
               <div className="flex justify-between items-center py-3">
                 <span className="text-lg font-semibold">{faq.question}</span>
-                <span className="text-xl">{openIndex === index ? "▲" : "▼"}</span>
+                <span className="text-xl">
+                  {openIndex === index ? "▲" : "▼"}
+                </span>
               </div>
-              {openIndex === index && <p className="text-gray-600">{faq.answer}</p>}
+              {openIndex === index && (
+                <p className="text-gray-600">{faq.answer}</p>
+              )}
             </div>
           ))}
         </div>

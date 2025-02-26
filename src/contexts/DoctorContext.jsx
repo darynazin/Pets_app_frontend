@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import {
   getDoctor,
   loginDoctor,
@@ -15,7 +15,9 @@ export const DoctorProvider = ({ children }) => {
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [doctors, setDoctors] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
 
   const fetchDoctor = async () => {
@@ -30,9 +32,23 @@ export const DoctorProvider = ({ children }) => {
     }
   };
 
+  const fetchDoctors = async () => {
+    try {
+      setLoading(true);
+      const { data } = await getDoctors();
+      setDoctors(data);
+      setFilteredDoctors(data);
+    } catch (err) {
+      console.error("Failed to fetch doctors:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filterDoctors = (query) => {
+    setSearchTerm(query);
     if (!query) {
-      fetchDoctors();
+      setFilteredDoctors(doctors);
       return;
     }
     const lowercasedQuery = query.toLowerCase();
@@ -41,7 +57,7 @@ export const DoctorProvider = ({ children }) => {
         doctor.name.toLowerCase().includes(lowercasedQuery) ||
         doctor.address.toLowerCase().includes(lowercasedQuery)
     );
-    setDoctors(filtered);
+    setFilteredDoctors(filtered);
   };
 
   const login = async (credentials) => {
@@ -77,18 +93,6 @@ export const DoctorProvider = ({ children }) => {
       setDoctor(null);
     } catch (err) {
       console.error("Logout failed:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchDoctors = async () => {
-    try {
-      setLoading(true);
-      const { data } = await getDoctors();
-      setDoctors(data);
-    } catch (err) {
-      console.error("Failed to fetch doctors:", err);
     } finally {
       setLoading(false);
     }
@@ -135,6 +139,9 @@ export const DoctorProvider = ({ children }) => {
         selectedDoctor,
         setSelectedDoctor,
         filterDoctors,
+        filteredDoctors,
+        searchTerm,
+        setSearchTerm,
       }}
     >
       {children}
@@ -157,6 +164,9 @@ export const useDoctor = () => {
     selectedDoctor,
     setSelectedDoctor,
     filterDoctors,
+    filteredDoctors,
+    searchTerm,
+    setSearchTerm,
   } = useContext(DoctorContext);
 
   return {
@@ -173,5 +183,8 @@ export const useDoctor = () => {
     selectedDoctor,
     setSelectedDoctor,
     filterDoctors,
+    filteredDoctors,
+    searchTerm,
+    setSearchTerm,
   };
 };
