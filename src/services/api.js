@@ -29,7 +29,14 @@ export const registerUser = (userData) => {
 export const loginUser = (credentials) => api.post("/users/login", credentials);
 export const logoutUser = () => api.post("/users/logout");
 export const getUser = () => api.get("/users/me");
-export const updateUser = (userData) => api.put("/users", userData);
+export const updateUser = async (userData) => {
+  const response = await api.put("/users", userData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};
 export const deleteUser = () => api.delete("/users");
 export const getSession = () => api.get("/users/session");
 
@@ -46,7 +53,17 @@ export const deleteDoctor = () => api.delete("/doctors");
 // Pet APIs
 export const createPet = (petData) => api.post("/pets", petData);
 export const getMyPets = () => api.get("/pets");
-export const getPetById = (petId) => api.get(`/pets/${petId}`);
+export const getPetById = async (petId) => {
+  try {
+    const response = await api.get(`/pets/${petId}`);
+    return response;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
 export const updatePet = (petData) => api.put("/pets", petData);
 export const deletePet = (petId) => api.delete(`/pets/${petId}`);
 
@@ -75,7 +92,9 @@ export const uploadUserImage = async (userId, file) => {
   const formData = new FormData();
   formData.append("file", file);
   return api.post(`/upload/users/${userId}/image`, formData, {
-    headers: {},
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     withCredentials: true,
   });
 };

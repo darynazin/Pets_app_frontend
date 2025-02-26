@@ -17,6 +17,7 @@ export const DoctorProvider = ({ children }) => {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
+
   const fetchDoctor = async () => {
     try {
       const { data } = await getDoctor();
@@ -27,6 +28,20 @@ export const DoctorProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const filterDoctors = (query) => {
+    if (!query) {
+      fetchDoctors();
+      return;
+    }
+    const lowercasedQuery = query.toLowerCase();
+    const filtered = doctors.filter(
+      (doctor) =>
+        doctor.name.toLowerCase().includes(lowercasedQuery) ||
+        doctor.address.toLowerCase().includes(lowercasedQuery)
+    );
+    setDoctors(filtered);
   };
 
   const login = async (credentials) => {
@@ -119,6 +134,7 @@ export const DoctorProvider = ({ children }) => {
         deleteDoctorAccount,
         selectedDoctor,
         setSelectedDoctor,
+        filterDoctors,
       }}
     >
       {children}
@@ -140,6 +156,7 @@ export const useDoctor = () => {
     deleteDoctorAccount,
     selectedDoctor,
     setSelectedDoctor,
+    filterDoctors,
   } = useContext(DoctorContext);
 
   return {
@@ -155,5 +172,6 @@ export const useDoctor = () => {
     deleteDoctorAccount,
     selectedDoctor,
     setSelectedDoctor,
+    filterDoctors,
   };
 };

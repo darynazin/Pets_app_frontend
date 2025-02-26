@@ -22,13 +22,13 @@ export const UserProvider = ({ children }) => {
   const fetchUser = async () => {
     try {
       setLoading(true);
-      
+
       const sessionResponse = await getSession();
       if (!sessionResponse.data.authenticated) {
         setUser(null);
         return;
       }
-  
+
       const { data } = await getUser();
       setUser(data);
     } catch (err) {
@@ -50,7 +50,7 @@ export const UserProvider = ({ children }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error( error);
+        console.error(error);
         setUser(null);
         setLoading(false);
       }
@@ -113,9 +113,14 @@ export const UserProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await updateUser(userData);
-      setUser(response.data);
+      if (response?.data) {
+        setUser(response.data);
+        return response.data;
+      }
+      throw new Error("Failed to update user");
     } catch (err) {
       console.error("Failed to update user:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
