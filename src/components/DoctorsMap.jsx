@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { MAPS_KEY } from "../config/googleMaps";
 import {
   APIProvider,
@@ -9,10 +9,9 @@ import {
 import { useDoctor } from "../contexts/DoctorContext";
 
 const DoctorsMap = () => {
-  const { doctors, fetchDoctors } = useDoctor();
-  useEffect(() => { fetchDoctors(); }, []);
+  const { doctors, selectedDoctor, setSelectedDoctor } = useDoctor();
   return (
-    <div className="w-full h-screen">
+    <div className="w-[500px] h-[700px]">
       <APIProvider
         apiKey={MAPS_KEY}
         onLoad={() => console.log("Maps API has loaded.")}
@@ -31,9 +30,9 @@ const DoctorsMap = () => {
           }
         >
           {doctors.map((poi) => (
-            <AdvancedMarker key={poi._id} position={poi.location}>
+            <AdvancedMarker key={poi._id} position={poi.location} onClick={() => setSelectedDoctor(poi)}>
               <Pin
-                background={"#FBBC04"}
+                background={selectedDoctor?._id === poi._id ? "#00FF00" : "#FBBC04"}
                 glyphColor={"#000"}
                 borderColor={"#000"}
               />

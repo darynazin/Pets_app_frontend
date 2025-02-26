@@ -15,6 +15,7 @@ export const DoctorProvider = ({ children }) => {
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [doctors, setDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   const fetchDoctor = async () => {
     try {
@@ -116,6 +117,8 @@ export const DoctorProvider = ({ children }) => {
         fetchDoctors,
         updateDoctorInfo,
         deleteDoctorAccount,
+        selectedDoctor,
+        setSelectedDoctor,
       }}
     >
       {children}
@@ -135,6 +138,8 @@ export const useDoctor = () => {
     fetchDoctors,
     updateDoctorInfo,
     deleteDoctorAccount,
+    selectedDoctor,
+    setSelectedDoctor,
   } = useContext(DoctorContext);
 
   return {
@@ -148,5 +153,7 @@ export const useDoctor = () => {
     fetchDoctors,
     updateDoctorInfo,
     deleteDoctorAccount,
+    selectedDoctor,
+    setSelectedDoctor,
   };
 };
