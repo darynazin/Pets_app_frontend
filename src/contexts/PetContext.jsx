@@ -110,9 +110,8 @@ export const PetProvider = ({ children }) => {
         fetchPetById,
         deletePet,
         error,
-        uploadImage,
         setError,
-        uploadImage
+        uploadImage,
       }}
     >
       {children}

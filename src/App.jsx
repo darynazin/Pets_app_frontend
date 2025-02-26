@@ -11,7 +11,7 @@ import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
 import { AppointmentProvider } from "./contexts/AppointmentContext.jsx";
-import SearchVet from "./pages/SearchVet.jsx";
+import FindVet from "./pages/FindVet.jsx";
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
                     element={<PetRegistrationPage />}
                   />
                   <Route path="/pets/:id/edit" element={<PetEditPage />} />
-                  <Route path="/search" element={<SearchVet />} />
+                  <Route path="/search" element={<FindVet />} />
                   <Route path="/emergency" element={<Emergency />} />
                   {/* <Route path="/pet/:id" element={<PetUpdate />} />
                   <Route path="/appointments/:id" element={<AppointmentUpdate />} /> */}
