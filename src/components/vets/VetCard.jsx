@@ -1,20 +1,45 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDoctor } from "../../contexts/DoctorContext";
 
 const VetCard = ({ doctor }) => {
+  const { selectedDoctor, setSelectedDoctor } = useDoctor();
+  const doctorRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedDoctor?._id === doctor._id) {
+      doctorRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [selectedDoctor, doctor._id]);
+
+  const handleCardClick = () => {
+    setSelectedDoctor(doctor);
+  };
+
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <figure>
+    <div
+      ref={doctorRef}
+      className={`card w-full border-2 border-blue-100 rounded-lg mb-4 p-2 ${
+        selectedDoctor?._id === doctor._id ? 'drop-shadow-lg ring-2' : ''
+      }`}
+      onClick={handleCardClick}
+    >
+      {/* <figure>
         <img
           src={doctor.image || "/default-vet.png"}
           alt={doctor.name}
           className="w-full h-48 object-cover"
         />
-      </figure>
-      <div className="card-body">
+      </figure> */}
+      <div className="card-body flex flex-row justify-between p-2">
+        <div
+      
+         >
         <h2 className="card-title">Dr. {doctor.name}</h2>
-        <div className="space-y-2">
-          <p className="flex items-center gap-2">
+          <p className="flex items-center gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
