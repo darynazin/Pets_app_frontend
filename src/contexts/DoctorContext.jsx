@@ -27,22 +27,23 @@ export const DoctorProvider = ({ children }) => {
   useEffect(() => {
     if (error) {
       console.log(error);
-      console.log(doctor);
     }
-  }, [error, doctor]);
+  }, [error]);
 
   const fetchDoctor = async () => {
     try {
       setLoading(true);
 
       const sessionResponse = await getSession();
-      if (!sessionResponse.data.authenticated && sessionResponse.data.user.role !== "doctor") {
+      if (
+        !sessionResponse.data.authenticated &&
+        sessionResponse.data.user.role !== "doctor"
+      ) {
         setDoctor(null);
         return;
       }
 
       const { data } = await getDoctor();
-      console.log(data);
       setDoctor(data);
     } catch (err) {
       setError("Failed to fetch doctor");
@@ -53,23 +54,23 @@ export const DoctorProvider = ({ children }) => {
   };
 
   useEffect(() => {
-      const checkSession = async () => {
-        try {
-          const response = await getSession();
-          if (response.data.authenticated) {
-            fetchDoctor();
-          } else {
-            setDoctor(null);
-            setLoading(false);
-          }
-        } catch (error) {
-          console.error(error);
+    const checkSession = async () => {
+      try {
+        const response = await getSession();
+        if (response.data.authenticated) {
+          fetchDoctor();
+        } else {
           setDoctor(null);
           setLoading(false);
         }
-      };
-      checkSession();
-    }, []);
+      } catch (error) {
+        console.error(error);
+        setDoctor(null);
+        setLoading(false);
+      }
+    };
+    checkSession();
+  }, []);
 
   const fetchDoctors = async () => {
     try {
@@ -100,13 +101,11 @@ export const DoctorProvider = ({ children }) => {
   };
 
   const loginVet = async (credentials) => {
-    console.log(credentials);
     try {
       setLoading(true);
       const response = await loginDoctor(credentials);
-      
+
       setDoctor(response.data.user);
-      console.log(response.data.user);
       navigate("/doctor/profile");
     } catch (err) {
       setError(err.message || "Login failed");
@@ -116,29 +115,29 @@ export const DoctorProvider = ({ children }) => {
   };
 
   const register = async (doctorData) => {
-      try {
-        setLoading(true);
-  
-        const response = await registerDoctor(doctorData);
-        const doctorId = response.data._id;
-  
-        if (doctorData.image) {
-          try {
-            await uploadDoctorImage(doctorId, doctorData.image);
-          } catch (imageError) {
-            console.error("Image upload failed:", imageError);
-          }
+    try {
+      setLoading(true);
+
+      const response = await registerDoctor(doctorData);
+      const doctorId = response.data._id;
+
+      if (doctorData.image) {
+        try {
+          await uploadDoctorImage(doctorId, doctorData.image);
+        } catch (imageError) {
+          console.error("Image upload failed:", imageError);
         }
-  
-        const { data } = await getDoctor();
-        setDoctor(data);
-      } catch (err) {
-        console.error("Registration failed:", err);
-        throw err;
-      } finally {
-        setLoading(false);
       }
-    };
+
+      const { data } = await getDoctor();
+      setDoctor(data);
+    } catch (err) {
+      console.error("Registration failed:", err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const logoutVet = async () => {
     try {
@@ -155,11 +154,10 @@ export const DoctorProvider = ({ children }) => {
   const updateDoctorInfo = async (doctorData) => {
     try {
       setLoading(true);
-      await updateDoctor(doctorData);
-      const { data } = await getDoctor();
-      setDoctor(data);
+      const response = await updateDoctor(doctorData);
+      setDoctor(response.data);
     } catch (err) {
-      setError("Failed to update doctor");
+      setError(err);
     } finally {
       setLoading(false);
     }

@@ -100,7 +100,6 @@ function OwnerProfile() {
       }
 
       const updatedUser = await update(updateData);
-      console.log("Updated user:", updatedUser);
 
       if (updatedUser) {
         setFormData((prev) => ({

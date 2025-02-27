@@ -23,7 +23,6 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     if (error) {
       console.log(error);
-      console.log(user);
     }
   }, [error, user]);
 

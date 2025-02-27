@@ -72,7 +72,7 @@ function Header() {
                 )}
                 {doctor && (
                   <li>
-                    <Link to="/doctor/profile">Profile</Link>
+                    <Link to="doctor/profile">Profile</Link>
                   </li>
                 )}
                 <li>
