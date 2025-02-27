@@ -26,7 +26,7 @@ function PetCard({ pet }) {
   };
 
   return (
-    <div className="card card-compact bg-base-100 shadow-xl">
+    <div className="card card-compact bg-base-100 shadow-xl hover:shadow-2xl transition-shadow cursor-pointer">
       <figure className="h-64">
         <img
           src={pet.image || defaultPetImage}

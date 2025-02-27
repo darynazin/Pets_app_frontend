@@ -27,17 +27,15 @@ const VetCard = ({ doctor }) => {
       }`}
       onClick={handleCardClick}
     >
-      {/* <figure>
+      <div className="card-body flex flex-row justify-between px-4 py-1">
+      <figure>
         <img
-          src={doctor.image || "/default-vet.png"}
+          src={doctor.image || "https://masterpiecer-images.s3.yandex.net/514a9d14308211ee99a1c20edf74fa66:upscaled"}
           alt={doctor.name}
-          className="w-full h-48 object-cover"
+          className="w-full h-16 w-16 object-cover rounded-3xl"
         />
-      </figure> */}
-      <div className="card-body flex flex-row justify-between p-2">
-        <div
-      
-         >
+      </figure>
+        <div className="w-3/4 mx-4">
         <h2 className="card-title">Dr. {doctor.name}</h2>
           <p className="flex items-center gap-1">
             <svg
@@ -100,7 +98,7 @@ const VetCard = ({ doctor }) => {
         <div className="card-actions justify-end mt-4">
           <Link
             to={`/appointments/book/${doctor._id}`}
-            className="btn btn-primary"
+            className="btn btn-primary py-1"
           >
             Book Appointment
           </Link>

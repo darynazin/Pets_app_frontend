@@ -19,8 +19,8 @@ function FindVet() {
   return (
     <div className='flex p-10 gap-16'>
       
-      <div className='flex-1 h-[600px] overflow-y-auto px-10 overflow-x-hidden ounline-none'>
-      <div className='mb-4'>
+      <div className='flex-grow'>
+      <div className='mb-4 w-full'>
           <input
             type='text'
             value={searchTerm}
@@ -30,9 +30,12 @@ function FindVet() {
             autoFocus
           />
         </div>
+      <div className='h-[500px] overflow-y-auto  overflow-x-hidden ounline-none'>
+      
         {filteredDoctors.map((doctor) => (
           <VetCard key={doctor._id} doctor={doctor} />
         ))}
+      </div>
       </div>
       <DoctorsMap />
     </div>

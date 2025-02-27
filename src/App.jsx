@@ -9,6 +9,7 @@ import PetEditPage from "./pages/PetEditPage.jsx";
 import OwnerProfile from "./pages/OwnerProfile.jsx";
 import AppointmentBooking from "./pages/AppointmentBooking.jsx";
 import AppointmentPage from "./pages/AppointmentPage.jsx";
+import VetProfile from "./pages/VetProfile.jsx";
 import Layout from "./components/Layout.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/pets/:id/edit" element={<PetEditPage />} />
                   <Route path="/search" element={<FindVet />} />
                   <Route path="/profile" element={<OwnerProfile />} />
+                  <Route path="/doctor/profile" element={<VetProfile />} />
                   <Route path="/emergency" element={<Emergency />} />
                   <Route
                     path="/appointments/book/:doctorId"
