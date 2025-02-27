@@ -1,9 +1,158 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDoctor } from "../contexts/DoctorContext";
+import { usePet } from "../contexts/PetContext";
+import { useAppointment } from "../contexts/AppointmentContext";
+import { formatDateForInput } from "../utils/dateUtils";
+import { VISIT_TYPES } from "../constants/visitTypes";
+
+import PetSelectionStep from "../components/appointments/PetSelectionStep";
+import DateTimeSelectionStep from "../components/appointments/DateTimeSelectionStep";
+import VisitDetailsStep from "../components/appointments/VisitDetailsStep";
+import ConfirmationStep from "../components/appointments/ConfirmationStep";
 
 const AppointmentBooking = () => {
   const { doctorId } = useParams();
+  const navigate = useNavigate();
+  const { fetchDoctors, doctors, loading: doctorLoading } = useDoctor();
+  const { fetchPets, loading: petLoading } = usePet();
+  const { addAppointment, loading: appointmentLoading } = useAppointment();
+
   const [currentStep, setCurrentStep] = useState(1);
+  const [selectedPetIds, setSelectedPetIds] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(
+    formatDateForInput(new Date())
+  );
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [visitType, setVisitType] = useState(Object.values(VISIT_TYPES)[0]);
+  const [additionalNotes, setAdditionalNotes] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    fetchDoctors();
+    fetchPets();
+  }, []);
+
+  const nextStep = () => {
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Create appointment for each pet
+      const appointmentPromises = selectedPetIds.map((petId) =>
+        addAppointment({
+          doctorId,
+          petId,
+          date: selectedDate,
+          timeSlot: selectedTime,
+          visitType,
+          additionalNotes,
+        })
+      );
+
+      await Promise.all(appointmentPromises);
+      setSuccess(true);
+
+      // redirect after 2 sec
+      setTimeout(() => {
+        navigate("/mypets");
+      }, 2000);
+    } catch (err) {
+      setError("Failed to create appointment. Please try again.");
+      console.error("Error creating appointment:", err);
+    }
+  };
+
+  if (doctorLoading || petLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex justify-center">
+        <div className="loading loading-spinner loading-lg"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="alert alert-error">
+          <span>{error}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (success) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="alert alert-success">
+          <span>Appointment successfully booked! Redirecting...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // render current step
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <PetSelectionStep
+            selectedPetIds={selectedPetIds}
+            setSelectedPetIds={setSelectedPetIds}
+            nextStep={nextStep}
+          />
+        );
+      case 2:
+        return (
+          <DateTimeSelectionStep
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
+            doctorId={doctorId}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        );
+      case 3:
+        return (
+          <VisitDetailsStep
+            visitType={visitType}
+            setVisitType={setVisitType}
+            additionalNotes={additionalNotes}
+            setAdditionalNotes={setAdditionalNotes}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        );
+      case 4:
+        return (
+          <ConfirmationStep
+            selectedPetIds={selectedPetIds}
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            visitType={visitType}
+            additionalNotes={additionalNotes}
+            doctorId={doctorId}
+            handleSubmit={handleSubmit}
+            prevStep={prevStep}
+            loading={appointmentLoading}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -25,7 +174,8 @@ const AppointmentBooking = () => {
       </div>
 
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold mb-4">Book Appointment</h2>
+        <h2 className="text-2xl font-bold mb-4">Appointment Booking</h2>
+        {renderStepContent()}
       </div>
     </div>
   );
