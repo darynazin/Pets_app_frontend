@@ -157,7 +157,12 @@ export const DoctorProvider = ({ children }) => {
       const response = await updateDoctor(doctorData);
       setDoctor(response.data);
     } catch (err) {
-      setError(err);
+      if (typeof err.response.data.error === "string") {
+        setError(err.response.data.error);
+        console.log(err.response.data.error);
+      } else {
+        setError("Failed to update doctor info");
+      }
     } finally {
       setLoading(false);
     }
@@ -181,7 +186,9 @@ export const DoctorProvider = ({ children }) => {
         doctor,
         doctors,
         loading,
+        setLoading,
         error,
+        setError,
         fetchDoctor,
         loginVet,
         register,
@@ -207,7 +214,9 @@ export const useDoctor = () => {
     doctor,
     doctors,
     loading,
+    setLoading,
     error,
+    setError,
     loginVet,
     register,
     logoutVet,
@@ -227,7 +236,9 @@ export const useDoctor = () => {
     doctor,
     doctors,
     loading,
+    setLoading,
     error,
+    setError,
     loginVet,
     register,
     logoutVet,
