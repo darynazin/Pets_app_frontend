@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { formatTimeSlot } from "../../utils/dateUtils";
 import { getAvailableTimeSlots } from "../../services/api";
+import Swal from "sweetalert2";
 
 const DateTimeSelectionStep = ({
   selectedDate,
@@ -14,21 +15,64 @@ const DateTimeSelectionStep = ({
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  //check if weekend
+  const isWeekend = (date) => {
+    const dayOfWeek = new Date(date).getDay();
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  };
 
   // Fetch available slots when date or doctor changes
   useEffect(() => {
     const fetchAvailableSlots = async () => {
       if (!selectedDate || !doctorId) return;
 
+      if (isWeekend(selectedDate)) {
+        Swal.fire({
+          title: "Weekend Not Available",
+          text: "Our clinic is closed on weekends. Please select a weekday.",
+          icon: "info",
+          confirmButtonText: "OK",
+        });
+        setAvailableSlots([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
 
       try {
         const response = await getAvailableTimeSlots(doctorId, selectedDate);
-        setAvailableSlots(response.data);
+
+        // Check if response is an array or object with availableSlots property
+        if (Array.isArray(response.data)) {
+          setAvailableSlots(response.data);
+        } else if (response.data && response.data.availableSlots) {
+          setAvailableSlots(response.data.availableSlots);
+
+          // If there's a message, show it with SweetAlert2
+          if (response.data.message) {
+            Swal.fire({
+              title: "Information",
+              text: response.data.message,
+              icon: "info",
+              confirmButtonText: "OK",
+            });
+          }
+        } else {
+          setAvailableSlots([]);
+        }
       } catch (err) {
         console.error("Error fetching available time slots:", err);
         setError("Failed to load available times. Please try again.");
+
+        // Show error with SweetAlert2
+        Swal.fire({
+          title: "Error",
+          text: "Failed to load available times. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+
         setAvailableSlots([]);
       } finally {
         setLoading(false);
@@ -43,6 +87,24 @@ const DateTimeSelectionStep = ({
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return new Date(date) < today;
+  };
+
+  // Handle date change with validation
+  const handleDateChange = (e) => {
+    const newDate = e.target.value;
+
+    // Check if it's a weekend
+    if (isWeekend(newDate)) {
+      Swal.fire({
+        title: "Weekend Not Available",
+        text: "Our clinic is closed on weekends. Please select a weekday.",
+        icon: "info",
+        confirmButtonText: "OK",
+      });
+    }
+
+    setSelectedDate(newDate);
+    setSelectedTime(null); // Reset selected time when date changes
   };
 
   return (
@@ -60,11 +122,13 @@ const DateTimeSelectionStep = ({
           className="input input-bordered w-full"
           value={selectedDate}
           min={new Date().toISOString().split("T")[0]}
-          onChange={(e) => {
-            setSelectedDate(e.target.value);
-            setSelectedTime(null); // Reset selected time when date changes
-          }}
+          onChange={handleDateChange}
         />
+        <label className="label">
+          <span className="label-text-alt text-info">
+            Our clinic is open Monday through Friday
+          </span>
+        </label>
       </div>
 
       {loading ? (
@@ -81,16 +145,9 @@ const DateTimeSelectionStep = ({
             <span className="label-text">Available Time Slots</span>
           </label>
 
-          {availableSlots.length === 0 ? (
-            <div className="alert alert-info">
-              <span>
-                No available time slots for this date. Please select another
-                date.
-              </span>
-            </div>
-          ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-              {availableSlots.map((slot) => (
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+            {availableSlots && availableSlots.length > 0 ? (
+              availableSlots.map((slot) => (
                 <button
                   key={slot}
                   className={`btn btn-sm ${
@@ -100,9 +157,16 @@ const DateTimeSelectionStep = ({
                 >
                   {formatTimeSlot(slot)}
                 </button>
-              ))}
-            </div>
-          )}
+              ))
+            ) : (
+              <div className="col-span-full text-center py-4 text-info">
+                <p>
+                  Our clinic is closed on the weekends, please select another
+                  day.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -112,7 +176,7 @@ const DateTimeSelectionStep = ({
         </button>
         <button
           className="btn btn-primary"
-          disabled={!selectedTime || !selectedDate}
+          disabled={!selectedTime || !selectedDate || isWeekend(selectedDate)}
           onClick={nextStep}
         >
           Next
