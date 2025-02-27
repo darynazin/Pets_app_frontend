@@ -11,7 +11,11 @@ function AppointmentPage() {
     fetchSingleAppointment(id);
   }, []);
 
-  return appointment && <AppointmentDetails appointment={appointment} />;
+  return (
+    <div className="flex-grow">
+      {appointment && <AppointmentDetails appointment={appointment} />}
+    </div>
+  )
 }
 
 export default AppointmentPage;
