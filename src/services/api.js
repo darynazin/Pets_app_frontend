@@ -77,6 +77,8 @@ export const updateAppointment = (appointmentData) =>
   api.put("/appointments", appointmentData);
 export const deleteAppointment = (appointmentId) =>
   api.delete(`/appointments/${appointmentId}`);
+export const getAppointmentById = (appointmentId) => 
+  api.get(`/appointments/one/${appointmentId}`);
 
 // Image Upload APIs
 export const uploadPetImage = (petId, formData) => {

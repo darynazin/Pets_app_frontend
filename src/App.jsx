@@ -8,6 +8,7 @@ import PetRegistrationPage from "./pages/PetRegistrationPage.jsx";
 import PetEditPage from "./pages/PetEditPage.jsx";
 import OwnerProfile from "./pages/OwnerProfile.jsx";
 import AppointmentBooking from "./pages/AppointmentBooking.jsx";
+import AppointmentPage from "./pages/AppointmentPage.jsx";
 import Layout from "./components/Layout.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
@@ -40,8 +41,8 @@ function App() {
                     path="/appointments/book/:doctorId"
                     element={<AppointmentBooking />}
                   />
-                  {/* <Route path="/pet/:id" element={<PetUpdate />} />
-                  <Route path="/appointments/:id" element={<AppointmentUpdate />} /> */}
+                  {/* <Route path="/pet/:id" element={<PetUpdate />} /> */}
+                  <Route path="/appointments/:id" element={<AppointmentPage />} />
                 </Route>
               </Routes>
             </AppointmentProvider>
