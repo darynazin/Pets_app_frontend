@@ -5,6 +5,7 @@ import { usePet } from "../contexts/PetContext";
 import { useAppointment } from "../contexts/AppointmentContext";
 import { formatDateForInput } from "../utils/dateUtils";
 import { VISIT_TYPES } from "../constants/visitTypes";
+import Swal from "sweetalert2";
 
 import PetSelectionStep from "../components/appointments/PetSelectionStep";
 import DateTimeSelectionStep from "../components/appointments/DateTimeSelectionStep";
@@ -27,7 +28,6 @@ const AppointmentBooking = () => {
   const [visitType, setVisitType] = useState(Object.values(VISIT_TYPES)[0]);
   const [additionalNotes, setAdditionalNotes] = useState("");
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     fetchDoctors();
@@ -61,15 +61,28 @@ const AppointmentBooking = () => {
       );
 
       await Promise.all(appointmentPromises);
-      setSuccess(true);
 
-      // redirect after 2 sec
-      setTimeout(() => {
-        navigate("/mypets");
-      }, 2000);
+      Swal.fire({
+        title: "Success!",
+        text: "Your appointment has been successfully booked.",
+        icon: "success",
+        confirmButtonText: "View My Pets",
+        confirmButtonColor: "#3085d6",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/mypets");
+        }
+      });
     } catch (err) {
       setError("Failed to create appointment. Please try again.");
       console.error("Error creating appointment:", err);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to create appointment. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -86,16 +99,6 @@ const AppointmentBooking = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="alert alert-error">
           <span>{error}</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (success) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="alert alert-success">
-          <span>Appointment successfully booked! Redirecting...</span>
         </div>
       </div>
     );
