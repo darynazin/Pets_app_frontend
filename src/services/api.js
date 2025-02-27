@@ -38,7 +38,7 @@ export const updateUser = async (userData) => {
   return response;
 };
 export const deleteUser = () => api.delete("/users");
-export const getSession = () => api.get("/users/session");
+export const getSession = () => api.get("/doctors/session");
 
 // Doctor APIs
 export const registerDoctor = (doctorData) => api.post("/doctors", doctorData);

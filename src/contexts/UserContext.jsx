@@ -13,18 +13,26 @@ import {
 } from "../services/api";
 
 const UserContext = createContext();
+
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      console.log(user);
+    }
+  }, [error, user]);
+
   const fetchUser = async () => {
     try {
       setLoading(true);
 
       const sessionResponse = await getSession();
-      if (!sessionResponse.data.authenticated) {
+      if (!sessionResponse.data.authenticated && sessionResponse.data.user.role !== "user") {
         setUser(null);
         return;
       }
@@ -43,7 +51,7 @@ export const UserProvider = ({ children }) => {
     const checkSession = async () => {
       try {
         const response = await getSession();
-        if (response.data.authenticated) {
+        if (response.data.authenticated && response.data.user.role === "user") {
           fetchUser();
         } else {
           setUser(null);
@@ -65,7 +73,6 @@ export const UserProvider = ({ children }) => {
       setUser(response.data.user);
       navigate("/mypets");
     } catch (err) {
-      console.error("Login failed:", err);
       setError("Invalid email or password", err);
     } finally {
       setLoading(false);

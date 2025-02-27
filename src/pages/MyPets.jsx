@@ -32,8 +32,8 @@ function MyPets() {
   });
 
   return (
-    <div className="petside flex flex-col lg:flex-row w-8/12 gap-8 p-8 mx-auto flex-grow">
-      <div className="flex-2 flex flex-col items-start min-w-[400px]">
+    <div className="petside flex flex-col lg:flex-row w-8/12 gap-16 p-8 mx-auto flex-grow">
+      <div className="flex-1 flex flex-col items-start min-w-[400px]">
         <div className="">
           <h2 className="text-2xl font-bold mb-6">My Pets</h2>
           <div className="flex flex-col gap-6 mx-auto">
@@ -70,7 +70,7 @@ function MyPets() {
         </div>
       </div>
 
-      <div className="appointmentside flex-1 space-y-8 items-start">
+      <div className="appointmentside flex-2 space-y-8 items-start">
         <div>
           <h2 className="text-2xl font-bold mb-6">Upcoming Appointments</h2>
           {upcomingAppointments.length > 0 ? (

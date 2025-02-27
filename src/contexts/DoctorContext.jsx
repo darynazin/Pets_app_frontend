@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getDoctor,
   loginDoctor,
@@ -7,6 +8,8 @@ import {
   getDoctors,
   updateDoctor,
   deleteDoctor,
+  getSession,
+  uploadDoctorImage,
 } from "../services/api";
 
 const DoctorContext = createContext();
@@ -15,22 +18,58 @@ export const DoctorProvider = ({ children }) => {
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [doctors, setDoctors] = useState([]);
+  const [error, setError] = useState(null);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      console.log(doctor);
+    }
+  }, [error, doctor]);
 
   const fetchDoctor = async () => {
     try {
+      setLoading(true);
+
+      const sessionResponse = await getSession();
+      if (!sessionResponse.data.authenticated && sessionResponse.data.user.role !== "doctor") {
+        setDoctor(null);
+        return;
+      }
+
       const { data } = await getDoctor();
+      console.log(data);
       setDoctor(data);
     } catch (err) {
-      console.error("Failed to fetch doctor:", err);
+      setError("Failed to fetch doctor");
       setDoctor(null);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+      const checkSession = async () => {
+        try {
+          const response = await getSession();
+          if (response.data.authenticated) {
+            fetchDoctor();
+          } else {
+            setDoctor(null);
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error(error);
+          setDoctor(null);
+          setLoading(false);
+        }
+      };
+      checkSession();
+    }, []);
 
   const fetchDoctors = async () => {
     try {
@@ -39,7 +78,7 @@ export const DoctorProvider = ({ children }) => {
       setDoctors(data);
       setFilteredDoctors(data);
     } catch (err) {
-      console.error("Failed to fetch doctors:", err);
+      setError("Failed to fetch doctors");
     } finally {
       setLoading(false);
     }
@@ -60,39 +99,54 @@ export const DoctorProvider = ({ children }) => {
     setFilteredDoctors(filtered);
   };
 
-  const login = async (credentials) => {
+  const loginVet = async (credentials) => {
+    console.log(credentials);
     try {
       setLoading(true);
-      await loginDoctor(credentials);
-      const { data } = await getDoctor();
-      setDoctor(data);
+      const response = await loginDoctor(credentials);
+      
+      setDoctor(response.data.user);
+      console.log(response.data.user);
+      navigate("/doctor/profile");
     } catch (err) {
-      console.error("Login failed:", err);
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
 
   const register = async (doctorData) => {
-    try {
-      setLoading(true);
-      await registerDoctor(doctorData);
-      const { data } = await getDoctor();
-      setDoctor(data);
-    } catch (err) {
-      console.error("Registration failed:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        setLoading(true);
+  
+        const response = await registerDoctor(doctorData);
+        const doctorId = response.data._id;
+  
+        if (doctorData.image) {
+          try {
+            await uploadDoctorImage(doctorId, doctorData.image);
+          } catch (imageError) {
+            console.error("Image upload failed:", imageError);
+          }
+        }
+  
+        const { data } = await getDoctor();
+        setDoctor(data);
+      } catch (err) {
+        console.error("Registration failed:", err);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const logout = async () => {
+  const logoutVet = async () => {
     try {
       setLoading(true);
       await logoutDoctor();
       setDoctor(null);
     } catch (err) {
-      console.error("Logout failed:", err);
+      setError("Logout failed");
     } finally {
       setLoading(false);
     }
@@ -105,7 +159,7 @@ export const DoctorProvider = ({ children }) => {
       const { data } = await getDoctor();
       setDoctor(data);
     } catch (err) {
-      console.error("Failed to update doctor:", err);
+      setError("Failed to update doctor");
     } finally {
       setLoading(false);
     }
@@ -117,7 +171,7 @@ export const DoctorProvider = ({ children }) => {
       await deleteDoctor();
       setDoctor(null);
     } catch (err) {
-      console.error("Failed to delete doctor account:", err);
+      setError("Failed to delete doctor account");
     } finally {
       setLoading(false);
     }
@@ -129,10 +183,11 @@ export const DoctorProvider = ({ children }) => {
         doctor,
         doctors,
         loading,
+        error,
         fetchDoctor,
-        login,
+        loginVet,
         register,
-        logout,
+        logoutVet,
         fetchDoctors,
         updateDoctorInfo,
         deleteDoctorAccount,
@@ -154,9 +209,10 @@ export const useDoctor = () => {
     doctor,
     doctors,
     loading,
-    login,
+    error,
+    loginVet,
     register,
-    logout,
+    logoutVet,
     fetchDoctor,
     fetchDoctors,
     updateDoctorInfo,
@@ -173,9 +229,10 @@ export const useDoctor = () => {
     doctor,
     doctors,
     loading,
-    login,
+    error,
+    loginVet,
     register,
-    logout,
+    logoutVet,
     fetchDoctor,
     fetchDoctors,
     updateDoctorInfo,

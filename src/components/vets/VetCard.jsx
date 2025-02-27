@@ -98,7 +98,7 @@ const VetCard = ({ doctor }) => {
         <div className="card-actions justify-end mt-4">
           <Link
             to={`/appointments/book/${doctor._id}`}
-            className="btn btn-primary py-1"
+            className="btn btn-primary"
           >
             Book Appointment
           </Link>

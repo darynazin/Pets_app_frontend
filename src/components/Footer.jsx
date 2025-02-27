@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Footer() {
   return (
     <div>
-      <footer className="footer bg-base-100 text-base-content p-10 ">
+      <footer className="footer bg-base-100 text-base-content p-2">
         <Link to="/" className="link link-hover">
           <img src="/logo.png" alt="VetiGo" />
         </Link>
@@ -62,7 +62,7 @@ function Footer() {
         </div>
       </footer>
       <div className="w-11/12 mx-auto">
-      <footer className="footer bg-base-100 text-base-content border-base-300 border-t px-10 pt-6 pb-14">
+      <footer className="footer bg-base-100 text-base-content border-base-300 border-t py-4">
         <div className="flex gap-24 justify-center w-full">
           <h3>© 2023 Relume. All rights reserved.</h3>
           <h3>Privacy Policy</h3>

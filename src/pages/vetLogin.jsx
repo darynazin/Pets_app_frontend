@@ -1,20 +1,17 @@
 import React from "react";
 import { useState } from "react";
 import AuthForm from "../components/AuthForm";
-import { useUser } from "../contexts/UserContext";
+import { useDoctor } from "../contexts/DoctorContext";
 
-function LogIn() {
-  const { login, error } = useUser();
+function VetLogIn() {
+  const { loginVet, error } = useDoctor();
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    image: "",
-    petsId: "[]",
   });
 
   const handleLogin = async (values) => {
-    await login(values);
+    await loginVet(values);
   };
 
   return (
@@ -32,4 +29,4 @@ function LogIn() {
   );
 }
 
-export default LogIn;
+export default VetLogIn;

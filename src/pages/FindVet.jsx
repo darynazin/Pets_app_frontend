@@ -17,7 +17,7 @@ function FindVet() {
   }, [searchTerm, doctors]);
 
   return (
-    <div className='flex p-10 gap-16'>
+    <div className='flex p-10 gap-16 flex-grow'>
       
       <div className='flex-grow'>
       <div className='mb-4 w-full'>
