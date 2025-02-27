@@ -69,7 +69,7 @@ function Header() {
             </div>
           ) : (
             <>
-              <Link to="/" className="link link-hover px-4 min-w-max">
+              <Link to="/vetLogin" className="link link-hover px-4 min-w-max">
                 Are you a vet?
               </Link>
               <div className="flex gap-2">
