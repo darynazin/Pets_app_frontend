@@ -107,3 +107,8 @@ export const uploadDoctorImage = async (doctorId, file) => {
     withCredentials: true,
   });
 };
+
+// time slot API
+export const getAvailableTimeSlots = (doctorId, date) => {
+  return api.get(`/appointments/available?doctorId=${doctorId}&date=${date}`);
+};
