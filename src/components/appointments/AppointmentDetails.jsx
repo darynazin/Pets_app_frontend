@@ -45,20 +45,20 @@ function AppointmentDetails({ appointment }) {
       <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <FaClock />
-          <span>{appointment?.date || "Thursday, 20 February"}</span>
+          <span>{appointment?.date}</span>
         </div>
-        <span>{appointment?.timeSlot || "15:30"}</span>
+        <span>{appointment?.timeSlot}</span>
       </div>
 
       <div className="flex items-center p-4 border-b">
         <img
-          src="https://masterpiecer-images.s3.yandex.net/514a9d14308211ee99a1c20edf74fa66:upscaled"
+          src={appointment?.doctorId?.image || "https://masterpiecer-images.s3.yandex.net/514a9d14308211ee99a1c20edf74fa66:upscaled"}
           alt="Doctor"
           className="rounded-full w-12 h-12 mr-4"
         />
         <div>
           <h2 className="text-lg font-semibold">
-            {appointment?.doctorId?.name || "Rasmus Knauer"}
+            {appointment?.doctorId?.name}
           </h2>
         </div>
       </div>
@@ -70,7 +70,7 @@ function AppointmentDetails({ appointment }) {
         <div className="flex items-center space-x-2 mt-2">
           <FaPaw />
           <p className="font-medium">
-            {appointment?.petId?.name || "Daryna ZINCHENKO"}
+            {appointment?.petId?.name}
           </p>
         </div>
       </div>
@@ -91,7 +91,7 @@ function AppointmentDetails({ appointment }) {
           </div>
 
           <div className="flex justify-end mt-6">
-            <p className="text-red-500" onClick={handleRemove}>
+            <p className="text-red-500 pointer cursor-pointer" onClick={handleRemove}>
               Cancel Appointment
             </p>
           </div>

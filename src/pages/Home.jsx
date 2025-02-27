@@ -10,10 +10,8 @@ function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (search.trim()) {
       navigate("/search");
       setSearchTerm(search);
-    }
   };
 
   const toggleFAQ = (index) => {

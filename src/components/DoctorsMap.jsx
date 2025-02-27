@@ -11,7 +11,7 @@ import { useDoctor } from "../contexts/DoctorContext";
 const DoctorsMap = () => {
   const { doctors, selectedDoctor, setSelectedDoctor } = useDoctor();
   return (
-    <div className="flex-1 max-h-[600px]">
+    <div className="w-1/2 max-h-[600px]">
       <APIProvider
         apiKey={MAPS_KEY}
         onLoad={() => console.log("Maps API has loaded.")}
