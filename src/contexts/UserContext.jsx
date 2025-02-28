@@ -24,7 +24,9 @@ export const UserProvider = ({ children }) => {
     if (error) {
       console.log(error);
     }
-  }, [error, user]);
+
+    console.log("User context: ", user);
+  }, []);
 
   const fetchUser = async () => {
     try {
@@ -50,6 +52,7 @@ export const UserProvider = ({ children }) => {
     const checkSession = async () => {
       try {
         const response = await getSession();
+        console.log("Session response: ", response.data);
         if (response.data.authenticated && response.data.user.role === "user") {
           fetchUser();
         } else {

@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { usePet } from "../../contexts/PetContext";
+import { useUser } from "../../contexts/UserContext";
 
 const PetSelectionStep = ({ selectedPetIds, setSelectedPetIds, nextStep }) => {
   const { pets, fetchPets, loading } = usePet();
+  const { user } = useUser();
 
   useEffect(() => {
-    fetchPets();
+    if(user) {
+      fetchPets();
+    }
   }, []);
+
+  
 
   const togglePetSelection = (petId) => {
     // If pet is already selected, remove it

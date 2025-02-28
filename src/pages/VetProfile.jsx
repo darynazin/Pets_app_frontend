@@ -12,7 +12,8 @@ function VetProfile() {
     loading, 
     setLoading,
     error,
-    setError
+    setError,
+    fetchDoctor,
   } = useDoctor();
   const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
@@ -99,24 +100,10 @@ function VetProfile() {
       const updatedDoctor = await updateDoctorInfo(updatedData);
 
       if (updatedDoctor) {
-        setFormData((prev) => ({
-          ...prev,
-          name: updatedDoctor.name || "",
-          email: updatedDoctor.email || "",
-          address: updatedDoctor.address || "",
-          phone: updatedDoctor.phoneNumber || "",
-          password: "",
-          newPassword: "",
-          image: updatedDoctor.image || "",
-        }));
+        fetchDoctor();
         setPreviewUrl(updatedDoctor.image || null);
         Swal.fire("Success", "Profile updated successfully", "success");
       }
-      Swal.fire("Success", "Profile updated successfully", "success");
-
-
-      
-
     } catch (err) {
       setError(err);
       Swal.fire("Error", "Failed to update profile. Please try again.", "error");
@@ -163,7 +150,7 @@ function VetProfile() {
   return doctor && (
     <div className="max-w-lg mx-auto p-6 bg-white shadow rounded-lg">
       
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p className="text-red-500 text-center p-4">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-col items-center">

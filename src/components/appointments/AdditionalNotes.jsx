@@ -13,9 +13,9 @@ function AdditionalNotes({ appointment }) {
   const handleEditClick = () => setIsEditing(true);
 
   const handleSaveClick = () => {
-    editAppointment({ 
-      _id: appointment._id, 
-      additionalNotes: notes 
+    editAppointment({
+      _id: appointment._id,
+      additionalNotes: notes
     });
 
     setIsEditing(false);

@@ -28,7 +28,10 @@ export const DoctorProvider = ({ children }) => {
     if (error) {
       console.log(error);
     }
-  }, [error]);
+
+    console.log("Doctor context: ", doctor);
+    
+  }, []);
 
   const fetchDoctor = async () => {
     try {
@@ -36,9 +39,7 @@ export const DoctorProvider = ({ children }) => {
 
       const sessionResponse = await getSession();
       if (
-        !sessionResponse.data.authenticated &&
-        sessionResponse.data.user.role !== "doctor"
-      ) {
+        !sessionResponse.data.authenticated && sessionResponse.data.user.role !== "doctor") {
         setDoctor(null);
         return;
       }
@@ -57,7 +58,8 @@ export const DoctorProvider = ({ children }) => {
     const checkSession = async () => {
       try {
         const response = await getSession();
-        if (response.data.authenticated) {
+        if (response.data.authenticated && response.data.user.role === "doctor") {
+          
           fetchDoctor();
         } else {
           setDoctor(null);
@@ -106,7 +108,7 @@ export const DoctorProvider = ({ children }) => {
       const response = await loginDoctor(credentials);
 
       setDoctor(response.data.user);
-      navigate("/doctor/profile");
+      navigate("/doctor/appointments");
     } catch (err) {
       setError(err.message || "Login failed");
     } finally {
