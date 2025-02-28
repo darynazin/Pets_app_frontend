@@ -6,6 +6,7 @@ import {
   updatePet,
   getPetById,
   deletePet as apiDeletePet,
+  uploadPetImage,
 } from "../services/api";
 
 const PetContext = createContext();
@@ -71,10 +72,14 @@ export const PetProvider = ({ children }) => {
   };
 
   const uploadImage = async (petId, file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    responce = await uploadPetImage(petId, formData);
+    try {
+      const response = await uploadPetImage(petId, file);
+      return response;
+    } catch (err) {
+      console.error("Failed to upload image:", err);
+      setError(err.message || "Failed to upload image");
+      throw err;
+    }
   };
 
   const deletePet = async (petId) => {

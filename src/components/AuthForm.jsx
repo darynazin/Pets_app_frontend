@@ -80,7 +80,7 @@ const AuthForm = ({ isRegistering, onSubmit, error }) => {
               className="text-red-500 text-sm"
             />
           </div>
-
+          {/* 
           {isRegistering && (
             <label className="form-control w-full max-w-s mb-4">
               <div className="label">
@@ -92,7 +92,7 @@ const AuthForm = ({ isRegistering, onSubmit, error }) => {
                 onChange={(e) => setFieldValue("image", e.target.files[0])}
               />
             </label>
-          )}
+          )} */}
 
           <button
             type="submit"
