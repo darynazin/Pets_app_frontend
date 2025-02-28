@@ -112,12 +112,15 @@ function VetProfile() {
         setPreviewUrl(updatedDoctor.image || null);
         Swal.fire("Success", "Profile updated successfully", "success");
       }
+      Swal.fire("Success", "Profile updated successfully", "success");
 
 
       
 
     } catch (err) {
       setError(err);
+      Swal.fire("Error", "Failed to update profile. Please try again.", "error");
+
     } finally {
       setLoading(false);
     }
