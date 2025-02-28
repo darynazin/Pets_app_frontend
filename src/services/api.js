@@ -77,12 +77,15 @@ export const updateAppointment = (appointmentData) =>
   api.put("/appointments", appointmentData);
 export const deleteAppointment = (appointmentId) =>
   api.delete(`/appointments/${appointmentId}`);
-export const getAppointmentById = (appointmentId) => 
+export const getAppointmentById = (appointmentId) =>
   api.get(`/appointments/one/${appointmentId}`);
 
 // Image Upload APIs
-export const uploadPetImage = (petId, formData) => {
-  api.post(`/upload/pets/${petId}/image`, formData, {
+
+export const uploadPetImage = async (petId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  return api.post(`/upload/pets/${petId}/image`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

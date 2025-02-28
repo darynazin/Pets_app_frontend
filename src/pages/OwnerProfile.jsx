@@ -95,7 +95,7 @@ function OwnerProfile() {
         updateData.newPassword = formData.newPassword;
       }
 
-      if (imageUrl) {
+      if (imageUrl !== undefined) {
         updateData.image = imageUrl;
       }
 
@@ -245,9 +245,12 @@ function OwnerProfile() {
         <div className="flex gap-4">
           <button
             type="submit"
-            className={`btn btn-primary flex-1 ${loading ? "loading" : ""}`}
+            className="btn btn-primary flex-1"
             disabled={loading}
           >
+            {loading && (
+              <span className="loading loading-spinner loading-xs mr-2"></span>
+            )}
             Save Changes
           </button>
           <button

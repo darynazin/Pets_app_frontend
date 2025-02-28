@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePet } from "../../contexts/PetContext";
 import { formatDateForInput } from "../../utils/dateUtils";
+import { uploadPetImage } from "../../services/api";
 
 const PetEditForm = ({ pet }) => {
   const navigate = useNavigate();
-  const { editPet, deletePet, loading, setLoading, error, setError, uploadImage } = usePet();
+  const {
+    editPet,
+    deletePet,
+    loading,
+    setLoading,
+    error,
+    setError,
+    uploadImage,
+  } = usePet();
+
   const [formData, setFormData] = useState({
     _id: pet._id,
     name: pet.name,
@@ -44,22 +54,41 @@ const PetEditForm = ({ pet }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
 
     try {
+      setLoading(true);
+      setError(null);
+
+      let finalImageUrl = formData.image;
+
       if (imageFile) {
-        const imageResponse = uploadImage(pet._id, imageFile);
-        formData.image = imageResponse.data.imageUrl;
+        try {
+          const imageResponse = await uploadImage(pet._id, imageFile);
+          if (imageResponse && imageResponse.data) {
+            finalImageUrl =
+              imageResponse.data.imageUrl ||
+              imageResponse.data.image ||
+              formData.image;
+          }
+        } catch (imageError) {
+          console.error("Image upload failed:", imageError);
+          setError("Failed to upload image. Pet details were not updated.");
+          setLoading(false);
+          return;
+        }
       }
 
-      editPet(formData);
-      
+      await editPet({
+        ...formData,
+        image: finalImageUrl,
+      });
+
+      navigate("/mypets");
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update pet");
       console.error("Update failed:", err);
+      setError(err.message || "Failed to update pet");
     } finally {
       setLoading(false);
     }
@@ -74,7 +103,7 @@ const PetEditForm = ({ pet }) => {
       setLoading(true);
       deletePet(formData._id);
       // Navigate immediately after successful deletion
-       // Using replace to prevent back navigation
+      // Using replace to prevent back navigation
     } catch (err) {
       setError("Failed to delete pet");
       console.error("Delete failed:", err);
