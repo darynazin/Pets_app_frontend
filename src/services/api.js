@@ -105,7 +105,9 @@ export const uploadDoctorImage = async (doctorId, file) => {
   const formData = new FormData();
   formData.append("file", file);
   return api.post(`/upload/doctors/${doctorId}/image`, formData, {
-    headers: {},
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
     withCredentials: true,
   });
 };

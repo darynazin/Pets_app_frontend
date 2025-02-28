@@ -1,15 +1,17 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
-import { useUser } from "../contexts/UserContext.jsx"; // Import the user context
+import { useUser } from "../contexts/UserContext.jsx";
+import { useDoctor } from "../contexts/DoctorContext.jsx";
 import { useState, useEffect } from "react";
 
 const Layout = () => {
-  const { loading } = useUser();  // Destructure loading state
+  const { loading } = useUser();
+  const { loading: doctorsLoading } = useDoctor();
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading || !doctorsLoading) {
       setIsReady(true);
     }
   }, [loading]);
