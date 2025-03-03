@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import { uploadUserImage } from "../services/api";
+import Swal from "sweetalert2";
 
 function OwnerProfile() {
   const { user, update, remove, loading: contextLoading } = useUser();
@@ -120,17 +121,24 @@ function OwnerProfile() {
   };
 
   const handleDelete = async () => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete your account? This cannot be undone."
-      )
-    ) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete your account and cancel all appointments.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
       try {
         setLoading(true);
         await remove();
-        navigate("/");
+        Swal.fire("Deleted!", "Your account has been deleted.", "success").then(() => {
+          navigate("/");
+        });
       } catch (err) {
-        setError(err.message || "Failed to delete account");
+        Swal.fire("Delete Failed", "Failed to delete account. Try again later.", "error");
         setLoading(false);
       }
     }
