@@ -9,7 +9,6 @@ import {
   updateDoctor,
   deleteDoctor,
   getSession,
-  uploadDoctorImage,
 } from "../services/api";
 
 const DoctorContext = createContext();
@@ -105,7 +104,7 @@ export const DoctorProvider = ({ children }) => {
       const response = await loginDoctor(credentials);
 
       setDoctor(response.data.user);
-      navigate("/doctor/appointments");
+      navigate("/vet/schedule");
     } catch (err) {
       setError(err.message || "Login failed");
     } finally {

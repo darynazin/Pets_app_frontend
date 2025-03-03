@@ -38,10 +38,10 @@ export const AppointmentProvider = ({ children }) => {
   }
     
 
-  const fetchDoctorAppointments = async (doctorId) => {
+  const fetchDoctorAppointments = async () => {
     setLoading(true);
     try {
-      const { data } = await getDoctorAppointments(doctorId);
+      const { data } = await getDoctorAppointments();
       setAppointments(data);
     } catch (err) {
       console.error("Failed to fetch doctor appointments:", err);
@@ -81,6 +81,7 @@ export const AppointmentProvider = ({ children }) => {
       console.error("Failed to delete appointment:", err);
     } finally {
       setLoading(false);
+      fetchDoctorAppointments();
     }
   };
 
