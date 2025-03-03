@@ -10,8 +10,8 @@ function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-      navigate("/search");
-      setSearchTerm(search);
+    navigate("/search");
+    setSearchTerm(search);
   };
 
   const toggleFAQ = (index) => {
@@ -44,7 +44,7 @@ function Home() {
   return (
     <div className="flex flex-col gap-36 flex-grow p-10">
       <div className="hero bg-base-100">
-        <div className="hero-content flex-col lg:flex-row-reverse">
+        <div className="hero-content flex-col lg:flex-row-reverse mt-10">
           <div className="ml-10">
             <h1 className="text-5xl font-bold">
               Book a Vet. Get Trusted Pet Care. Stress-Free.
@@ -71,7 +71,11 @@ function Home() {
               Terms and Conditions.
             </p>
           </div>
-          <img src="/home.svg" className="rounded-lg shadow-2xl" />
+          <img
+            src="/home.svg"
+            className="rounded-lg max-w-full max-h-full"
+            style={{ maxWidth: "480px", maxHeight: "480px" }}
+          />
         </div>
       </div>
 
