@@ -116,10 +116,10 @@ function Header() {
         ) : (
           !doctor && (
             <div className="flex gap-2 items-center">
-              <Link to="/vet/login" className="link link-hover px-4 min-w-max">
+              <Link to="/vet/login" className="btn btn-ghost">
                 Are you a vet?
               </Link>
-              <Link to="/login" className="btn btn-neutral">
+              <Link to="/login" className="btn btn-ghost border border-black">
                 Log In
               </Link>
               <Link to="/signup" className="btn btn-neutral">

@@ -21,7 +21,7 @@ const Layout = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div data-theme="mytheme" className="font-sans flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow my-20">
         <Outlet />
