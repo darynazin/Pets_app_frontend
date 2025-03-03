@@ -7,7 +7,7 @@ function Footer() {
   };
   return (
     <div>
-      <footer className="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
+      <footer className="footer sm:footer-horizontal bg-gray-100 text-base-content p-10">
         <aside>
           <Link to="/" className="link w-20 h-auto">
             <img src="/logo-secondary.png" alt="VetiGo" />

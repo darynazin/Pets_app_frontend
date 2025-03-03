@@ -21,7 +21,14 @@ const AuthForm = ({
   };
   return (
     <Formik
-      initialValues={{ name: "", email: "", password: "", image: null, address: "", phoneNumber: "" }}
+      initialValues={{
+        name: "",
+        email: "",
+        password: "",
+        image: null,
+        address: "",
+        phoneNumber: "",
+      }}
       onSubmit={onSubmit}
       validate={(values) => {
         const errors = {};
@@ -134,14 +141,29 @@ const AuthForm = ({
               : "Login"}
           </button>
           <p className="mt-4 text-center">
-            Don't have an account?{" "}
-            <Link
-              to={isVetLogIn ? "/vet/signup" : "/signup"}
-              className="text-blue-800"
-            >
-              Sign up
-            </Link>{" "}
-            here!{" "}
+            {isRegistering ? (
+              <>
+                Already have an account?{" "}
+                <Link
+                  to={isVetRegistering ? "/vet/login" : "/login"}
+                  className="font-medium"
+                >
+                  Login
+                </Link>{" "}
+                here!
+              </>
+            ) : (
+              <>
+                Don't have an account?{" "}
+                <Link
+                  to={isVetLogIn ? "/vet/signup" : "/signup"}
+                  className="font-medium"
+                >
+                  Sign up
+                </Link>{" "}
+                here!{" "}
+              </>
+            )}
           </p>
         </Form>
       )}

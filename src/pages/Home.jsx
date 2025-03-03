@@ -59,6 +59,7 @@ function Home() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
+          {/* Card 1: Get first aid assistance */}
           <div
             className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
             style={{ transition: "all 0.3s ease" }}
@@ -161,7 +162,7 @@ function Home() {
           </div>
         </div>
         <section className="faq my-24">
-          <div className="faq-container bg-gray-50 p-10 rounded-lg">
+          <div className="faq-container bg-base-100 shadow-xl hover:shadow-2xl p-10 rounded-lg">
             <div className="flex flex-col md:flex-row md:gap-10">
               <div className="faq-des w-full md:w-1/3 mb-10 md:mb-0">
                 <h2 className="text-3xl font-bold mb-4">
