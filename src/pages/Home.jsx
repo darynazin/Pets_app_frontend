@@ -20,7 +20,7 @@ function Home() {
   };
 
   return (
-    <div className="container mx-auto px-8">
+    <div className="container mx-auto px-8 my-20">
       <div className="flex flex-col gap-36 flex-grow">
         <div className="hero bg-base-100">
           <div className="hero-content flex-col lg:flex-row-reverse">
@@ -59,36 +59,105 @@ function Home() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-24">
-          <div className="bg-white flex flex-col gap-3">
-            <div className="text-green-500 text-4xl">✅</div>
-            <div className="flex items-center gap-2 text-lg font-semibold">
-              <span>🆘 AI First Aid Assistant</span>
+          <div
+            className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
+            style={{ transition: "all 0.3s ease" }}
+          >
+            <div className="card-body flex flex-col justify-between h-full">
+              <h2 className="card-title text-xl">
+                <span>🆘 </span>
+                AI First Aid Assistant
+              </h2>
+              <div className="space-y-2">
+                <p className="text-gray-600">
+                  Get instant, vet-approved first aid steps tailored to your
+                  pet's situation.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="badge badge-outline text-green-500 border-green-500">
+                    24/7 Available
+                  </span>
+                  <span className="badge badge-outline text-green-500 border-green-500">
+                    Vet Approved
+                  </span>
+                </div>
+              </div>
+              <div className="card-actions justify-end mt-6">
+                <button className="btn btn-sm" onClick={() => navigate("/")}>
+                  Try Now
+                </button>
+              </div>
             </div>
-            <p className="text-gray-600">
-              Get instant, vet-approved first aid steps tailored to your pet’s
-              situation.
-            </p>
           </div>
 
-          <div className="bg-white flex flex-col gap-3">
-            <div className="text-green-500 text-4xl">✅</div>
-            <div className="flex items-center gap-2 text-lg font-semibold">
-              <span>📅 Instant Vet Booking</span>
+          {/* Card 2: Instant Vet Booking */}
+          <div
+            className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
+            style={{ transition: "all 0.3s ease" }}
+          >
+            <div className="card-body flex flex-col justify-between h-full">
+              <h2 className="card-title text-xl">
+                <span>📅 </span>
+                Instant Vet Booking
+              </h2>
+              <div className="space-y-2">
+                <p className="text-gray-600">
+                  No more waiting on hold—see available slots and book in
+                  seconds.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="badge badge-outline text-blue-500 border-blue-500">
+                    Quick Booking
+                  </span>
+                  <span className="badge badge-outline text-blue-500 border-blue-500">
+                    Verified Clinics
+                  </span>
+                </div>
+              </div>
+              <div className="card-actions justify-end mt-6">
+                <button
+                  className="btn btn-sm"
+                  onClick={() => navigate("/search")}
+                >
+                  Find Vets
+                </button>
+              </div>
             </div>
-            <p className="text-gray-600">
-              No more waiting on hold—see available slots and book in seconds.
-            </p>
           </div>
 
-          <div className="bg-white flex flex-col gap-3">
-            <div className="text-green-500 text-4xl">✅</div>
-            <div className="flex items-center gap-2 text-lg font-semibold">
-              <span>🏥 Find Trusted Vets</span>
+          {/* Card 3: Find Trusted Vets */}
+          <div
+            className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
+            style={{ transition: "all 0.3s ease" }}
+          >
+            <div className="card-body flex flex-col justify-between h-full">
+              <h2 className="card-title text-xl">
+                <span>🏥 </span>
+                Are You a Vet?
+              </h2>
+              <div className="space-y-2">
+                <p className="text-gray-600">
+                  Join the Vet Network. Manage appointments effortlessly, and
+                  grow your practice.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="badge badge-outline text-purple-500 border-purple-500">
+                    Practice Growth
+                  </span>
+                  <span className="badge badge-outline text-purple-500 border-purple-500">
+                    Effortless Booking
+                  </span>
+                </div>
+              </div>
+              <div className="card-actions justify-end mt-6">
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => navigate("/vet/login")}
+                >
+                  Join Now
+                </button>
+              </div>
             </div>
-            <p className="text-gray-600">
-              Easily locate nearby clinics with reviews, contact info, and
-              directions.
-            </p>
           </div>
         </div>
         <section className="faq my-24">

@@ -16,7 +16,7 @@ function Header() {
   return (
     <div className="navbar bg-base-100 px-10">
       <Link to="/" className="navbar-start">
-        <img src="/logo.png" alt="logo" />
+        <img src="/logo.png" alt="logo" className="w-28 h-auto" />
       </Link>
       <div className="navbar-center">
         <Link

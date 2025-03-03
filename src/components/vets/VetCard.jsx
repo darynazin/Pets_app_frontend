@@ -30,18 +30,14 @@ const VetCard = ({ doctor }) => {
       <div className="card-body flex flex-row justify-between px-4 py-1">
         <figure className="flex-shrink-0">
           <div className="avatar">
-            <div className="w-16 h-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+            <div className="w-16 h-16 rounded-full">
               <img
-                src={
-                  doctor.image ||
-                  "https://masterpiecer-images.s3.yandex.net/514a9d14308211ee99a1c20edf74fa66:upscaled"
-                }
+                src={doctor.image || "./src/assets/default-vet.jpg"}
                 alt={doctor.name}
                 className="object-cover"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src =
-                    "https://masterpiecer-images.s3.yandex.net/514a9d14308211ee99a1c20edf74fa66:upscaled";
+                  e.target.src = "./src/assets/default-vet.jpg";
                 }}
               />
             </div>

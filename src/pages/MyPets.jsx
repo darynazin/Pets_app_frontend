@@ -32,7 +32,7 @@ function MyPets() {
   });
 
   return (
-    <div className="container mx-auto px-8">
+    <div className="container mx-auto px-8 my-20">
       <h2 className="text-3xl font-bold mb-6">My Pets & Appointments</h2>
 
       <div className="flex flex-col-reverse lg:flex-row gap-16 mx-auto flex-grow">
