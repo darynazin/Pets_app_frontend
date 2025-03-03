@@ -19,6 +19,7 @@ function VetLogIn() {
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
         <AuthForm
           isRegistering={false}
+          isVetLogIn={true}
           formData={formData}
           setFormData={setFormData}
           onSubmit={handleLogin}

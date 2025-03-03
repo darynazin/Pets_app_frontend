@@ -28,9 +28,6 @@ export const DoctorProvider = ({ children }) => {
     if (error) {
       console.log(error);
     }
-
-    console.log("Doctor context: ", doctor);
-    
   }, []);
 
   const fetchDoctor = async () => {
@@ -120,19 +117,8 @@ export const DoctorProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      const response = await registerDoctor(doctorData);
-      const doctorId = response.data._id;
-
-      if (doctorData.image) {
-        try {
-          await uploadDoctorImage(doctorId, doctorData.image);
-        } catch (imageError) {
-          console.error("Image upload failed:", imageError);
-        }
-      }
-
-      const { data } = await getDoctor();
-      setDoctor(data);
+      await registerDoctor(doctorData);
+      navigate("/vet/login");
     } catch (err) {
       console.error("Registration failed:", err);
       throw err;

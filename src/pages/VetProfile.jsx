@@ -98,11 +98,11 @@ function VetProfile() {
       };
 
       const updatedDoctor = await updateDoctorInfo(updatedData);
-
       if (updatedDoctor) {
+
         fetchDoctor();
         setPreviewUrl(updatedDoctor.image || null);
-        Swal.fire("Success", "Profile updated successfully", "success");
+        Swal.fire("Success", "Profile updated successfully", "success");q
       }
     } catch (err) {
       setError(err);

@@ -11,7 +11,8 @@ import AppointmentBooking from "./pages/AppointmentBooking.jsx";
 import AppointmentPage from "./pages/AppointmentPage.jsx";
 import VetProfile from "./pages/VetProfile.jsx";
 import Layout from "./components/Layout.jsx";
-import VetLogIn from "./pages/VetLogIn.jsx";
+import VetLogIn from "./pages/vetLogin.jsx";
+import VetSignUp from "./pages/VetSignUp.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
@@ -21,43 +22,42 @@ import FindVet from "./pages/FindVet.jsx";
 function App() {
   return (
     <Router>
-      <div data-theme="mytheme" className="font-sans">
-        <UserProvider>
-          <DoctorProvider>
-            <PetProvider>
-              <AppointmentProvider>
-                <Routes>
-                  <Route path="/" element={<Layout />}>
-                    <Route index element={<Home />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/login" element={<LogIn />} />
-                    <Route path="/vetLogin" element={<VetLogIn />} />
-                    <Route path="/mypets" element={<MyPets />} />
-                    <Route
-                      path="/mypets/register"
-                      element={<PetRegistrationPage />}
-                    />
-                    <Route path="/pets/:id/edit" element={<PetEditPage />} />
-                    <Route path="/search" element={<FindVet />} />
-                    <Route path="/profile" element={<OwnerProfile />} />
-                    <Route path="/doctor/profile" element={<VetProfile />} />
-                    <Route path="/emergency" element={<Emergency />} />
-                    <Route
-                      path="/appointments/book/:doctorId"
-                      element={<AppointmentBooking />}
-                    />
-                    {/* <Route path="/pet/:id" element={<PetUpdate />} /> */}
-                    <Route
-                      path="/appointments/:id"
-                      element={<AppointmentPage />}
-                    />
-                  </Route>
-                </Routes>
-              </AppointmentProvider>
-            </PetProvider>
-          </DoctorProvider>
-        </UserProvider>
-      </div>
+      <UserProvider>
+        <DoctorProvider>
+          <PetProvider>
+            <AppointmentProvider>
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/login" element={<LogIn />} />
+                  <Route path="/vet/login" element={<VetLogIn />} />
+                  <Route path="/vet/signup" element={<VetSignUp />} />
+                  <Route path="/mypets" element={<MyPets />} />
+                  <Route
+                    path="/mypets/register"
+                    element={<PetRegistrationPage />}
+                  />
+                  <Route path="/pets/:id/edit" element={<PetEditPage />} />
+                  <Route path="/search" element={<FindVet />} />
+                  <Route path="/profile" element={<OwnerProfile />} />
+                  <Route path="/doctor/profile" element={<VetProfile />} />
+                  <Route path="/emergency" element={<Emergency />} />
+                  <Route
+                    path="/appointments/book/:doctorId"
+                    element={<AppointmentBooking />}
+                  />
+                  {/* <Route path="/pet/:id" element={<PetUpdate />} /> */}
+                  <Route
+                    path="/appointments/:id"
+                    element={<AppointmentPage />}
+                  />
+                </Route>
+              </Routes>
+            </AppointmentProvider>
+          </PetProvider>
+        </DoctorProvider>
+      </UserProvider>
     </Router>
   );
 }

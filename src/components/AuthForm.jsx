@@ -1,7 +1,13 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link } from "react-router-dom";
 
-const AuthForm = ({ isRegistering, onSubmit, error }) => {
+const AuthForm = ({
+  isRegistering,
+  isVetRegistering,
+  isVetLogIn,
+  onSubmit,
+  error,
+}) => {
   const validateFile = (file) => {
     if (file) {
       if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
@@ -15,7 +21,7 @@ const AuthForm = ({ isRegistering, onSubmit, error }) => {
   };
   return (
     <Formik
-      initialValues={{ name: "", email: "", password: "", image: null }}
+      initialValues={{ name: "", email: "", password: "", image: null, address: "", phoneNumber: "" }}
       onSubmit={onSubmit}
       validate={(values) => {
         const errors = {};
@@ -26,27 +32,63 @@ const AuthForm = ({ isRegistering, onSubmit, error }) => {
         return errors;
       }}
     >
-      {({ setFieldValue, isSubmitting, errors }) => (
+      {({ isSubmitting }) => (
         <Form className="space-y-6">
           {error && (
             <div className="text-red-500 text-sm text-center">{error}</div>
           )}
           {isRegistering && (
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Name</span>
-              </label>
-              <Field
-                type="text"
-                name="name"
-                className="w-full input input-bordered"
-              />
-              <ErrorMessage
-                name="name"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
+            <>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Name</span>
+                </label>
+                <Field
+                  type="text"
+                  name="name"
+                  className="w-full input input-bordered"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+              {isVetRegistering && (
+                <>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Address</span>
+                    </label>
+                    <Field
+                      type="text"
+                      name="address"
+                      className="w-full input input-bordered"
+                    />
+                    <ErrorMessage
+                      name="address"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Phone</span>
+                    </label>
+                    <Field
+                      type="text"
+                      name="phoneNumber"
+                      className="w-full input input-bordered"
+                    />
+                    <ErrorMessage
+                      name="phoneNumber"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                </>
+              )}
+            </>
           )}
 
           <div className="form-control">
@@ -80,20 +122,6 @@ const AuthForm = ({ isRegistering, onSubmit, error }) => {
               className="text-red-500 text-sm"
             />
           </div>
-          {/* 
-          {isRegistering && (
-            <label className="form-control w-full max-w-s mb-4">
-              <div className="label">
-                <span className="label-text">Pick a photo</span>
-              </div>
-              <input
-                type="file"
-                className="file-input file-input-bordered file-input-primary w-full max-w-s"
-                onChange={(e) => setFieldValue("image", e.target.files[0])}
-              />
-            </label>
-          )} */}
-
           <button
             type="submit"
             className="w-full btn btn-primary"
@@ -107,7 +135,10 @@ const AuthForm = ({ isRegistering, onSubmit, error }) => {
           </button>
           <p className="mt-4 text-center">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-800">
+            <Link
+              to={isVetLogIn ? "/vet/signup" : "/signup"}
+              className="text-blue-800"
+            >
               Sign up
             </Link>{" "}
             here!{" "}
