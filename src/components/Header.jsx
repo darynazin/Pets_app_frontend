@@ -39,7 +39,7 @@ function Header() {
         )}
         {doctor && (
           <Link
-            to="/appointments"
+            to="/vet/schedule"
             className={`link link-hover p-4 text-md ${
               location.pathname === "/appointments"
                 ? "font-medium"
@@ -93,7 +93,7 @@ function Header() {
                 )}
                 {doctor && (
                   <li>
-                    <Link to="doctor/profile">Profile</Link>
+                    <Link to="vet/profile">Profile</Link>
                   </li>
                 )}
                 <li>

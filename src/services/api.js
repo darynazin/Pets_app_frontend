@@ -69,8 +69,8 @@ export const deletePet = (petId) => api.delete(`/pets/${petId}`);
 
 // Appointment APIs
 export const getUserAppointments = () => api.get("/appointments");
-export const getDoctorAppointments = (doctorId) =>
-  api.get(`/appointments/${doctorId}`);
+export const getDoctorAppointments = () =>
+  api.get(`/appointments/doctor`);
 export const createAppointment = (appointmentData) =>
   api.post("/appointments", appointmentData);
 export const updateAppointment = (appointmentData) =>
