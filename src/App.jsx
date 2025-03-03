@@ -11,7 +11,8 @@ import AppointmentBooking from "./pages/AppointmentBooking.jsx";
 import AppointmentPage from "./pages/AppointmentPage.jsx";
 import VetProfile from "./pages/VetProfile.jsx";
 import Layout from "./components/Layout.jsx";
-import VetLogIn from "./pages/VetLogIn.jsx";
+import VetLogIn from "./pages/vetLogin.jsx";
+import VetSignUp from "./pages/VetSignUp.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
@@ -30,7 +31,8 @@ function App() {
                   <Route index element={<Home />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/login" element={<LogIn />} />
-                  <Route path="/vetLogin" element={<VetLogIn />} />
+                  <Route path="/vet/login" element={<VetLogIn />} />
+                  <Route path="/vet/signup" element={<VetSignUp />} />
                   <Route path="/mypets" element={<MyPets />} />
                   <Route
                     path="/mypets/register"
