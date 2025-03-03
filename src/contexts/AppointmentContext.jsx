@@ -81,6 +81,7 @@ export const AppointmentProvider = ({ children }) => {
       console.error("Failed to delete appointment:", err);
     } finally {
       setLoading(false);
+      fetchDoctorAppointments();
     }
   };
 

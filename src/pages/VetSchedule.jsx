@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAppointment } from '../contexts/AppointmentContext';
-import { useDoctor } from '../contexts/DoctorContext';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
+import AppointmentTable from '../components/appointments/AppointmentTable';
 
 function VetSchedule() {
   const { appointments, fetchDoctorAppointments, loading, removeAppointment } = useAppointment();
-  const { doctor } = useDoctor();
-  
-  // State to handle modal visibility and selected appointment
+  console.log(appointments);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
@@ -15,19 +14,16 @@ function VetSchedule() {
     fetchDoctorAppointments();
   }, []);
 
-  // Function to open the modal with the selected appointment details
   const openModal = (appointment) => {
     setSelectedAppointment(appointment);
     setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedAppointment(null);
   };
 
-  // Function to handle appointment cancellation with confirmation
   const handleCancelAppointment = (appointmentId) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -39,10 +35,10 @@ function VetSchedule() {
       confirmButtonText: 'Yes, cancel it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Proceed with appointment cancellation
         removeAppointment(appointmentId);
         Swal.fire('Cancelled!', 'The appointment has been cancelled.', 'success');
-        closeModal(); // Close the modal after cancelling
+        closeModal();
+        fetchDoctorAppointments();
       }
     });
   };
@@ -57,60 +53,23 @@ function VetSchedule() {
       ) : appointments.length === 0 ? (
         <p className="text-lg text-center">No appointments scheduled.</p>
       ) : (
-        <div className="overflow-x-auto shadow-lg rounded-lg">
-          <table className="table w-full border border-gray-300 bg-white rounded-lg">
-            <thead>
-              <tr className="bg-primary text-white text-lg">
-                <th className="p-4">Date</th>
-                <th className="p-4">Time</th>
-                <th className="p-4">Patient</th>
-                <th className="p-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointments.map((appointment) => (
-                <tr
-                  key={appointment._id}
-                  className="border-b border-gray-200 hover:bg-gray-100 transition cursor-pointer"
-                  onClick={() => openModal(appointment)} // Open modal on row click
-                >
-                  <td className="p-4 text-center">{appointment.date}</td>
-                  <td className="p-4 text-center">{appointment.time}</td>
-                  <td className="p-4 text-center font-semibold">{appointment.petName}</td>
-                  <td className="p-4 text-center">
-                    <button
-                      className="btn btn-outline btn-info btn-sm hover:scale-105 transition-transform"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering modal open on button click
-                        openModal(appointment); // Open modal when clicking on the "Details" button
-                      }}
-                    >
-                      Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <AppointmentTable appointments={appointments} openModal={openModal} />
       )}
 
-      {/* Modal for displaying appointment details */}
       {isModalOpen && selectedAppointment && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
             <h2 className="text-2xl font-bold mb-4">Appointment Details</h2>
             <p><strong>Date:</strong> {selectedAppointment.date}</p>
-            <p><strong>Time:</strong> {selectedAppointment.time}</p>
-            <p><strong>Patient:</strong> {selectedAppointment.petName}</p>
-            <p><strong>Owner:</strong> {selectedAppointment.ownerName}</p>
-            <p><strong>Details:</strong> {selectedAppointment.details}</p>
+            <p><strong>Time:</strong> {selectedAppointment.timeSlot}</p>
+            <p><strong>Patient:</strong> {selectedAppointment.petId.name}</p>
+            <p><strong>Owner:</strong> {selectedAppointment.userId.name}</p>
+            <p><strong>Details:</strong> {selectedAppointment.additionalNotes}</p>
 
-            {/* Cancel button inside modal */}
             <div className="mt-4 flex justify-end">
               <button
                 className="btn btn-outline btn-error"
-                onClick={() => handleCancelAppointment(selectedAppointment._id)} // Trigger Swal before cancel
+                onClick={() => handleCancelAppointment(selectedAppointment._id)}
               >
                 Cancel Appointment
               </button>
