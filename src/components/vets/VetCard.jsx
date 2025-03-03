@@ -22,9 +22,11 @@ const VetCard = ({ doctor }) => {
   return (
     <div
       ref={doctorRef}
-      className={`card w-full border-2 border-blue-100 rounded-lg mb-4 p-2 ${
-        selectedDoctor?._id === doctor._id ? "drop-shadow-lg ring-2" : ""
-      }`}
+      className={`card w-full border-2 ${
+        selectedDoctor?._id === doctor._id
+          ? "border-base-300 bg-base-100 drop-shadow-lg"
+          : "border-gray-100"
+      } rounded-lg mb-4 p-2 hover:bg-base-100 hover:border-base-200 transition-colors`}
       onClick={handleCardClick}
     >
       <div className="card-body flex flex-row justify-between px-4 py-1">
