@@ -32,30 +32,35 @@ function MyPets() {
   });
 
   return (
-    <div className="petside flex flex-col lg:flex-row w-8/12 gap-16 p-8 mx-auto flex-grow">
-      <div className="flex-1 flex flex-col items-start min-w-[400px]">
-        <div className="">
-          <h2 className="text-2xl font-bold mb-6">My Pets</h2>
-          <div className="flex flex-col gap-6 mx-auto">
+    <div className="container mx-auto px-8">
+      <h2 className="text-3xl font-bold mb-6">My Pets & Appointments</h2>
+
+      <div className="flex flex-col-reverse lg:flex-row gap-16 mx-auto flex-grow">
+        <div className="flex-1 flex flex-col items-start">
+          <div className="w-full">
+            <h2 className="text-2xl font-bold mb-6">My Pets</h2>
+
             {pets.length > 0 ? (
               <>
-                {pets.map((pet) => (
-                  <PetCard key={pet._id} pet={pet} />
-                ))}
-                <button
-                  className="btn btn-button w-fit mx-auto my-10"
-                  onClick={() => {
-                    navigate("/mypets/register");
-                  }}
-                >
-                  Add another Pet{" "}
-                </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                  {pets.map((pet) => (
+                    <PetCard key={pet._id} pet={pet} />
+                  ))}
+                </div>
+                <div className="flex justify-start w-full">
+                  <button
+                    className="btn btn-button w-fit my-10"
+                    onClick={() => {
+                      navigate("/mypets/register");
+                    }}
+                  >
+                    Add another Pet
+                  </button>
+                </div>
               </>
             ) : (
               <>
-                <p className="text-gray-500">
-                  No pets registered yet.
-                </p>
+                <p className="text-gray-500">No pets registered yet.</p>
                 <button
                   className="btn btn-button w-fit my-10"
                   onClick={() => {
@@ -68,63 +73,68 @@ function MyPets() {
             )}
           </div>
         </div>
-      </div>
 
-      <div className="appointmentside flex-2 space-y-8 items-start">
-        <div>
-          <h2 className="text-2xl font-bold mb-6">Upcoming Appointments</h2>
-          {upcomingAppointments.length > 0 ? (
-            <div className="space-y-4">
-              {upcomingAppointments.map((appointment) => (
-                <AppointmentCard
-                  key={appointment._id}
-                  appointment={appointment}
-                  status="Upcoming"
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">No upcoming appointments.</p>
-          )}
-        </div>
+        <div className="appointmentside flex-2 space-y-8 items-start">
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Upcoming Appointments</h2>
+            {upcomingAppointments.length > 0 ? (
+              <div className="space-y-4">
+                {upcomingAppointments.map((appointment) => (
+                  <AppointmentCard
+                    key={appointment._id}
+                    appointment={appointment}
+                    status="Upcoming"
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No upcoming appointments.</p>
+            )}
+          </div>
 
-        <div>
-        <div className="flex flex-col">
-          <h2 className="text-2xl font-bold mb-6">Past Appointments</h2>
-          {pastAppointments.length > 0 ? (
-            <div className="space-y-4">
-              {pastAppointments.map((appointment) => (
-                <AppointmentCard
-                  key={appointment._id}
-                  appointment={appointment}
-                  status="Past"
-                />
-              ))}
+          <div>
+            <div className="flex flex-col">
+              <h2 className="text-2xl font-bold mb-6">Past Appointments</h2>
+              {pastAppointments.length > 0 ? (
+                <div className="space-y-4">
+                  {pastAppointments.map((appointment) => (
+                    <AppointmentCard
+                      key={appointment._id}
+                      appointment={appointment}
+                      status="Past"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500">No past appointments.</p>
+              )}
+              {appointments.length > 0 ? (
+                <div className="flex justify-start w-full mt-5">
+                  {" "}
+                  <button
+                    className="btn btn-button w-fit my-10"
+                    onClick={() => {
+                      navigate("/search");
+                    }}
+                  >
+                    Create another Appointment
+                  </button>
+                </div>
+              ) : (
+                <div className="flex justify-start w-full mt-5">
+                  {" "}
+                  <button
+                    className="btn btn-button w-fit my-10"
+                    onClick={() => {
+                      navigate("/search");
+                    }}
+                  >
+                    Create Appointment
+                  </button>
+                </div>
+              )}
             </div>
-          ) : (
-            <p className="text-gray-500">No past appointments.</p>
-          )}
-          {appointments.length > 0 ? (
-            <button
-              className="btn btn-button w-fit mx-auto my-10"
-              onClick={() => {
-                navigate("/search");
-              }}
-            >
-              Create another Appointments
-            </button>
-          ):(
-            <button
-          className="btn btn-button w-fit my-10"
-          onClick={() => {
-            navigate("/search");
-          }}
-        >
-          Create Appointment
-        </button>
-          )}
-        </div>
-        
+          </div>
         </div>
       </div>
     </div>

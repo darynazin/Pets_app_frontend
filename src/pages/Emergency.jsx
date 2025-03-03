@@ -32,8 +32,8 @@ function Emergency() {
   });
 
   return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-bold mb-8">
+    <div className="container mx-auto px-8">
+      <h1 className="text-3xl font-bold mb-8">
         <span>🆘 </span>Vet Clinics with Emergency Service
       </h1>
 

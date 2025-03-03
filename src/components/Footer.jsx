@@ -2,11 +2,46 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Footer() {
+  const getCurrentYear = () => {
+    return new Date().getFullYear();
+  };
   return (
     <div>
-      <footer className="footer bg-base-100 text-base-content p-2">
-        <Link to="/" className="link link-hover">
-          <img src="/logo.png" alt="VetiGo" />
+      <footer className="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
+        <aside>
+          <Link to="/" className="link w-20 h-auto">
+            <img src="/logo-secondary.png" alt="VetiGo" />
+          </Link>
+          <p>
+            © {getCurrentYear()} VetiGO. All rights reserved.
+            <br />
+            Reliable Care When Your Pet Needs It Most.
+          </p>
+        </aside>
+        <nav>
+          <h6 className="footer-title">Services</h6>
+          <a className="link link-hover">Ask VetAI</a>
+          <a className="link link-hover">Find A Vet</a>
+          <a className="link link-hover">Appointment Booking</a>
+          <a className="link link-hover">Emergency Contacts</a>
+        </nav>
+        <nav>
+          <h6 className="footer-title">Company</h6>
+          <a className="link link-hover">About us</a>
+          <a className="link link-hover">Contact</a>
+
+          <a className="link link-hover">Press kit</a>
+        </nav>
+        <nav>
+          <h6 className="footer-title">Legal</h6>
+          <a className="link link-hover">Terms of use</a>
+          <a className="link link-hover">Privacy policy</a>
+          <a className="link link-hover">Cookie policy</a>
+        </nav>
+      </footer>
+      {/* <footer className="footer bg-base-100 text-base-content p-2">
+        <Link to="/" className="link w-20 h-auto">
+          <img src="/logo-secondary.png" alt="VetiGo" />
         </Link>
         <div className="flex gap-24 justify-center w-full">
           <Link to="/" className="link link-hover">
@@ -62,15 +97,14 @@ function Footer() {
         </div>
       </footer>
       <div className="w-11/12 mx-auto">
-      <footer className="footer bg-base-100 text-base-content border-base-300 border-t py-4">
-        <div className="flex gap-24 justify-center w-full">
-          <h3>© 2023 Relume. All rights reserved.</h3>
-          <h3>Privacy Policy</h3>
-          <h3>Terms of Service</h3>
-          <h3>Cookies Settings</h3>
-        </div>
-      </footer>
-      </div>
+        <footer className="footer bg-base-100 text-base-content border-base-300 border-t py-4">
+          <div className="flex gap-24 justify-center w-full">
+            <h3>© 2023 Relume. All rights reserved.</h3>
+            <h3>Privacy Policy</h3>
+            <h3>Terms of Service</h3>
+            <h3>Cookies Settings</h3>
+          </div>
+        </footer> */}
     </div>
   );
 }
