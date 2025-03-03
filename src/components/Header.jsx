@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import { useDoctor } from "../contexts/DoctorContext";
 import { useNavigate } from "react-router-dom";
@@ -19,23 +19,44 @@ function Header() {
         <img src="/logo.png" alt="logo" />
       </Link>
       <div className="navbar-center">
-        <Link to="/" className="link link-hover p-4 text-xl">
+        <Link
+          to="/"
+          className={`link link-hover p-4 text-md ${
+            location.pathname === "/" ? "font-medium" : "font-regular"
+          }`}
+        >
           ASK VetAI
         </Link>
         {user && (
-          <Link to="/mypets" className="link link-hover p-4 text-xl">
-            MY PETS
+          <Link
+            to="/mypets"
+            className={`link link-hover p-4 text-md ${
+              location.pathname === "/mypets" ? "font-medium" : "font-regular"
+            }`}
+          >
+            MY Pets
           </Link>
         )}
         {doctor && (
-          <Link to="/appointments" className="link link-hover p-4 text-xl">
+          <Link
+            to="/appointments"
+            className={`link link-hover p-4 text-md ${
+              location.pathname === "/appointments"
+                ? "font-medium"
+                : "font-regular"
+            }`}
+          >
             My Appointments
           </Link>
         )}
         {!doctor && (
           <Link
             to="/emergency"
-            className="link link-hover p-4 text-xl text-red-500"
+            className={`link link-hover p-4 text-md text-red-500 ${
+              location.pathname === "/emergency"
+                ? "font-medium"
+                : "font-regular"
+            }`}
           >
             Emergency
           </Link>
