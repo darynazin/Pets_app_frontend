@@ -28,7 +28,7 @@ function Header() {
           </Link>
         )}
         {doctor && (
-          <Link to="/appointments" className="link link-hover p-4 text-xl">
+          <Link to="/vet/schedule" className="link link-hover p-4 text-xl">
             My Appointments
           </Link>
         )}
@@ -72,7 +72,7 @@ function Header() {
                 )}
                 {doctor && (
                   <li>
-                    <Link to="doctor/profile">Profile</Link>
+                    <Link to="vet/profile">Profile</Link>
                   </li>
                 )}
                 <li>
