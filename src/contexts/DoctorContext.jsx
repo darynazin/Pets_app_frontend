@@ -9,7 +9,6 @@ import {
   updateDoctor,
   deleteDoctor,
   getSession,
-  uploadDoctorImage,
 } from "../services/api";
 
 const DoctorContext = createContext();
