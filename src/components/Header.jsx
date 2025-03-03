@@ -16,7 +16,7 @@ function Header() {
   return (
     <div className="navbar bg-base-100 px-10">
       <Link to="/" className="navbar-start">
-        <img src="/logo.png" alt="logo" />
+        <img src="/logo.png" alt="logo" className="w-28 h-auto" />
       </Link>
       <div className="navbar-center">
         <Link
@@ -116,10 +116,10 @@ function Header() {
         ) : (
           !doctor && (
             <div className="flex gap-2 items-center">
-              <Link to="/vet/login" className="link link-hover px-4 min-w-max">
+              <Link to="/vet/login" className="btn btn-ghost">
                 Are you a vet?
               </Link>
-              <Link to="/login" className="btn btn-neutral">
+              <Link to="/login" className="btn btn-ghost border border-black">
                 Log In
               </Link>
               <Link to="/signup" className="btn btn-neutral">
