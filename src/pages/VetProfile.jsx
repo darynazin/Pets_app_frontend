@@ -115,7 +115,7 @@ function VetProfile() {
 
   const handleDelete = async () => {
     Swal.fire({
-      title: "Are you sure?",
+      title: "Are you sure? All data and appointments will be deleted!",
       text: "This action cannot be undone!",
       icon: "warning",
       showCancelButton: true,
