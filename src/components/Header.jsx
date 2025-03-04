@@ -20,7 +20,7 @@ function Header() {
       </Link>
       <div className="navbar-center">
         <Link
-          to="/"
+          to="/ai"
           className={`link link-hover p-4 text-md ${
             location.pathname === "/" ? "font-medium" : "font-regular"
           }`}
