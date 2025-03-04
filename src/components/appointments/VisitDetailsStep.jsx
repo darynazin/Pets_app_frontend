@@ -1,5 +1,5 @@
 import React from "react";
-import { VISIT_TYPES } from "../../constants/visitTypes";
+import { VISIT_TYPES } from "../../constants/visitTypes.js";
 
 const VisitDetailsStep = ({
   visitType,

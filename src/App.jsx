@@ -20,6 +20,7 @@ import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
 import { AppointmentProvider } from "./contexts/AppointmentContext.jsx";
 import FindVet from "./pages/FindVet.jsx";
+import { About, Contact, Help } from "./pages/company/index.js";
 
 function App() {
   return (
@@ -56,6 +57,11 @@ function App() {
                     path="/appointments/:id"
                     element={<AppointmentPage />}
                   />
+                  <Route path="/company">
+                    <Route path="about" element={<About />} />
+                    <Route path="contact" element={<Contact />} />
+                    <Route path="help" element={<Help />} />
+                  </Route>
                 </Route>
               </Routes>
             </AppointmentProvider>

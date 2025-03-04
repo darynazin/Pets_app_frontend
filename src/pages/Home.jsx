@@ -20,7 +20,7 @@ function Home() {
   };
 
   return (
-    <div className="container mx-auto px-8 my-20">
+    <div className="container mx-auto px-8 mt-20">
       <div className="flex flex-col gap-36 flex-grow">
         <div className="hero bg-base-100">
           <div className="hero-content flex-col lg:flex-row-reverse">
@@ -41,7 +41,10 @@ function Home() {
                   onChange={(e) => setSearch(e.target.value)}
                   className="input input-bordered w-full max-w-xs"
                 />
-                <button type="submit" className="btn btn-accent">
+                <button
+                  type="submit"
+                  className="btn btn-accent  hover:btn-primary transition-colors duration-300"
+                >
                   Find a Vet
                 </button>
               </form>
@@ -84,7 +87,13 @@ function Home() {
                 </div>
               </div>
               <div className="card-actions justify-end mt-6">
-                <button className="btn btn-sm" onClick={() => navigate("/")}>
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    navigate("/ai");
+                  }}
+                >
                   Try Now
                 </button>
               </div>
@@ -118,7 +127,10 @@ function Home() {
               <div className="card-actions justify-end mt-6">
                 <button
                   className="btn btn-sm"
-                  onClick={() => navigate("/search")}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                    navigate("/search");
+                  }}
                 >
                   Find Vets
                 </button>
@@ -152,8 +164,11 @@ function Home() {
               </div>
               <div className="card-actions justify-end mt-6">
                 <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => navigate("/vet/login")}
+                  className="btn btn-primary btn-sm  hover:btn-accent transition-colors duration-300"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                    navigate("/vet/login");
+                  }}
                 >
                   Join Now
                 </button>

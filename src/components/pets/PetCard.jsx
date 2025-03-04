@@ -39,7 +39,7 @@ function PetCard({ pet }) {
         <h2 className="card-title">{pet.name}</h2>
         <div className="flex items-center text-sm w-full">
           <p className="mr-4">
-            <span className="font-semibold">Species:</span> {pet.species}
+            <span className="font-semibold">Pet Type:</span> {pet.species}
           </p>
           <p className="mr-4">
             <span className="font-semibold">Age:</span>{" "}

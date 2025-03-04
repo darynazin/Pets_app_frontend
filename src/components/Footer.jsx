@@ -9,7 +9,13 @@ function Footer() {
     <div>
       <footer className="footer sm:footer-horizontal bg-gray-100 text-base-content p-10">
         <aside>
-          <Link to="/" className="link w-20 h-auto">
+          <Link
+            to="/"
+            className="link w-20 h-auto"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <img src="/logo-secondary.png" alt="VetiGo" />
           </Link>
           <p>
@@ -34,11 +40,15 @@ function Footer() {
           </Link>
         </nav>
         <nav>
-          <h6 className="footer-title">Company</h6>
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
-
-          <a className="link link-hover">Help</a>
+          <Link to="/company/about" className="link link-hover">
+            About us
+          </Link>
+          <Link to="/company/contact" className="link link-hover">
+            Contact
+          </Link>
+          <Link to="/company/help" className="link link-hover">
+            Help
+          </Link>
         </nav>
         <nav>
           <h6 className="footer-title">Legal</h6>
