@@ -87,7 +87,13 @@ function Home() {
                 </div>
               </div>
               <div className="card-actions justify-end mt-6">
-                <button className="btn btn-sm" onClick={() => navigate("/")}>
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    navigate("/ai");
+                  }}
+                >
                   Try Now
                 </button>
               </div>
@@ -121,7 +127,10 @@ function Home() {
               <div className="card-actions justify-end mt-6">
                 <button
                   className="btn btn-sm"
-                  onClick={() => navigate("/search")}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                    navigate("/search");
+                  }}
                 >
                   Find Vets
                 </button>
@@ -156,7 +165,10 @@ function Home() {
               <div className="card-actions justify-end mt-6">
                 <button
                   className="btn btn-primary btn-sm  hover:btn-accent transition-colors duration-300"
-                  onClick={() => navigate("/vet/login")}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                    navigate("/vet/login");
+                  }}
                 >
                   Join Now
                 </button>
