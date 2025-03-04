@@ -14,6 +14,7 @@ import Layout from "./components/Layout.jsx";
 import VetLogIn from "./pages/vetLogin.jsx";
 import VetSignUp from "./pages/VetSignUp.jsx";
 import VetSchedule from "./pages/VetSchedule.jsx";
+import VetAI from "./pages/VetAI.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
@@ -45,6 +46,7 @@ function App() {
                   <Route path="/profile" element={<OwnerProfile />} />
                   <Route path="/vet/profile" element={<VetProfile />} />
                   <Route path="/emergency" element={<Emergency />} />
+                  <Route path="/ai" element={<VetAI />} />
                   <Route
                     path="/appointments/book/:doctorId"
                     element={<AppointmentBooking />}

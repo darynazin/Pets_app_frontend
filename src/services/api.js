@@ -119,3 +119,9 @@ export const uploadDoctorImage = async (doctorId, file) => {
 export const getAvailableTimeSlots = (doctorId, date) => {
   return api.get(`/appointments/available?doctorId=${doctorId}&date=${date}`);
 };
+
+
+// AI api
+export const getRecommendations = (query) => {
+  return api.post("/api/v1/chat/completions", { message: query});
+};
