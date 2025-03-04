@@ -1,24 +1,26 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+// import React, { useEffect } from "react";
+// import { useLocation } from "react-router-dom";
+import aboutImg1 from "../../assets/about-img_1.jpg";
+import aboutImg2 from "../../assets/about-img_2.jpg";
 
 function About() {
-  const location = useLocation();
+  // const location = useLocation();
 
-  useEffect(() => {
-    // Scroll to section if hash is present in URL
-    if (location.hash) {
-      const element = document.getElementById(location.hash.slice(1));
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   // Scroll to section if hash is present in URL
+  //   if (location.hash) {
+  //     const element = document.getElementById(location.hash.slice(1));
+  //     if (element) {
+  //       element.scrollIntoView({ behavior: "smooth" });
+  //     }
+  //   } else {
+  //     window.scrollTo(0, 0);
+  //   }
+  // }, [location]);
 
   return (
     <div className="container mx-auto px-8 my-16">
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-20">
         {/* Header Section */}
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">About VetiGO</h1>
@@ -47,7 +49,7 @@ function About() {
             </div>
             <div className="lg:w-1/2">
               <img
-                src="/about-mission.svg"
+                src={aboutImg1}
                 alt="VetiGO Mission"
                 className="rounded-lg shadow-md w-full h-auto"
                 onError={(e) => {
@@ -79,7 +81,7 @@ function About() {
             </div>
             <div className="lg:w-1/2">
               <img
-                src="/about-vision.svg"
+                src={aboutImg2}
                 alt="VetiGO Vision"
                 className="rounded-lg shadow-md w-full h-auto"
                 onError={(e) => {
@@ -91,12 +93,12 @@ function About() {
           </div>
         </section>
 
-        {/* What We Do Section */}
+        {/* What We Do Section
         <section id="what-we-do" className="scroll-mt-24">
           <h2 className="text-3xl font-bold mb-8 text-center">What We Do</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8"> */}
+        {/* Card 1 */}
+        {/* <div
               className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
               style={{ transition: "all 0.3s ease" }}
             >
@@ -118,10 +120,10 @@ function About() {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            {/* Card 2 */}
-            <div
+        {/* Card 2 */}
+        {/* <div
               className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
               style={{ transition: "all 0.3s ease" }}
             >
@@ -143,10 +145,10 @@ function About() {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            {/* Card 3 */}
-            <div
+        {/* Card 3 */}
+        {/* <div
               className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
               style={{ transition: "all 0.3s ease" }}
             >
@@ -170,78 +172,91 @@ function About() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Why Choose Us Section */}
-        <section
-          id="why-choose-us"
-          className="scroll-mt-24 bg-base-100 shadow-xl hover:shadow-2xl p-10 rounded-lg"
-        >
-          <h2 className="text-3xl font-bold mb-8 text-center">
-            Why Choose VetiGO
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="flex gap-4">
-              <div className="bg-primary rounded-full h-12 w-12 flex items-center justify-center shrink-0">
-                <span className="text-white text-xl">⏱️</span>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Immediate Assistance
-                </h3>
-                <p className="text-gray-600">
-                  Get instant guidance for pet emergencies when every minute
-                  counts.
-                </p>
-              </div>
-            </div>
+        <section id="why-choose-us" className="scroll-mt-24">
+          <div className="card bg-base-100 shadow-xl mb-20">
+            <div className="card-body">
+              <h2 className="card-title text-3xl font-bold justify-center mb-8">
+                Why Choose VetiGO
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Immediate Assistance */}
+                <div className="card bg-base-200 hover:shadow-md transition-all">
+                  <div className="card-body">
+                    <div className="flex items-center gap-4">
+                      <div className="badge badge-white badge-lg p-4">
+                        <span className="text-2xl">🚑</span>
+                      </div>
+                      <h3 className="card-title text-lg">
+                        Immediate Assistance
+                      </h3>
+                    </div>
+                    <p className="text-base-content/70 mt-2">
+                      Get instant guidance for pet emergencies when every minute
+                      counts.
+                    </p>
+                  </div>
+                </div>
 
-            <div className="flex gap-4">
-              <div className="bg-primary rounded-full h-12 w-12 flex items-center justify-center shrink-0">
-                <span className="text-white text-xl">🛡️</span>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Trusted Information
-                </h3>
-                <p className="text-gray-600">
-                  All first aid guidance is verified by professional
-                  veterinarians.
-                </p>
-              </div>
-            </div>
+                {/* Trusted Information */}
+                <div className="card bg-base-200 hover:shadow-md transition-all">
+                  <div className="card-body">
+                    <div className="flex items-center gap-4">
+                      <div className="badge badge-white badge-lg p-4">
+                        <span className="text-2xl">👨‍⚕️</span>
+                      </div>
+                      <h3 className="card-title text-lg">
+                        Trusted Information
+                      </h3>
+                    </div>
+                    <p className="text-base-content/70 mt-2">
+                      All first aid guidance is verified by professional
+                      veterinarians.
+                    </p>
+                  </div>
+                </div>
 
-            <div className="flex gap-4">
-              <div className="bg-primary rounded-full h-12 w-12 flex items-center justify-center shrink-0">
-                <span className="text-white text-xl">🔄</span>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Seamless Booking</h3>
-                <p className="text-gray-600">
-                  Book, modify, or cancel appointments without phone calls or
-                  waiting.
-                </p>
-              </div>
-            </div>
+                {/* Seamless Booking */}
+                <div className="card bg-base-200 hover:shadow-md transition-all">
+                  <div className="card-body">
+                    <div className="flex items-center gap-4">
+                      <div className="badge badge-white badge-lg p-4">
+                        <span className="text-2xl">📅</span>
+                      </div>
+                      <h3 className="card-title text-lg">Seamless Booking</h3>
+                    </div>
+                    <p className="text-base-content/70 mt-2">
+                      Book, modify, or cancel appointments without phone calls
+                      or waiting.
+                    </p>
+                  </div>
+                </div>
 
-            <div className="flex gap-4">
-              <div className="bg-primary rounded-full h-12 w-12 flex items-center justify-center shrink-0">
-                <span className="text-white text-xl">🔍</span>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Vetted Professionals
-                </h3>
-                <p className="text-gray-600">
-                  All vets on our platform are verified and licensed
-                  professionals.
-                </p>
+                {/* Vetted Professionals */}
+                <div className="card bg-base-200 hover:shadow-md transition-all">
+                  <div className="card-body">
+                    <div className="flex items-center gap-4">
+                      <div className="badge badge-white badge-lg p-4">
+                        <span className="text-2xl">✅</span>
+                      </div>
+                      <h3 className="card-title text-lg">
+                        Vetted Professionals
+                      </h3>
+                    </div>
+                    <p className="text-base-content/70 mt-2">
+                      All vets on our platform are verified and licensed
+                      professionals.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Navigation Section */}
+        {/* Navigation Section
         <div className="bg-base-100 shadow p-6 rounded-lg">
           <h3 className="text-xl font-bold mb-4">Quick Navigation</h3>
           <div className="flex flex-wrap gap-3">
@@ -258,7 +273,7 @@ function About() {
               Why Choose Us
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
