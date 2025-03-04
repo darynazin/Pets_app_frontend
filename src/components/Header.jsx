@@ -22,7 +22,7 @@ function Header() {
         <Link
           to="/ai"
           className={`link link-hover p-4 text-md ${
-            location.pathname === "/" ? "font-medium" : "font-regular"
+            location.pathname === "/ai" ? "font-medium" : "font-regular"
           }`}
         >
           ASK VetAI
@@ -122,7 +122,10 @@ function Header() {
               <Link to="/login" className="btn btn-ghost border border-black">
                 Log In
               </Link>
-              <Link to="/signup" className="btn btn-neutral">
+              <Link
+                to="/signup"
+                className="btn btn-neutral  hover:btn-accent transition-colors duration-300"
+              >
                 Sign Up
               </Link>
             </div>

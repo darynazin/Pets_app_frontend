@@ -9,7 +9,13 @@ function Footer() {
     <div>
       <footer className="footer sm:footer-horizontal bg-gray-100 text-base-content p-10">
         <aside>
-          <Link to="/" className="link w-20 h-auto">
+          <Link
+            to="/"
+            className="link w-20 h-auto"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <img src="/logo-secondary.png" alt="VetiGo" />
           </Link>
           <p>
