@@ -1,61 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { FAQS } from "../../constants/faqs";
-
-// Additional FAQ categories
-const ADDITIONAL_FAQS = {
-  account: [
-    {
-      question: "How do I create an account?",
-      answer:
-        "Creating an account is simple! Click 'Sign Up' in the top-right corner of the homepage, fill in your details, and you're set. You can sign up using your email or through social media accounts.",
-    },
-    {
-      question: "How do I reset my password?",
-      answer:
-        "If you've forgotten your password, click 'Login' and then 'Forgot password?' Enter the email address associated with your account, and we'll send you a link to reset your password.",
-    },
-    {
-      question: "Can I have multiple pets on one account?",
-      answer:
-        "Absolutely! You can add as many pets as you need to your account. Go to 'My Pets' section and click 'Add New Pet' to enter your pet's information including name, species, breed, age, and any relevant medical history.",
-    },
-  ],
-  appointments: [
-    {
-      question: "How far in advance can I book an appointment?",
-      answer:
-        "You can book appointments up to 60 days in advance, depending on the vet clinic's availability. Some clinics may have different scheduling policies, which will be indicated on their profile.",
-    },
-    {
-      question: "Can I book recurring appointments?",
-      answer:
-        "Currently, you need to book each appointment individually. However, you can easily view your pet's appointment history and schedule follow-ups from the same clinic through your dashboard.",
-    },
-    {
-      question: "What information do I need to provide when booking?",
-      answer:
-        "When booking an appointment, you'll need to select your pet, indicate the reason for the visit, choose a date and time, and provide any additional notes about your pet's condition that might be helpful for the vet.",
-    },
-  ],
-  technical: [
-    {
-      question: "Is my data secure on the platform?",
-      answer:
-        "Yes, we take data security seriously. All personal and pet information is encrypted and stored securely. We comply with GDPR and other relevant data protection regulations. You can review our privacy policy for more details.",
-    },
-    {
-      question: "What browsers are supported?",
-      answer:
-        "VetiGO is optimized for modern browsers including Chrome, Firefox, Safari, and Edge. For the best experience, we recommend keeping your browser updated to the latest version.",
-    },
-    {
-      question: "Is there a mobile app available?",
-      answer:
-        "Our website is fully responsive and works well on mobile devices. While a dedicated mobile app is in development, you can currently access all features through your mobile browser.",
-    },
-  ],
-};
+import { ADDITIONAL_FAQS } from "../../constants/additionalFaqs";
 
 function Help() {
   const location = useLocation();
@@ -64,7 +10,6 @@ function Help() {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    // Scroll to section if hash is present in URL
     if (location.hash) {
       const element = document.getElementById(location.hash.slice(1));
       if (element) {
@@ -113,9 +58,9 @@ function Help() {
   };
 
   return (
-    <div className="container mx-auto px-8 my-16">
+    <div className="container mx-auto px-8 my-16 mb-32">
       <div className="flex flex-col gap-16">
-        {/* Header Section */}
+        {/* header */}
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Help Center</h1>
           <p className="text-gray-600 max-w-2xl mx-auto mb-8">
@@ -123,73 +68,57 @@ function Help() {
             VetiGO's features.
           </p>
 
-          {/* Search Bar */}
-          <div className="form-control max-w-md mx-auto">
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Search for help..."
-                className="input input-bordered w-full"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button className="btn btn-square">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-            </div>
+          {/* searchbar */}
+          <div className="form-control w-full max-w-md mx-auto mb-2">
+            <input
+              type="text"
+              placeholder="Search for help..."
+              className="input input-bordered w-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
 
-        {/* Categories Tabs */}
-        <div className="tabs tabs-boxed justify-center">
-          <a
-            className={`tab ${
+        {/* tabs */}
+        <div className="tabs tabs-bordered flex justify-center">
+          <button
+            className={`tab tab-bordered ${
               activeCategory === "general" ? "tab-active" : ""
             }`}
             onClick={() => setActiveCategory("general")}
           >
-            General
-          </a>
-          <a
-            className={`tab ${
+            <span className="text-lg ml-2">General</span>
+          </button>
+
+          <button
+            className={`tab tab-bordered ${
               activeCategory === "account" ? "tab-active" : ""
             }`}
             onClick={() => setActiveCategory("account")}
           >
-            Account
-          </a>
-          <a
-            className={`tab ${
+            <span className="text-lg ml-2">Account</span>
+          </button>
+
+          <button
+            className={`tab tab-bordered ${
               activeCategory === "appointments" ? "tab-active" : ""
             }`}
             onClick={() => setActiveCategory("appointments")}
           >
-            Appointments
-          </a>
-          <a
-            className={`tab ${
+            <span className="text-lg ml-2">Appointments</span>
+          </button>
+
+          <button
+            className={`tab tab-bordered ${
               activeCategory === "technical" ? "tab-active" : ""
             }`}
             onClick={() => setActiveCategory("technical")}
           >
-            Technical
-          </a>
+            <span className="text-lg ml-2">Technical</span>
+          </button>
         </div>
-
-        {/* Search Results */}
+        {/* results */}
         {searchTerm && (
           <section id="search-results" className="scroll-mt-24">
             <h2 className="text-2xl font-bold mb-6">
@@ -236,8 +165,7 @@ function Help() {
             )}
           </section>
         )}
-
-        {/* FAQ Content */}
+        {/* faqs */}
         {!searchTerm && (
           <div>
             {activeCategory === "general" && (
