@@ -34,11 +34,15 @@ function Footer() {
           </Link>
         </nav>
         <nav>
-          <h6 className="footer-title">Company</h6>
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
-
-          <a className="link link-hover">Help</a>
+          <Link to="/company/about" className="link link-hover">
+            About us
+          </Link>
+          <Link to="/company/contact" className="link link-hover">
+            Contact
+          </Link>
+          <Link to="/company/help" className="link link-hover">
+            Help
+          </Link>
         </nav>
         <nav>
           <h6 className="footer-title">Legal</h6>
