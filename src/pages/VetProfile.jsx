@@ -9,15 +9,18 @@ function VetProfile() {
     doctor,
     updateDoctorInfo,
     deleteDoctorAccount,
-    loading, 
-    setLoading,
-    error,
-    setError,
+    loading: contextLoading,
+    setLoading: setContextLoading,
+    error: contextError,
+    setError: setContextError,
     fetchDoctor,
   } = useDoctor();
+
   const navigate = useNavigate();
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(doctor?.image || null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -66,6 +69,15 @@ function VetProfile() {
     }
   };
 
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setPreviewUrl(null);
+    setFormData((prev) => ({
+      ...prev,
+      image: null,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -91,23 +103,37 @@ function VetProfile() {
         name: formData.name.trim(),
         email: formData.email.trim(),
         address: formData.address.trim(),
-        password: formData.password.trim(),
-        newPassword: formData.newPassword.trim(),
         phoneNumber: formData.phone.trim(),
         image: imageUrl,
       };
 
+      if (formData.password) {
+        updatedData.password = formData.password.trim();
+      }
+
+      if (formData.newPassword) {
+        updatedData.newPassword = formData.newPassword.trim();
+      }
+
       const updatedDoctor = await updateDoctorInfo(updatedData);
       if (updatedDoctor) {
-
         fetchDoctor();
         setPreviewUrl(updatedDoctor.image || null);
-        Swal.fire("Success", "Profile updated successfully", "success");q
+        setFormData((prev) => ({
+          ...prev,
+          password: "",
+          newPassword: "",
+        }));
+        Swal.fire("Success", "Profile updated successfully", "success");
+        navigate("/appointments");
       }
     } catch (err) {
-      setError(err);
-      Swal.fire("Error", "Failed to update profile. Please try again.", "error");
-
+      setError(err.message || "Failed to update profile");
+      Swal.fire(
+        "Error",
+        "Failed to update profile. Please try again.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -115,132 +141,205 @@ function VetProfile() {
 
   const handleDelete = async () => {
     Swal.fire({
-      title: "Are you sure? All data and appointments will be deleted!",
-      text: "This action cannot be undone!",
+      title: "Are you sure?",
+      text: "This will permanently delete your account and all appointments.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await deleteDoctorAccount();
-          Swal.fire("Deleted!", "Your account has been deleted.", "success");
-          navigate("/");
-        } catch (err) {
-          Swal.fire(
-            "Error!",
-            "Failed to delete account. Please try again.",
-            "error"
-          );
-        }
-      }
+      cancelButtonText: "Cancel",
     });
+    if (result.isConfirmed) {
+      try {
+        setLoading(true);
+        await deleteDoctorAccount();
+        Swal.fire("Deleted!", "Your account has been deleted.", "success").then(
+          () => {
+            navigate("/");
+          }
+        );
+      } catch (err) {
+        Swal.fire(
+          "Delete Failed",
+          "Failed to delete account. Try again later.",
+          "error"
+        );
+        setLoading(false);
+      }
+    }
   };
 
-  if (loading) {
+  if (contextLoading || !doctor) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
 
-  return doctor && (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow rounded-lg">
-      
-      {error && <p className="text-red-500 text-center p-4">{error}</p>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-col items-center">
-          {previewUrl && (
-            <img
-              src={previewUrl}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover"
-            />
+  return (
+    <div className="container mx-auto px-8 my-20 mb-32">
+      <h1 className="text-3xl font-bold mb-8">{doctor.name}'s Profile Page</h1>
+      <div className="max-w-md mx-auto w-full">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="alert alert-error">
+              <span>{error}</span>
+            </div>
           )}
-          <div className="flex flex-col items-center space-y-3">
-            <label className="flex items-center px-4 py-2 rounded-lg cursor-pointer hover:underline transition">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-              📂 Update Image
-            </label>
+
+          <div className="flex flex-col items-center mb-6">
+            <div className="avatar">
+              <div className="w-32 h-32 rounded-full ring ring-primary mb-4">
+                {previewUrl ? (
+                  <img
+                    src={previewUrl}
+                    alt="Profile preview"
+                    className="rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="bg-gray-200 w-full h-full rounded-full" />
+                )}
+              </div>
+            </div>
+            <div className="flex gap-2 mt-2">
+              <label className="btn btn-outline btn-sm">
+                Change Image
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </label>
+              {(previewUrl || formData.image) && (
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="btn btn-outline btn-error btn-sm"
+                >
+                  Remove Image
+                </button>
+              )}
+            </div>
           </div>
-        </div>
 
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Name"
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="w-full p-2 border rounded"
-          disabled
-        />
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-          placeholder="Address"
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="Phone Number"
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Current Password"
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="newPassword"
-          value={formData.newPassword}
-          onChange={handleChange}
-          placeholder="New Password"
-          className="w-full p-2 border rounded"
-        />
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Name</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="input input-bordered"
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-500 text-white py-2 rounded"
-        >
-          {loading ? "Updating..." : "Update Profile"}
-        </button>
-      </form>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              className="input input-bordered"
+              disabled
+            />
+          </div>
 
-      <button
-        onClick={handleDelete}
-        className="w-full bg-red-500 text-white py-2 rounded mt-4"
-      >
-        Delete Account
-      </button>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Address</span>
+            </label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="input input-bordered"
+              required
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Phone Number</span>
+            </label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="input input-bordered"
+              required
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Current Password</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="input input-bordered"
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">New Password</span>
+            </label>
+            <input
+              type="password"
+              name="newPassword"
+              value={formData.newPassword}
+              onChange={handleChange}
+              className="input input-bordered"
+            />
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              className="btn btn-primary flex-1"
+              disabled={loading}
+            >
+              {loading && (
+                <span className="loading loading-spinner loading-xs mr-2"></span>
+              )}
+              Save Changes
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline btn-error flex-1"
+              onClick={() => navigate("/appointments")}
+            >
+              Cancel
+            </button>
+          </div>
+
+          <div className="flex gap-4 mt-4">
+            <button
+              type="button"
+              className="btn btn-error w-full"
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              Delete Account
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  )
+  );
 }
 
 export default VetProfile;
