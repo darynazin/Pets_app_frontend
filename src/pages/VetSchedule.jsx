@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useAppointment } from '../contexts/AppointmentContext';
-import Swal from 'sweetalert2';
-import AppointmentTable from '../components/appointments/AppointmentTable';
+import React, { useEffect, useState } from "react";
+import { useAppointment } from "../contexts/AppointmentContext";
+import Swal from "sweetalert2";
+import AppointmentTable from "../components/appointments/AppointmentTable";
 
 function VetSchedule() {
-  const { appointments, fetchDoctorAppointments, loading, removeAppointment } = useAppointment();
+  const { appointments, fetchDoctorAppointments, loading, removeAppointment } =
+    useAppointment();
   console.log(appointments);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,17 +27,21 @@ function VetSchedule() {
 
   const handleCancelAppointment = (appointmentId) => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this appointment!',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "You will not be able to recover this appointment!",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
         removeAppointment(appointmentId);
-        Swal.fire('Cancelled!', 'The appointment has been cancelled.', 'success');
+        Swal.fire(
+          "Cancelled!",
+          "The appointment has been cancelled.",
+          "success"
+        );
         closeModal();
         fetchDoctorAppointments();
       }
@@ -44,8 +49,8 @@ function VetSchedule() {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold text-center text-primary mb-6">My Appointments</h1>
+    <div className="container mx-auto px-8 my-20">
+      <h1 className="text-3xl font-bold mb-20">My Appointments</h1>
       {loading ? (
         <div className="flex justify-center items-center">
           <span className="loading loading-spinner text-primary"></span>
@@ -60,11 +65,21 @@ function VetSchedule() {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
             <h2 className="text-2xl font-bold mb-4">Appointment Details</h2>
-            <p><strong>Date:</strong> {selectedAppointment.date}</p>
-            <p><strong>Time:</strong> {selectedAppointment.timeSlot}</p>
-            <p><strong>Patient:</strong> {selectedAppointment.petId.name}</p>
-            <p><strong>Owner:</strong> {selectedAppointment.userId.name}</p>
-            <p><strong>Details:</strong> {selectedAppointment.additionalNotes}</p>
+            <p>
+              <strong>Date:</strong> {selectedAppointment.date}
+            </p>
+            <p>
+              <strong>Time:</strong> {selectedAppointment.timeSlot}
+            </p>
+            <p>
+              <strong>Patient:</strong> {selectedAppointment.petId.name}
+            </p>
+            <p>
+              <strong>Owner:</strong> {selectedAppointment.userId.name}
+            </p>
+            <p>
+              <strong>Details:</strong> {selectedAppointment.additionalNotes}
+            </p>
 
             <div className="mt-4 flex justify-end">
               <button

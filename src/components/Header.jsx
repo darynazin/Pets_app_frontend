@@ -41,7 +41,7 @@ function Header() {
           <Link
             to="/vet/schedule"
             className={`link link-hover p-4 text-md ${
-              location.pathname === "/appointments"
+              location.pathname === "/vet/schedule"
                 ? "font-medium"
                 : "font-regular"
             }`}
