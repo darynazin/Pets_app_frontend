@@ -15,6 +15,7 @@ import VetLogIn from "./pages/vetLogin.jsx";
 import VetSignUp from "./pages/VetSignUp.jsx";
 import VetSchedule from "./pages/VetSchedule.jsx";
 import VetAI from "./pages/VetAI.jsx";
+import ProtectedLayout from "./components/ProtectedLayout.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
@@ -36,31 +37,37 @@ function App() {
                   <Route path="/login" element={<LogIn />} />
                   <Route path="/vet/login" element={<VetLogIn />} />
                   <Route path="/vet/signup" element={<VetSignUp />} />
-                  <Route path="/vet/schedule" element={<VetSchedule />} />
-                  <Route path="/mypets" element={<MyPets />} />
-                  <Route
-                    path="/mypets/register"
-                    element={<PetRegistrationPage />}
-                  />
-                  <Route path="/pets/:id/edit" element={<PetEditPage />} />
+
                   <Route path="/search" element={<FindVet />} />
-                  <Route path="/profile" element={<OwnerProfile />} />
-                  <Route path="/vet/profile" element={<VetProfile />} />
                   <Route path="/emergency" element={<Emergency />} />
                   <Route path="/ai" element={<VetAI />} />
-                  <Route
-                    path="/appointments/book/:doctorId"
-                    element={<AppointmentBooking />}
-                  />
-                  {/* <Route path="/pet/:id" element={<PetUpdate />} /> */}
-                  <Route
-                    path="/appointments/:id"
-                    element={<AppointmentPage />}
-                  />
+
                   <Route path="/company">
                     <Route path="about" element={<About />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="help" element={<Help />} />
+                  </Route>
+
+                  <Route element={<ProtectedLayout allowedRoles={"doctor"} />}>
+                    <Route path="/vet/profile" element={<VetProfile />} />
+                    <Route path="/vet/schedule" element={<VetSchedule />} />
+                  </Route>
+                  <Route element={<ProtectedLayout allowedRoles={"user"} />}>
+                    <Route path="/mypets" element={<MyPets />} />
+                    <Route
+                      path="/mypets/register"
+                      element={<PetRegistrationPage />}
+                    />
+                    <Route path="/profile" element={<OwnerProfile />} />
+                    <Route path="/pets/:id/edit" element={<PetEditPage />} />
+                    <Route
+                      path="/appointments/:id"
+                      element={<AppointmentPage />}
+                    />
+                    <Route
+                      path="/appointments/book/:doctorId"
+                      element={<AppointmentBooking />}
+                    />
                   </Route>
                 </Route>
               </Routes>
