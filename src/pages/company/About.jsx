@@ -1,10 +1,18 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import aboutImg1 from "../../assets/about-img_1.jpg";
 import aboutImg2 from "../../assets/about-img_2.jpg";
+import aboutImg1Placeholder from "../../assets/placeholders/about-img_1-small.jpg";
+import aboutImg2Placeholder from "../../assets/placeholders/about-img_2-small.jpg";
 
 function About() {
   const location = useLocation();
+  const [imagesLoaded, setImagesLoaded] = useState({
+    img1: false,
+    img2: false,
+  });
 
   useEffect(() => {
     if (location.hash) {
@@ -48,16 +56,35 @@ function About() {
               </p>
             </div>
             <div className="lg:w-1/2">
-              <img
-                src={aboutImg1}
-                alt="VetiGO Mission"
-                className="rounded-lg shadow-md w-full h-auto"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src =
-                    "https://placehold.co/600x400?text=Our+Mission";
-                }}
-              />
+              <div className="relative rounded-lg shadow-md overflow-hidden bg-gray-100">
+                {!imagesLoaded.img1 && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="loading loading-spinner loading-lg text-primary"></div>
+                  </div>
+                )}
+                <LazyLoadImage
+                  src={aboutImg1}
+                  alt="VetiGO Mission"
+                  className="w-full h-auto rounded-lg"
+                  effect="blur"
+                  placeholder={
+                    <img
+                      src={aboutImg1Placeholder}
+                      alt="Loading"
+                      className="w-full h-auto rounded-lg blur-sm"
+                    />
+                  }
+                  threshold={300}
+                  afterLoad={() =>
+                    setImagesLoaded((prev) => ({ ...prev, img1: true }))
+                  }
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://placehold.co/600x400?text=Our+Mission";
+                  }}
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -81,15 +108,35 @@ function About() {
               </p>
             </div>
             <div className="lg:w-1/2">
-              <img
-                src={aboutImg2}
-                alt="VetiGO Vision"
-                className="rounded-lg shadow-md w-full h-auto"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://placehold.co/600x400?text=Our+Vision";
-                }}
-              />
+              <div className="relative rounded-lg shadow-md overflow-hidden bg-gray-100">
+                {!imagesLoaded.img2 && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="loading loading-spinner loading-lg text-primary"></div>
+                  </div>
+                )}
+                <LazyLoadImage
+                  src={aboutImg2}
+                  alt="VetiGO Vision"
+                  className="w-full h-auto rounded-lg"
+                  effect="blur"
+                  placeholder={
+                    <img
+                      src={aboutImg2Placeholder}
+                      alt="Loading"
+                      className="w-full h-auto rounded-lg blur-sm"
+                    />
+                  }
+                  threshold={300}
+                  afterLoad={() =>
+                    setImagesLoaded((prev) => ({ ...prev, img2: true }))
+                  }
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://placehold.co/600x400?text=Our+Vision";
+                  }}
+                />
+              </div>
             </div>
           </div>
         </section>
