@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import aboutImg1 from "../../assets/about-img_1.jpg";
 import aboutImg2 from "../../assets/about-img_2.jpg";
-import aboutImg1Placeholder from "../../assets/placeholders/about-img_1-small.jpg";
-import aboutImg2Placeholder from "../../assets/placeholders/about-img_2-small.jpg";
+import aboutImg1Placeholder from "../../assets/about-img_1-small.jpg";
+import aboutImg2Placeholder from "../../assets/about-img_2-small.jpg";
 
 function About() {
   const location = useLocation();
