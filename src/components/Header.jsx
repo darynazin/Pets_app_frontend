@@ -41,7 +41,7 @@ function Header() {
           <Link
             to="/vet/schedule"
             className={`link link-hover p-4 text-md ${
-              location.pathname === "/appointments"
+              location.pathname === "/vet/schedule"
                 ? "font-medium"
                 : "font-regular"
             }`}
@@ -66,7 +66,10 @@ function Header() {
         {user || doctor ? (
           <div className="flex items-center gap-4">
             <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle">
+              <label
+                tabIndex={0}
+                className="btn btn-ghost btn-circle hover:bg-accent"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="black"

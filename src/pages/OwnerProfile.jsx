@@ -134,11 +134,17 @@ function OwnerProfile() {
       try {
         setLoading(true);
         await remove();
-        Swal.fire("Deleted!", "Your account has been deleted.", "success").then(() => {
-          navigate("/");
-        });
+        Swal.fire("Deleted!", "Your account has been deleted.", "success").then(
+          () => {
+            navigate("/");
+          }
+        );
       } catch (err) {
-        Swal.fire("Delete Failed", "Failed to delete account. Try again later.", "error");
+        Swal.fire(
+          "Delete Failed",
+          "Failed to delete account. Try again later.",
+          "error"
+        );
         setLoading(false);
       }
     }
@@ -153,134 +159,136 @@ function OwnerProfile() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Edit Your Profile</h1>
-      <form onSubmit={handleSubmit} className="max-w-lg mx-auto space-y-4">
-        {error && (
-          <div className="alert alert-error">
-            <span>{error}</span>
-          </div>
-        )}
+    <div className="container mx-auto px-8 my-20 mb-32">
+      <h1 className="text-3xl font-bold mb-8">{user.name}'s Profile Page</h1>
+      <div className="max-w-md mx-auto w-full">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="alert alert-error">
+              <span>{error}</span>
+            </div>
+          )}
 
-        <div className="flex flex-col items-center mb-6">
-          <div className="avatar">
-            <div className="w-24 h-24 rounded-full ring ring-primary">
-              {previewUrl ? (
-                <img
-                  src={previewUrl}
-                  alt="Profile preview"
-                  className="rounded-full object-cover"
+          <div className="flex flex-col items-center mb-6">
+            <div className="avatar">
+              <div className="w-32 h-32 rounded-full ring ring-primary mb-4">
+                {previewUrl ? (
+                  <img
+                    src={previewUrl}
+                    alt="Profile preview"
+                    className="rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="bg-gray-200 w-full h-full rounded-full" />
+                )}
+              </div>
+            </div>
+            <div className="flex gap-2 mt-2">
+              <label className="btn btn-outline btn-sm">
+                Change Image
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageChange}
                 />
-              ) : (
-                <div className="bg-gray-200 w-full h-full rounded-full" />
+              </label>
+              {(previewUrl || formData.image) && (
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="btn btn-outline btn-error btn-sm"
+                >
+                  Remove Image
+                </button>
               )}
             </div>
           </div>
-          <div className="flex gap-2 mt-2">
-            <label className="btn btn-outline btn-sm">
-              Change Image
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Name</span>
             </label>
-            {(previewUrl || formData.image) && (
-              <button
-                type="button"
-                onClick={handleRemoveImage}
-                className="btn btn-outline btn-error btn-sm"
-              >
-                Remove Image
-              </button>
-            )}
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="input input-bordered"
+              required
+            />
           </div>
-        </div>
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Name</span>
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="input input-bordered"
-            required
-          />
-        </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
+            <input
+              type="email"
+              value={formData.email}
+              className="input input-bordered"
+              disabled
+            />
+          </div>
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Email</span>
-          </label>
-          <input
-            type="email"
-            value={formData.email}
-            className="input input-bordered"
-            disabled
-          />
-        </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Current Password</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="input input-bordered"
+            />
+          </div>
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Current Password</span>
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            className="input input-bordered"
-          />
-        </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">New Password</span>
+            </label>
+            <input
+              type="password"
+              name="newPassword"
+              value={formData.newPassword}
+              onChange={handleInputChange}
+              className="input input-bordered"
+            />
+          </div>
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">New Password</span>
-          </label>
-          <input
-            type="password"
-            name="newPassword"
-            value={formData.newPassword}
-            onChange={handleInputChange}
-            className="input input-bordered"
-          />
-        </div>
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              className="btn btn-primary flex-1"
+              disabled={loading}
+            >
+              {loading && (
+                <span className="loading loading-spinner loading-xs mr-2"></span>
+              )}
+              Save Changes
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline btn-error flex-1"
+              onClick={() => navigate("/mypets")}
+            >
+              Cancel
+            </button>
+          </div>
 
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="btn btn-primary flex-1"
-            disabled={loading}
-          >
-            {loading && (
-              <span className="loading loading-spinner loading-xs mr-2"></span>
-            )}
-            Save Changes
-          </button>
-          <button
-            type="button"
-            className="btn btn-outline btn-error flex-1"
-            onClick={() => navigate("/mypets")}
-          >
-            Cancel
-          </button>
-        </div>
-
-        <div className="flex gap-4 mt-4">
-          <button
-            type="button"
-            className="btn btn-error w-full"
-            onClick={handleDelete}
-            disabled={loading}
-          >
-            Delete Account
-          </button>
-        </div>
-      </form>
+          <div className="flex gap-4 mt-4">
+            <button
+              type="button"
+              className="btn btn-error w-full"
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              Delete Account
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

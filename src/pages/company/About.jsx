@@ -1,10 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import aboutImg1 from "../../assets/about-img_1.jpg";
 import aboutImg2 from "../../assets/about-img_2.jpg";
+import aboutImg1Placeholder from "../../assets/about-img_1-small.jpg";
+import aboutImg2Placeholder from "../../assets/about-img_2-small.jpg";
 
 function About() {
   const location = useLocation();
+  const [imagesLoaded, setImagesLoaded] = useState({
+    img1: false,
+    img2: false,
+  });
 
   useEffect(() => {
     if (location.hash) {
@@ -48,16 +56,35 @@ function About() {
               </p>
             </div>
             <div className="lg:w-1/2">
-              <img
-                src={aboutImg1}
-                alt="VetiGO Mission"
-                className="rounded-lg shadow-md w-full h-auto"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src =
-                    "https://placehold.co/600x400?text=Our+Mission";
-                }}
-              />
+              <div className="relative rounded-lg shadow-md overflow-hidden bg-gray-100">
+                {!imagesLoaded.img1 && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="loading loading-spinner loading-lg text-primary"></div>
+                  </div>
+                )}
+                <LazyLoadImage
+                  src={aboutImg1}
+                  alt="VetiGO Mission"
+                  className="w-full h-auto rounded-lg"
+                  effect="blur"
+                  placeholder={
+                    <img
+                      src={aboutImg1Placeholder}
+                      alt="Loading"
+                      className="w-full h-auto rounded-lg blur-sm"
+                    />
+                  }
+                  threshold={300}
+                  afterLoad={() =>
+                    setImagesLoaded((prev) => ({ ...prev, img1: true }))
+                  }
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://placehold.co/600x400?text=Our+Mission";
+                  }}
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -81,99 +108,38 @@ function About() {
               </p>
             </div>
             <div className="lg:w-1/2">
-              <img
-                src={aboutImg2}
-                alt="VetiGO Vision"
-                className="rounded-lg shadow-md w-full h-auto"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://placehold.co/600x400?text=Our+Vision";
-                }}
-              />
+              <div className="relative rounded-lg shadow-md overflow-hidden bg-gray-100">
+                {!imagesLoaded.img2 && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="loading loading-spinner loading-lg text-primary"></div>
+                  </div>
+                )}
+                <LazyLoadImage
+                  src={aboutImg2}
+                  alt="VetiGO Vision"
+                  className="w-full h-auto rounded-lg"
+                  effect="blur"
+                  placeholder={
+                    <img
+                      src={aboutImg2Placeholder}
+                      alt="Loading"
+                      className="w-full h-auto rounded-lg blur-sm"
+                    />
+                  }
+                  threshold={300}
+                  afterLoad={() =>
+                    setImagesLoaded((prev) => ({ ...prev, img2: true }))
+                  }
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://placehold.co/600x400?text=Our+Vision";
+                  }}
+                />
+              </div>
             </div>
           </div>
         </section>
-
-        {/* What We Do Section
-        <section id="what-we-do" className="scroll-mt-24">
-          <h2 className="text-3xl font-bold mb-8 text-center">What We Do</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8"> */}
-        {/* Card 1 */}
-        {/* <div
-              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
-              style={{ transition: "all 0.3s ease" }}
-            >
-              <div className="card-body">
-                <h3 className="card-title text-xl">
-                  <span>🆘 </span>
-                  AI-Powered First Aid
-                </h3>
-                <p className="text-gray-600">
-                  Get immediate pet health advice powered by AI. Know exactly
-                  what to do in emergencies before reaching a vet.
-                </p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  <span className="badge badge-outline text-green-500 border-green-500">
-                    24/7 Available
-                  </span>
-                  <span className="badge badge-outline text-green-500 border-green-500">
-                    Vet Approved
-                  </span>
-                </div>
-              </div>
-            </div> */}
-
-        {/* Card 2 */}
-        {/* <div
-              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
-              style={{ transition: "all 0.3s ease" }}
-            >
-              <div className="card-body">
-                <h3 className="card-title text-xl">
-                  <span>📅 </span>
-                  Seamless Booking System
-                </h3>
-                <p className="text-gray-600">
-                  For pet owners: Register, browse available slots, book,
-                  modify, or cancel appointments with ease.
-                </p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  <span className="badge badge-outline text-blue-500 border-blue-500">
-                    Real-time Availability
-                  </span>
-                  <span className="badge badge-outline text-blue-500 border-blue-500">
-                    Easy Scheduling
-                  </span>
-                </div>
-              </div>
-            </div> */}
-
-        {/* Card 3 */}
-        {/* <div
-              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all transform"
-              style={{ transition: "all 0.3s ease" }}
-            >
-              <div className="card-body">
-                <h3 className="card-title text-xl">
-                  <span>📍 </span>
-                  Find Nearby Vets
-                </h3>
-                <p className="text-gray-600">
-                  Locate trusted vets based on your location. View clinic
-                  details and contact information instantly.
-                </p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  <span className="badge badge-outline text-purple-500 border-purple-500">
-                    Location-Based
-                  </span>
-                  <span className="badge badge-outline text-purple-500 border-purple-500">
-                    Verified Clinics
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section> */}
 
         <section id="why-choose-us" className="scroll-mt-24">
           <div className="card bg-base-100 shadow-xl mb-20">
@@ -251,25 +217,6 @@ function About() {
             </div>
           </div>
         </section>
-
-        {/* Navigation Section
-        <div className="bg-base-100 shadow p-6 rounded-lg">
-          <h3 className="text-xl font-bold mb-4">Quick Navigation</h3>
-          <div className="flex flex-wrap gap-3">
-            <a href="#mission" className="btn btn-sm btn-outline">
-              Our Mission
-            </a>
-            <a href="#vision" className="btn btn-sm btn-outline">
-              Our Vision
-            </a>
-            <a href="#what-we-do" className="btn btn-sm btn-outline">
-              What We Do
-            </a>
-            <a href="#why-choose-us" className="btn btn-sm btn-outline">
-              Why Choose Us
-            </a>
-          </div>
-        </div> */}
       </div>
     </div>
   );

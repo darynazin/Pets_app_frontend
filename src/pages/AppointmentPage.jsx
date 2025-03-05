@@ -15,7 +15,7 @@ function AppointmentPage() {
     <div className="flex-grow">
       {appointment && <AppointmentDetails appointment={appointment} />}
     </div>
-  )
+  );
 }
 
 export default AppointmentPage;
