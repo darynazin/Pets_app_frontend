@@ -4,6 +4,7 @@ import { getSession } from "../services/api";
 
 function ProtectedLayout({ allowedRoles }) {
   const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -12,17 +13,22 @@ function ProtectedLayout({ allowedRoles }) {
         setSession(response);
       } catch (error) {
         console.error("Error fetching session:", error);
-        setSession(null);
+      } finally {
+        setLoading(false);
       }
     };
-
+  
     fetchSession();
   }, []);
-
-  if (!session || !session.data.authenticated) {
+  
+  if (loading) {
+    return <p>Loading...</p>; // Or show a spinner
+  }
+  
+  if (!session) {
     return <Navigate to="/login" />;
   }
-
+  
   if (!allowedRoles.includes(session.data.user.role)) {
     return <Navigate to="/" />;
   }
