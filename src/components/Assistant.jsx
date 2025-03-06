@@ -93,7 +93,6 @@ const Assistant = () => {
 
           {response ? (
             <div className="space-y-6">
-              {/* First Aid Recommendations - Now more prominent and with white background */}
               <div>
                 <h3 className="text-2xl font-bold mb-4">
                   First Aid Recommendations
@@ -131,7 +130,6 @@ const Assistant = () => {
                 </div>
               </div>
 
-              {/* Pet Information - Now with less padding and secondary importance */}
               <div className="bg-base-200 p-4 rounded-lg">
                 <h3 className="text-lg font-semibold mb-3">Pet Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
