@@ -23,12 +23,6 @@ export const DoctorProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-  }, []);
-
   const fetchDoctor = async () => {
     try {
       setLoading(true);
@@ -139,17 +133,17 @@ export const DoctorProvider = ({ children }) => {
   };
 
   const updateDoctorInfo = async (doctorData) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await updateDoctor(doctorData);
       setDoctor(response.data);
     } catch (err) {
-      if (typeof err.response.data.error === "string") {
-        setError(err.response.data.error);
-        console.log(err.response.data.error);
-      } else {
-        setError("Failed to update doctor info");
-      }
+
+      const errorMessage =
+      err.response?.data?.error ||
+      err.message ||
+      "Failed to update profile";
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }

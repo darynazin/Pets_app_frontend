@@ -20,12 +20,6 @@ export const UserProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-  }, []);
-
   const fetchUser = async () => {
     try {
       setLoading(true);

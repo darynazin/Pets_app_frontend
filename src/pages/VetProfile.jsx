@@ -10,9 +10,6 @@ function VetProfile() {
     updateDoctorInfo,
     deleteDoctorAccount,
     loading: contextLoading,
-    setLoading: setContextLoading,
-    error: contextError,
-    setError: setContextError,
     fetchDoctor,
   } = useDoctor();
 
@@ -82,6 +79,8 @@ function VetProfile() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    
+    let updateSuccessful = false;
 
     try {
       let imageUrl = formData.image;
@@ -93,6 +92,12 @@ function VetProfile() {
         } catch (imageError) {
           console.error("Image upload failed:", imageError);
           setError("Failed to upload image. Please try again.");
+          await Swal.fire({
+            title: "Error",
+            text: "Failed to upload image. Please try again.",
+            icon: "error",
+            confirmButtonText: "OK"
+          });
           setLoading(false);
           return;
         }
@@ -103,44 +108,48 @@ function VetProfile() {
         name: formData.name.trim(),
         email: formData.email.trim(),
         address: formData.address.trim(),
+        password: formData.password.trim(),
+        newPassword: formData.newPassword.trim(),
         phoneNumber: formData.phone.trim(),
         image: imageUrl,
       };
 
-      if (formData.password) {
-        updatedData.password = formData.password.trim();
-      }
-
-      if (formData.newPassword) {
-        updatedData.newPassword = formData.newPassword.trim();
-      }
-
-      const updatedDoctor = await updateDoctorInfo(updatedData);
-      if (updatedDoctor) {
-        fetchDoctor();
-        setPreviewUrl(updatedDoctor.image || null);
-        setFormData((prev) => ({
-          ...prev,
-          password: "",
-          newPassword: "",
-        }));
-        Swal.fire("Success", "Profile updated successfully", "success");
-        navigate("/appointments");
-      }
+      const result = await updateDoctorInfo(updatedData);
+  
+      updateSuccessful = true;
+      
+      await fetchDoctor();
+      
     } catch (err) {
-      setError(err.message || "Failed to update profile");
-      Swal.fire(
-        "Error",
-        "Failed to update profile. Please try again.",
-        "error"
-      );
+      console.error("Update error:", err);
+      const errorMessage = err.message || "Failed to update profile. Please try again.";
+      setError(errorMessage);
+      
+      await Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+      
+      updateSuccessful = false;
+      
     } finally {
       setLoading(false);
+      
+      if (updateSuccessful) {
+        await Swal.fire({
+          title: "Success",
+          text: "Profile updated successfully",
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+      }
     }
   };
 
   const handleDelete = async () => {
-    Swal.fire({
+    const result = await Swal.fire({
       title: "Are you sure?",
       text: "This will permanently delete your account and all appointments.",
       icon: "warning",
@@ -150,21 +159,25 @@ function VetProfile() {
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "Cancel",
     });
+    
     if (result.isConfirmed) {
       try {
         setLoading(true);
         await deleteDoctorAccount();
-        Swal.fire("Deleted!", "Your account has been deleted.", "success").then(
-          () => {
-            navigate("/");
-          }
-        );
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Your account has been deleted.",
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+        navigate("/");
       } catch (err) {
-        Swal.fire(
-          "Delete Failed",
-          "Failed to delete account. Try again later.",
-          "error"
-        );
+        await Swal.fire({
+          title: "Delete Failed",
+          text: "Failed to delete account. Try again later.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
         setLoading(false);
       }
     }
@@ -320,7 +333,7 @@ function VetProfile() {
             <button
               type="button"
               className="btn btn-outline btn-error flex-1"
-              onClick={() => navigate("/appointments")}
+              onClick={() => navigate("/vet/schedule")}
             >
               Cancel
             </button>

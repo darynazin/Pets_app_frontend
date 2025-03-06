@@ -6,7 +6,6 @@ import AppointmentTable from "../components/appointments/AppointmentTable";
 function VetSchedule() {
   const { appointments, fetchDoctorAppointments, loading, removeAppointment } =
     useAppointment();
-  console.log(appointments);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
