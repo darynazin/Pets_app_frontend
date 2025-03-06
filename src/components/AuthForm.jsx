@@ -41,9 +41,6 @@ const AuthForm = ({
     >
       {({ isSubmitting }) => (
         <Form className="space-y-6">
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
-          )}
           {isRegistering && (
             <>
               <div className="form-control">

@@ -15,7 +15,7 @@ import VetLogIn from "./pages/vetLogin.jsx";
 import VetSignUp from "./pages/VetSignUp.jsx";
 import VetSchedule from "./pages/VetSchedule.jsx";
 import VetAI from "./pages/VetAI.jsx";
-import ProtectedLayout from "./components/ProtectedLayout.jsx";
+// import ProtectedLayout from "./components/ProtectedLayout.jsx";
 import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
@@ -48,11 +48,11 @@ function App() {
                     <Route path="help" element={<Help />} />
                   </Route>
 
-                  <Route element={<ProtectedLayout allowedRoles={"doctor"} />}>
+                  {/* <Route element={<ProtectedLayout allowedRoles={"doctor"} />}> */}
                     <Route path="/vet/profile" element={<VetProfile />} />
                     <Route path="/vet/schedule" element={<VetSchedule />} />
-                  </Route>
-                  <Route element={<ProtectedLayout allowedRoles={"user"} />}>
+                  {/* </Route> */}
+                  {/* <Route element={<ProtectedLayout allowedRoles={"user"} />}> */}
                     <Route path="/mypets" element={<MyPets />} />
                     <Route
                       path="/mypets/register"
@@ -68,7 +68,7 @@ function App() {
                       path="/appointments/book/:doctorId"
                       element={<AppointmentBooking />}
                     />
-                  </Route>
+                  {/* </Route> */}
                 </Route>
               </Routes>
             </AppointmentProvider>
