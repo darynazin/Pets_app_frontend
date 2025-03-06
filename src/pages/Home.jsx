@@ -187,7 +187,15 @@ function Home() {
                   Frequently asked questions ordered by popularity. If you still
                   have any doubts, feel free to ask!
                 </p>
-                <button className="btn">Contact us</button>
+                <button
+                  className="btn"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                    navigate("/company/contact");
+                  }}
+                >
+                  Contact us
+                </button>
               </div>
 
               <div className="faq-accordion w-full md:w-2/3 space-y-4">

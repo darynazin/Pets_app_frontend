@@ -47,7 +47,6 @@ const Assistant = () => {
       const query = `My pet is a ${data[0]}, ${data[1]} years old, breed: ${data[2]}, weighing ${data[3]} kg. It is showing symptoms: ${data[4]} since ${data[5]}. What recommendations do you have?`;
       const response = await getRecommendations({ query });
       setResponse(response.data);
-      console.log(response.data);
     } catch (error) {
       setResponse("Error fetching recommendations.");
     }
@@ -105,21 +104,15 @@ const Assistant = () => {
                           .split(/\d+\./)
                           .filter(Boolean)
                           .map((item, index) => {
-                            // Extract the first few words as the "keyword" (up to the first period or colon)
-                            const parts = item.trim().split(/[:\.]/);
-                            const keyword = parts[0].trim();
-                            const description = parts.slice(1).join(":").trim();
-
                             return (
-                              <div key={index} className="flex gap-2">
-                                <span className="font-medium text-primary min-w-[24px]">
+                              <div key={index} className="flex gap-3">
+                                <span className="font-bold text-primary min-w-[24px]">
                                   {index + 1}.
                                 </span>
                                 <div>
-                                  <span className="font-medium">
-                                    {keyword}:{" "}
+                                  <span className="text-base">
+                                    {item.trim()}
                                   </span>
-                                  <span>{description}</span>
                                 </div>
                               </div>
                             );
@@ -136,29 +129,17 @@ const Assistant = () => {
                   {questions.map((question, index) => (
                     <div
                       key={index}
-                      className="bg-base-100 p-3 rounded-lg shadow-sm"
+                      className="bg-base-100 p-2 rounded-lg shadow-sm"
                     >
                       <p className="text-xs text-base-content/70">{question}</p>
-                      <p className="font-medium">{answers[index]}</p>
+                      <p className="text-sm font-regular">{answers[index]}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="alert alert-warning">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="stroke-current shrink-0 h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
+                <span clasName="text-sm">‼️ </span>
                 <span className="text-sm">
                   This is AI-generated advice and should not replace
                   professional veterinary care. If your pet is in distress,
