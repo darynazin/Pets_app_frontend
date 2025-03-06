@@ -23,12 +23,6 @@ export const DoctorProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-  }, []);
-
   const fetchDoctor = async () => {
     try {
       setLoading(true);

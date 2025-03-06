@@ -39,7 +39,6 @@ function Contact() {
     // Simulate form submission
     setTimeout(() => {
       // In a real app, you'd send this to your backend
-      console.log("Form submitted:", formData);
       setSubmitStatus("success");
       setFormData({
         name: "",
