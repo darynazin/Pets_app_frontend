@@ -21,7 +21,9 @@ function Footer() {
           <p>
             © {getCurrentYear()} VetiGO. All rights reserved.
             <br />
-            Reliable Care When Your Pet Needs It Most.
+            <span className="font-medium">
+              Reliable Care When Your Pet Needs It Most.
+            </span>
           </p>
         </aside>
         <nav>
@@ -40,6 +42,7 @@ function Footer() {
           </Link>
         </nav>
         <nav>
+          <h6 className="footer-title">Company</h6>
           <Link to="/company/about" className="link link-hover">
             About us
           </Link>
