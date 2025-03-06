@@ -10,30 +10,25 @@ function ProtectedLayout({ allowedRoles }) {
     const fetchSession = async () => {
       try {
         const response = await getSession();
-        setSession(response);
+        setSession(response.data);
       } catch (error) {
         console.error("Error fetching session:", error);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchSession();
   }, []);
-  
+
   if (loading) {
-    return <p>Loading...</p>; // Or show a spinner
-  }
-  
-  if (!session) {
-    return <Navigate to="/login" />;
-  }
-  
-  if (!allowedRoles.includes(session.data.user.role)) {
-    return <Navigate to="/" />;
+    return <div>Loading...</div>;
   }
 
-  return <Outlet />;
+  const isAuthenticated =
+    session && session.user && allowedRoles.includes(session.user.role);
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 }
 
 export default ProtectedLayout;
