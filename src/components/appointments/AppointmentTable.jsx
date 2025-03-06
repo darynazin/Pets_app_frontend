@@ -41,7 +41,7 @@ function AppointmentTable({ appointments, openModal }) {
 
               return (
                 <React.Fragment key={monthYear}>
-                  <tr className="bg-accent bg-opacity-50">
+                  <tr className="bg-gray-300 bg-opacity-50">
                     <td
                       colSpan="5"
                       className="p-2 text-left font-bold text-base-content/70"

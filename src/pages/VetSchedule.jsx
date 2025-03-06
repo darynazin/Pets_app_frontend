@@ -87,10 +87,7 @@ function VetSchedule() {
               >
                 Cancel Appointment
               </button>
-              <button
-                className="btn btn-outline btn-primary ml-2"
-                onClick={closeModal}
-              >
+              <button className="btn btn-primary ml-2" onClick={closeModal}>
                 Close
               </button>
             </div>
