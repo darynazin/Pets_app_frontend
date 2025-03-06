@@ -1,18 +1,15 @@
 import React from "react";
 import { useDoctor } from "../contexts/DoctorContext";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AuthForm from "../components/AuthForm";
 
 function VetSignUp() {
-  const navigate = useNavigate();
   const { register } = useDoctor();
   const [error, setError] = useState("");
 
   const handleRegister = async (values) => {
     try {
       await register(values);
-      navigate("/vet/login");
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed");
     }
