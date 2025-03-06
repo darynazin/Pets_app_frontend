@@ -33,7 +33,6 @@ const Assisitant = () => {
       const query = `My pet is a ${data[0]}, ${data[1]} years old, breed: ${data[2]}, weighing ${data[3]} kg. It is showing symptoms: ${data[4]} since ${data[5]}. What recommendations do you have?`;
       const responce = await getRecommendations({ query });
       setResponse(responce.data);
-      console.log(responce.data);
     } catch (error) {
       setResponse("Error fetching recommendations.");
     }

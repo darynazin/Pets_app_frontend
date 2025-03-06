@@ -38,7 +38,6 @@ const PetRegistrationForm = () => {
         birthDate: formatDateForAPI(formData.birthDate),
       };
       const response = await createPet(petData);
-      console.log("Pet created:", response.data);
       const petId = response.data._id;
 
       if (imageFile) {
