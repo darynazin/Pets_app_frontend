@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   getDoctor,
   loginDoctor,
@@ -7,6 +8,7 @@ import {
   getDoctors,
   updateDoctor,
   deleteDoctor,
+  getSession,
 } from "../services/api";
 
 const DoctorContext = createContext();
@@ -15,27 +17,90 @@ export const DoctorProvider = ({ children }) => {
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [doctors, setDoctors] = useState([]);
+  const [error, setError] = useState(null);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const fetchDoctor = async () => {
     try {
+      setLoading(true);
+
+      const sessionResponse = await getSession();
+      if (
+        !sessionResponse.data.authenticated && sessionResponse.data.user.role !== "doctor") {
+        setDoctor(null);
+        return;
+      }
+
       const { data } = await getDoctor();
       setDoctor(data);
     } catch (err) {
-      console.error("Failed to fetch doctor:", err);
+      setError("Failed to fetch doctor");
       setDoctor(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (credentials) => {
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await getSession();
+        if (response.data.authenticated && response.data.user.role === "doctor") {
+          
+          fetchDoctor();
+        } else {
+          setDoctor(null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setDoctor(null);
+        setLoading(false);
+      }
+    };
+    checkSession();
+  }, []);
+
+  const fetchDoctors = async () => {
     try {
       setLoading(true);
-      await loginDoctor(credentials);
-      const { data } = await getDoctor();
-      setDoctor(data);
+      const { data } = await getDoctors();
+      setDoctors(data);
+      setFilteredDoctors(data);
     } catch (err) {
-      console.error("Login failed:", err);
+      setError("Failed to fetch doctors");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterDoctors = (query) => {
+    setSearchTerm(query);
+    if (!query) {
+      setFilteredDoctors(doctors);
+      return;
+    }
+    const lowercasedQuery = query.toLowerCase();
+    const filtered = doctors.filter(
+      (doctor) =>
+        doctor.name.toLowerCase().includes(lowercasedQuery) ||
+        doctor.address.toLowerCase().includes(lowercasedQuery)
+    );
+    setFilteredDoctors(filtered);
+  };
+
+  const loginVet = async (credentials) => {
+    try {
+      setLoading(true);
+      const response = await loginDoctor(credentials);
+
+      setDoctor(response.data.user);
+      navigate("/vet/schedule");
+    } catch (err) {
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -44,48 +109,41 @@ export const DoctorProvider = ({ children }) => {
   const register = async (doctorData) => {
     try {
       setLoading(true);
+
       await registerDoctor(doctorData);
-      const { data } = await getDoctor();
-      setDoctor(data);
+      navigate("/vet/login");
     } catch (err) {
       console.error("Registration failed:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = async () => {
+  const logoutVet = async () => {
     try {
       setLoading(true);
       await logoutDoctor();
       setDoctor(null);
     } catch (err) {
-      console.error("Logout failed:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchDoctors = async () => {
-    try {
-      setLoading(true);
-      const { data } = await getDoctors();
-      setDoctors(data);
-    } catch (err) {
-      console.error("Failed to fetch doctors:", err);
+      setError("Logout failed");
     } finally {
       setLoading(false);
     }
   };
 
   const updateDoctorInfo = async (doctorData) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      await updateDoctor(doctorData);
-      const { data } = await getDoctor();
-      setDoctor(data);
+      const response = await updateDoctor(doctorData);
+      setDoctor(response.data);
     } catch (err) {
-      console.error("Failed to update doctor:", err);
+
+      const errorMessage =
+      err.response?.data?.error ||
+      err.message ||
+      "Failed to update profile";
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -97,7 +155,7 @@ export const DoctorProvider = ({ children }) => {
       await deleteDoctor();
       setDoctor(null);
     } catch (err) {
-      console.error("Failed to delete doctor account:", err);
+      setError("Failed to delete doctor account");
     } finally {
       setLoading(false);
     }
@@ -109,13 +167,22 @@ export const DoctorProvider = ({ children }) => {
         doctor,
         doctors,
         loading,
+        setLoading,
+        error,
+        setError,
         fetchDoctor,
-        login,
+        loginVet,
         register,
-        logout,
+        logoutVet,
         fetchDoctors,
         updateDoctorInfo,
         deleteDoctorAccount,
+        selectedDoctor,
+        setSelectedDoctor,
+        filterDoctors,
+        filteredDoctors,
+        searchTerm,
+        setSearchTerm,
       }}
     >
       {children}
@@ -128,25 +195,43 @@ export const useDoctor = () => {
     doctor,
     doctors,
     loading,
-    login,
+    setLoading,
+    error,
+    setError,
+    loginVet,
     register,
-    logout,
+    logoutVet,
     fetchDoctor,
     fetchDoctors,
     updateDoctorInfo,
     deleteDoctorAccount,
+    selectedDoctor,
+    setSelectedDoctor,
+    filterDoctors,
+    filteredDoctors,
+    searchTerm,
+    setSearchTerm,
   } = useContext(DoctorContext);
 
   return {
     doctor,
     doctors,
     loading,
-    login,
+    setLoading,
+    error,
+    setError,
+    loginVet,
     register,
-    logout,
+    logoutVet,
     fetchDoctor,
     fetchDoctors,
     updateDoctorInfo,
     deleteDoctorAccount,
+    selectedDoctor,
+    setSelectedDoctor,
+    filterDoctors,
+    filteredDoctors,
+    searchTerm,
+    setSearchTerm,
   };
 };

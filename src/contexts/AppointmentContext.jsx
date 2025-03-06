@@ -1,10 +1,11 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import {
   getUserAppointments,
   getDoctorAppointments,
   createAppointment,
   updateAppointment,
   deleteAppointment,
+  getAppointmentById,
 } from "../services/api";
 
 const AppointmentContext = createContext();
@@ -12,6 +13,7 @@ const AppointmentContext = createContext();
 export const AppointmentProvider = ({ children }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [appointment, setAppointment] = useState(null);
 
   const fetchAppointments = async () => {
     try {
@@ -25,10 +27,21 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  const fetchDoctorAppointments = async (doctorId) => {
+  const fetchSingleAppointment = async (appointmentId) => {
+    try {
+      const { data } = await getAppointmentById(appointmentId);
+      setAppointment(data);
+    } catch (err) {
+      console.error("Failed to fetch appointment:", err);
+      return null;
+    }
+  }
+    
+
+  const fetchDoctorAppointments = async () => {
     setLoading(true);
     try {
-      const { data } = await getDoctorAppointments(doctorId);
+      const { data } = await getDoctorAppointments();
       setAppointments(data);
     } catch (err) {
       console.error("Failed to fetch doctor appointments:", err);
@@ -41,8 +54,7 @@ export const AppointmentProvider = ({ children }) => {
   const addAppointment = async (appointmentData) => {
     try {
       setLoading(true);
-      const { data } = await createAppointment(appointmentData);
-      setAppointments((prev) => [...prev, data]);
+      await createAppointment(appointmentData);
     } catch (err) {
       console.error("Failed to create appointment:", err);
     } finally {
@@ -53,10 +65,7 @@ export const AppointmentProvider = ({ children }) => {
   const editAppointment = async (appointmentData) => {
     try {
       setLoading(true);
-      const { data } = await updateAppointment(appointmentData);
-      setAppointments((prev) =>
-        prev.map((appt) => (appt._id === data._id ? data : appt))
-      );
+      await updateAppointment(appointmentData);
     } catch (err) {
       console.error("Failed to update appointment:", err);
     } finally {
@@ -68,13 +77,11 @@ export const AppointmentProvider = ({ children }) => {
     try {
       setLoading(true);
       await deleteAppointment(appointmentId);
-      setAppointments((prev) =>
-        prev.filter((appt) => appt._id !== appointmentId)
-      );
     } catch (err) {
       console.error("Failed to delete appointment:", err);
     } finally {
       setLoading(false);
+      fetchDoctorAppointments();
     }
   };
 
@@ -88,6 +95,8 @@ export const AppointmentProvider = ({ children }) => {
         editAppointment,
         removeAppointment,
         fetchDoctorAppointments,
+        fetchSingleAppointment,
+        appointment
       }}
     >
       {children}
@@ -104,6 +113,8 @@ export const useAppointment = () => {
     editAppointment,
     removeAppointment,
     fetchDoctorAppointments,
+    fetchSingleAppointment,
+    appointment
   } = useContext(AppointmentContext);
 
   return {
@@ -114,5 +125,7 @@ export const useAppointment = () => {
     editAppointment,
     removeAppointment,
     fetchDoctorAppointments,
+    fetchSingleAppointment,
+    appointment
   };
 };

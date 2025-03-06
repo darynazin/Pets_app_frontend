@@ -1,55 +1,38 @@
-import React from 'react'
-import { useState } from 'react';
-import AuthForm from '../components/AuthForm';
-import { useUser } from '../contexts/UserContext';
-import { useNavigate } from "react-router-dom";
-
+import React from "react";
+import { useState } from "react";
+import AuthForm from "../components/AuthForm";
+import { useUser } from "../contexts/UserContext";
 
 function LogIn() {
-  const navigate = useNavigate();
-  const { login, register } = useUser();
+  const { login, error } = useUser();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    image: '',
-    petsId: '[]',
+    name: "",
+    email: "",
+    password: "",
+    image: "",
+    petsId: "[]",
   });
 
-  const [isRegistering, setIsRegistering] = useState(false);
-  // Handle Login
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    login(formData);
-    navigate("/mypets")
+  const handleLogin = async (values) => {
+    await login(values);
   };
-
-  // Handle Registration
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    register(formData);
-    
-  };
-
-  // Handle Logout
-  // const handleLogout = async () => {
-  //   logout();
-  // };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-      
+    <div className="bg-gray-100 min-h-screen">
+      <div className="container mx-auto py-20 px-4">
+        <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+          <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
           <AuthForm
+            isRegistering={false}
             formData={formData}
             setFormData={setFormData}
-            onSubmit={isRegistering ? handleRegister : handleLogin}
-            toggleForm={() => setIsRegistering(!isRegistering)}
+            onSubmit={handleLogin}
+            error={error}
           />
-        
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default LogIn
+export default LogIn;

@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   getUser,
   loginUser,
@@ -6,6 +8,8 @@ import {
   registerUser,
   updateUser,
   deleteUser,
+  getSession,
+  uploadUserImage,
 } from "../services/api";
 
 const UserContext = createContext();
@@ -13,28 +17,56 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
 
-    const fetchUser = async () => {
-      try {
-        const { data } = await getUser();
-        setUser(data);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
+      const sessionResponse = await getSession();
+      if (!sessionResponse.data.authenticated && sessionResponse.data.user.role !== "user") {
         setUser(null);
-      } finally {
+        return;
+      }
+
+      const { data } = await getUser();
+      setUser(data);
+    } catch (err) {
+      setError(err.message || "Failed to fetch user");
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await getSession();
+        if (response.data.authenticated && response.data.user.role === "user") {
+          fetchUser();
+        } else {
+          setUser(null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setUser(null);
         setLoading(false);
       }
     };
+    checkSession();
+  }, []);
 
   const login = async (credentials) => {
     try {
       setLoading(true);
-      await loginUser(credentials);
-      const { data } = await getUser();
-      setUser(data);
+      const response = await loginUser(credentials);
+      setUser(response.data.user);
+      navigate("/mypets");
     } catch (err) {
-      console.error("Login failed:", err);
+      setError("Invalid email or password", err);
     } finally {
       setLoading(false);
     }
@@ -43,11 +75,23 @@ export const UserProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       setLoading(true);
-      await registerUser(userData);
+
+      const response = await registerUser(userData);
+      const userId = response.data._id;
+
+      if (userData.image) {
+        try {
+          await uploadUserImage(userId, userData.image);
+        } catch (imageError) {
+          console.error("Image upload failed:", imageError);
+        }
+      }
+
       const { data } = await getUser();
       setUser(data);
     } catch (err) {
       console.error("Registration failed:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -69,9 +113,14 @@ export const UserProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await updateUser(userData);
-      setUser(response.data);
+      if (response?.data) {
+        setUser(response.data);
+        return response.data;
+      }
+      throw new Error("Failed to update user");
     } catch (err) {
       console.error("Failed to update user:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -91,7 +140,17 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ fetchUser, user, loading, login, register, logout, update, remove }}
+      value={{
+        fetchUser,
+        user,
+        loading,
+        login,
+        register,
+        logout,
+        update,
+        remove,
+        error,
+      }}
     >
       {children}
     </UserContext.Provider>
@@ -99,8 +158,27 @@ export const UserProvider = ({ children }) => {
 };
 
 export const useUser = () => {
-  const { fetchUser, user, loading, login, register, logout, update, remove } =
-    useContext(UserContext);
+  const {
+    fetchUser,
+    user,
+    loading,
+    login,
+    register,
+    logout,
+    update,
+    remove,
+    error,
+  } = useContext(UserContext);
 
-  return { fetchUser, user, loading, login, register, logout, update, remove };
+  return {
+    fetchUser,
+    user,
+    loading,
+    login,
+    register,
+    logout,
+    update,
+    remove,
+    error,
+  };
 };
