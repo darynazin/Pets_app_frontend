@@ -38,7 +38,7 @@ const PetRegistrationForm = () => {
         birthDate: formatDateForAPI(formData.birthDate),
       };
       const response = await createPet(petData);
-      const petId = response.data._id;
+      const petId = response.data.pet._id || response.data._id;
 
       if (imageFile) {
         try {
@@ -56,9 +56,12 @@ const PetRegistrationForm = () => {
       navigate("/mypets");
     } catch (err) {
       const errorMessage =
-        err.response?.data?.message || err.message || "Failed to register pet";
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        "Failed to register pet";
+
       setError(errorMessage);
-      console.error("Registration error:", err);
     } finally {
       setLoading(false);
     }

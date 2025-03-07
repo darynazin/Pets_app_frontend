@@ -21,7 +21,7 @@ function Home() {
 
   return (
     <div className="container mx-auto px-8 mt-20 mb-32">
-      <div className="flex flex-col gap-32 flex-grow">
+      <div className="flex flex-col gap-24 flex-grow">
         <div className="hero bg-base-100">
           <div className="hero-content flex-col lg:flex-row-reverse">
             <div className="ml-10">
