@@ -8,12 +8,10 @@ const PetSelectionStep = ({ selectedPetIds, setSelectedPetIds, nextStep }) => {
   const { user } = useUser();
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       fetchPets();
     }
   }, []);
-
-  
 
   const togglePetSelection = (petId) => {
     // If pet is already selected, remove it
@@ -38,7 +36,7 @@ const PetSelectionStep = ({ selectedPetIds, setSelectedPetIds, nextStep }) => {
     return (
       <div className="text-center p-8">
         <p className="mb-4">You don't have any registered pets yet.</p>
-        <Link to="/pets/register" className="btn btn-primary">
+        <Link to="/mypets/register" className="btn btn-primary">
           Register a Pet First
         </Link>
       </div>
