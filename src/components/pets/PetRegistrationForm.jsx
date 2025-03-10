@@ -3,6 +3,7 @@ import { createPet, uploadPetImage } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { usePet } from "../../contexts/PetContext";
 import { formatDateForInput, formatDateForAPI } from "../../utils/dateUtils";
+import Swal from "sweetalert2";
 
 const PetRegistrationForm = () => {
   const navigate = useNavigate();
@@ -33,12 +34,38 @@ const PetRegistrationForm = () => {
     setError("");
 
     try {
+      const loadingToast = Swal.fire({
+        title: "Registering your pet",
+        html: "Please wait...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
       const petData = {
         ...formData,
         birthDate: formatDateForAPI(formData.birthDate),
       };
+
+      // Log the response to see its structure
       const response = await createPet(petData);
-      const petId = response.data.pet._id || response.data._id;
+      console.log("Full pet creation response:", response);
+
+      // More robust way to extract the ID
+      let petId;
+      if (response.data?.pet?._id) {
+        petId = response.data.pet._id;
+      } else if (response.data?._id) {
+        petId = response.data._id;
+      } else if (response._id) {
+        petId = response._id;
+      } else {
+        console.error("Could not find pet ID in response:", response);
+        throw new Error("Could not find pet ID in server response");
+      }
+
+      console.log("Extracted pet ID:", petId);
 
       if (imageFile) {
         try {
@@ -46,15 +73,41 @@ const PetRegistrationForm = () => {
           console.log("Image upload response:", imageResponse.data);
         } catch (imageError) {
           console.error("Image upload failed:", imageError);
-          setError(
-            `Pet created but image upload failed: ${imageError.message}`
-          );
+          // Non-blocking error - continue even if image upload fails
         }
       }
 
+      loadingToast.close();
+
       await fetchPets();
-      navigate("/mypets");
+
+      // Success feedback with options
+      await Swal.fire({
+        title: "Success!",
+        text: `${formData.name} has been added to your pets!`,
+        icon: "success",
+        confirmButtonText: "View My Pets",
+        showCancelButton: true,
+        cancelButtonText: "Add Another Pet",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/mypets");
+        } else {
+          // Reset form for adding another pet
+          setFormData({
+            name: "",
+            species: "",
+            breed: "",
+            birthDate: formatDateForInput(new Date()),
+            additionalNotes: "",
+          });
+          setImageFile(null);
+          setPreviewUrl(null);
+        }
+      });
     } catch (err) {
+      console.error("Pet registration error:", err);
+
       const errorMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
@@ -62,6 +115,13 @@ const PetRegistrationForm = () => {
         "Failed to register pet";
 
       setError(errorMessage);
+
+      Swal.fire({
+        title: "Registration Failed",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
     } finally {
       setLoading(false);
     }
@@ -125,7 +185,7 @@ const PetRegistrationForm = () => {
 
       <div className="form-control">
         <label className="label">
-          <span className="label-text">Species</span>
+          <span className="label-text">Pet Type</span>
         </label>
         <input
           type="text"
@@ -183,7 +243,7 @@ const PetRegistrationForm = () => {
         className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
         disabled={loading}
       >
-        Register Pet
+        Add new pet
       </button>
     </form>
   );
