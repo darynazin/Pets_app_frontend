@@ -48,11 +48,9 @@ const PetRegistrationForm = () => {
         birthDate: formatDateForAPI(formData.birthDate),
       };
 
-      // Log the response to see its structure
       const response = await createPet(petData);
       console.log("Full pet creation response:", response);
 
-      // More robust way to extract the ID
       let petId;
       if (response.data?.pet?._id) {
         petId = response.data.pet._id;
@@ -65,46 +63,44 @@ const PetRegistrationForm = () => {
         throw new Error("Could not find pet ID in server response");
       }
 
-      console.log("Extracted pet ID:", petId);
-
       if (imageFile) {
         try {
           const imageResponse = await uploadPetImage(petId, imageFile);
           console.log("Image upload response:", imageResponse.data);
         } catch (imageError) {
           console.error("Image upload failed:", imageError);
-          // Non-blocking error - continue even if image upload fails
         }
       }
 
       loadingToast.close();
-
       await fetchPets();
 
-      // Success feedback with options
-      await Swal.fire({
+      setLoading(false);
+
+      const result = await Swal.fire({
         title: "Success!",
         text: `${formData.name} has been added to your pets!`,
         icon: "success",
         confirmButtonText: "View My Pets",
         showCancelButton: true,
         cancelButtonText: "Add Another Pet",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/mypets");
-        } else {
-          // Reset form for adding another pet
-          setFormData({
-            name: "",
-            species: "",
-            breed: "",
-            birthDate: formatDateForInput(new Date()),
-            additionalNotes: "",
-          });
-          setImageFile(null);
-          setPreviewUrl(null);
-        }
       });
+
+      if (result.isConfirmed) {
+        navigate("/mypets");
+      } else {
+        setFormData({
+          name: "",
+          species: "",
+          breed: "",
+          birthDate: formatDateForInput(new Date()),
+          additionalNotes: "",
+        });
+        setImageFile(null);
+        setPreviewUrl(null);
+      }
+
+      return;
     } catch (err) {
       console.error("Pet registration error:", err);
 
