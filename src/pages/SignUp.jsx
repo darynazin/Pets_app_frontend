@@ -10,6 +10,7 @@ function SignUp() {
   const [error, setError] = useState("");
 
   const handleRegister = async (values) => {
+    console.log(values);
     try {
       await register(values);
       navigate("/login");
@@ -25,7 +26,7 @@ function SignUp() {
           <h1 className="text-3xl font-bold text-center mb-6">Sign Up</h1>
           <AuthForm
             isRegistering={true}
-            onSubmit={handleRegister}
+            handleSubmit={handleRegister}
             error={error}
           />
         </div>

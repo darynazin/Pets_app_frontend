@@ -22,7 +22,7 @@ function VetSignUp() {
           <AuthForm
             isRegistering={true}
             isVetRegistering={true}
-            onSubmit={handleRegister}
+            handleSubmit={handleRegister}
             error={error}
           />
         </div>

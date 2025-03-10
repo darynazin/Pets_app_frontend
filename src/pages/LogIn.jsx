@@ -26,7 +26,7 @@ function LogIn() {
             isRegistering={false}
             formData={formData}
             setFormData={setFormData}
-            onSubmit={handleLogin}
+            handleSubmit={handleLogin}
             error={error}
           />
         </div>
