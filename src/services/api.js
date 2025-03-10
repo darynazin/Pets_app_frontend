@@ -51,11 +51,7 @@ export const updateDoctor = (doctorData) => api.put("/doctors", doctorData);
 export const deleteDoctor = () => api.delete("/doctors");
 
 // Pet APIs
-export const createPet = (petData) => {
-  return api.post("/pets", petData, {
-    withCredentials: true,
-  });
-};
+export const createPet = (petData) => api.post("/pets", petData);
 export const getMyPets = () => api.get("/pets");
 export const getPetById = async (petId) => {
   try {
@@ -73,7 +69,8 @@ export const deletePet = (petId) => api.delete(`/pets/${petId}`);
 
 // Appointment APIs
 export const getUserAppointments = () => api.get("/appointments");
-export const getDoctorAppointments = () => api.get(`/appointments/doctor`);
+export const getDoctorAppointments = () =>
+  api.get(`/appointments/doctor`);
 export const createAppointment = (appointmentData) =>
   api.post("/appointments", appointmentData);
 export const updateAppointment = (appointmentData) =>
@@ -123,7 +120,8 @@ export const getAvailableTimeSlots = (doctorId, date) => {
   return api.get(`/appointments/available?doctorId=${doctorId}&date=${date}`);
 };
 
+
 // AI api
 export const getRecommendations = (query) => {
-  return api.post("/api/v1/chat/completions", { message: query });
+  return api.post("/api/v1/chat/completions", { message: query});
 };
