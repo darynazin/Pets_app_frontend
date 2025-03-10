@@ -15,37 +15,13 @@ const DateTimeSelectionStep = ({
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  //check if weekend
   const isWeekend = (date) => {
     const dayOfWeek = new Date(date).getDay();
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
 
-  const isPastTimeSlot = (timeSlot) => {
-    const today = new Date();
-    const selectedDateObj = new Date(selectedDate);
-
-    if (
-      selectedDateObj > today &&
-      !(
-        selectedDateObj.getDate() === today.getDate() &&
-        selectedDateObj.getMonth() === today.getMonth() &&
-        selectedDateObj.getFullYear() === today.getFullYear()
-      )
-    ) {
-      return false;
-    }
-
-    const [hours, minutes] = timeSlot
-      .split(":")
-      .map((num) => parseInt(num, 10));
-
-    const timeSlotDate = new Date(selectedDate);
-    timeSlotDate.setHours(hours, minutes, 0, 0);
-
-    return timeSlotDate <= today;
-  };
-
+  // Fetch available slots when date or doctor changes
   useEffect(() => {
     const fetchAvailableSlots = async () => {
       if (!selectedDate || !doctorId) return;
@@ -67,11 +43,13 @@ const DateTimeSelectionStep = ({
       try {
         const response = await getAvailableTimeSlots(doctorId, selectedDate);
 
+        // Check if response is an array or object with availableSlots property
         if (Array.isArray(response.data)) {
           setAvailableSlots(response.data);
         } else if (response.data && response.data.availableSlots) {
           setAvailableSlots(response.data.availableSlots);
 
+          // If there's a message, show it with SweetAlert2
           if (response.data.message) {
             Swal.fire({
               title: "Information",
@@ -87,6 +65,7 @@ const DateTimeSelectionStep = ({
         console.error("Error fetching available time slots:", err);
         setError("Failed to load available times. Please try again.");
 
+        // Show error with SweetAlert2
         Swal.fire({
           title: "Error",
           text: "Failed to load available times. Please try again.",
@@ -103,15 +82,18 @@ const DateTimeSelectionStep = ({
     fetchAvailableSlots();
   }, [selectedDate, doctorId]);
 
+  // Function to disable past dates
   const isPastDate = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return new Date(date) < today;
   };
 
+  // Handle date change with validation
   const handleDateChange = (e) => {
     const newDate = e.target.value;
 
+    // Check if it's a weekend
     if (isWeekend(newDate)) {
       Swal.fire({
         title: "Weekend Not Available",
@@ -122,7 +104,7 @@ const DateTimeSelectionStep = ({
     }
 
     setSelectedDate(newDate);
-    setSelectedTime(null);
+    setSelectedTime(null); // Reset selected time when date changes
   };
 
   return (
@@ -165,29 +147,22 @@ const DateTimeSelectionStep = ({
 
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
             {availableSlots && availableSlots.length > 0 ? (
-              availableSlots.map((slot) => {
-                const isPast = isPastTimeSlot(slot);
-
-                return (
-                  <button
-                    key={slot}
-                    className={`btn btn-sm ${
-                      selectedTime === slot ? "btn-primary" : "btn-outline"
-                    } ${isPast ? "btn-disabled opacity-50" : ""}`}
-                    onClick={() => !isPast && setSelectedTime(slot)}
-                    disabled={isPast}
-                    title={isPast ? "This time slot is in the past" : ""}
-                  >
-                    {formatTimeSlot(slot)}
-                  </button>
-                );
-              })
+              availableSlots.map((slot) => (
+                <button
+                  key={slot}
+                  className={`btn btn-sm ${
+                    selectedTime === slot ? "btn-primary" : "btn-outline"
+                  }`}
+                  onClick={() => setSelectedTime(slot)}
+                >
+                  {formatTimeSlot(slot)}
+                </button>
+              ))
             ) : (
               <div className="col-span-full text-center py-4 text-info">
                 <p>
-                  {selectedDate && !isWeekend(selectedDate)
-                    ? "No available time slots for this date."
-                    : "Our clinic is closed on the weekends, please select another day."}
+                  Our clinic is closed on the weekends, please select another
+                  day.
                 </p>
               </div>
             )}
