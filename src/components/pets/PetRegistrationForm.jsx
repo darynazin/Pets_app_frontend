@@ -105,7 +105,11 @@ const PetRegistrationForm = () => {
       console.error("Pet registration error:", err);
 
       const errorMessage =
-        err.response?.data?.message || err.message || "Failed to register pet";
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        "Failed to register pet";
+
       setError(errorMessage);
 
       Swal.fire({
