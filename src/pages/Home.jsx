@@ -29,7 +29,7 @@ function Home() {
                 Book a Vet. Get Trusted Pet Care. Stress-Free.
               </h1>
               <p className="py-6">
-                Find nearby vets, book appointments instantly, and access expert
+                Find nearby vets, book appointments instantly, and access AI
                 first aid tips—all in one place. No more phone calls, no more
                 hassle.
               </p>
