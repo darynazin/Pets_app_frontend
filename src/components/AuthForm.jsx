@@ -5,39 +5,18 @@ const AuthForm = ({
   isRegistering,
   isVetRegistering,
   isVetLogIn,
-  onSubmit,
-  error,
+  handleSubmit,
 }) => {
-  const validateFile = (file) => {
-    if (file) {
-      if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-        return "Please upload a valid image file (JPEG, PNG)";
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        return "File size should be less than 5MB";
-      }
-    }
-    return undefined;
-  };
   return (
     <Formik
       initialValues={{
         name: "",
         email: "",
         password: "",
-        image: null,
         address: "",
         phoneNumber: "",
       }}
-      onSubmit={onSubmit}
-      validate={(values) => {
-        const errors = {};
-        if (isRegistering && values.image) {
-          const fileError = validateFile(values.image);
-          if (fileError) errors.image = fileError;
-        }
-        return errors;
-      }}
+      onSubmit={handleSubmit}
     >
       {({ isSubmitting }) => (
         <Form className="space-y-6">
@@ -126,6 +105,7 @@ const AuthForm = ({
               className="text-red-500 text-sm"
             />
           </div>
+
           <button
             type="submit"
             className="w-full btn btn-primary"
@@ -137,6 +117,7 @@ const AuthForm = ({
               ? "Register"
               : "Login"}
           </button>
+
           <p className="mt-4 text-center">
             {isRegistering ? (
               <>

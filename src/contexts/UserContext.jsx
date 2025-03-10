@@ -77,18 +77,6 @@ export const UserProvider = ({ children }) => {
       setLoading(true);
 
       const response = await registerUser(userData);
-      const userId = response.data._id;
-
-      if (userData.image) {
-        try {
-          await uploadUserImage(userId, userData.image);
-        } catch (imageError) {
-          console.error("Image upload failed:", imageError);
-        }
-      }
-
-      const { data } = await getUser();
-      setUser(data);
     } catch (err) {
       console.error("Registration failed:", err);
       throw err;

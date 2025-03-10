@@ -9,21 +9,7 @@ const api = axios.create({
 // User APIs
 export const registerUser = (userData) => {
   const formData = new FormData();
-
-  Object.keys(userData).forEach((key) => {
-    if (key !== "image") {
-      formData.append(key, userData[key]);
-    }
-  });
-
-  if (userData.image) {
-    formData.append("file", userData.image);
-  }
-
-  return api.post("/users", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+  return api.post("/users", userData, {
   });
 };
 export const loginUser = (credentials) => api.post("/users/login", credentials);

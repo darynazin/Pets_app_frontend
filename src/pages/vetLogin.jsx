@@ -24,7 +24,7 @@ function VetLogIn() {
             isVetLogIn={true}
             formData={formData}
             setFormData={setFormData}
-            onSubmit={handleLogin}
+            handleSubmit={handleLogin}
             error={error}
           />
         </div>
