@@ -21,7 +21,6 @@ function MyPets() {
       setPastAppointments([]);
       return;
     }
-
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -68,7 +67,9 @@ function MyPets() {
   }, [location.key]);
 
   useEffect(() => {
+    console.log(appointments);
     categorizeAppointments();
+    console.log(appointments);
   }, [appointments]);
 
   if (isLoading) {
