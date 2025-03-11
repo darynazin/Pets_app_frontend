@@ -14,6 +14,7 @@ export const AppointmentProvider = ({ children }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [appointment, setAppointment] = useState(null);
+  const [doctorAppointments, setDoctorAppointments] = useState([]);
 
   const fetchAppointments = async () => {
     try {
@@ -42,10 +43,10 @@ export const AppointmentProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await getDoctorAppointments();
-      setAppointments(data);
+      setDoctorAppointments(data);
     } catch (err) {
       console.error("Failed to fetch doctor appointments:", err);
-      setAppointments([]);
+      setDoctorAppointments([]);
     } finally {
       setLoading(false);
     }
@@ -82,6 +83,7 @@ export const AppointmentProvider = ({ children }) => {
     } finally {
       setLoading(false);
       fetchDoctorAppointments();
+      fetchAppointments();
     }
   };
 
@@ -96,7 +98,8 @@ export const AppointmentProvider = ({ children }) => {
         removeAppointment,
         fetchDoctorAppointments,
         fetchSingleAppointment,
-        appointment
+        appointment,
+        doctorAppointments
       }}
     >
       {children}
@@ -114,7 +117,8 @@ export const useAppointment = () => {
     removeAppointment,
     fetchDoctorAppointments,
     fetchSingleAppointment,
-    appointment
+    appointment,
+    doctorAppointments
   } = useContext(AppointmentContext);
 
   return {
@@ -126,6 +130,7 @@ export const useAppointment = () => {
     removeAppointment,
     fetchDoctorAppointments,
     fetchSingleAppointment,
-    appointment
+    appointment,
+    doctorAppointments
   };
 };

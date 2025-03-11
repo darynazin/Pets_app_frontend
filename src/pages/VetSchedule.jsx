@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import AppointmentTable from "../components/appointments/AppointmentTable";
 
 function VetSchedule() {
-  const { appointments, fetchDoctorAppointments, loading, removeAppointment } =
+  const { doctorAppointments, fetchDoctorAppointments, loading, removeAppointment } =
     useAppointment();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,10 +54,10 @@ function VetSchedule() {
         <div className="flex justify-center items-center">
           <span className="loading loading-spinner text-primary"></span>
         </div>
-      ) : appointments.length === 0 ? (
+      ) : doctorAppointments.length === 0 ? (
         <p className="text-lg text-center">No appointments scheduled.</p>
       ) : (
-        <AppointmentTable appointments={appointments} openModal={openModal} />
+        <AppointmentTable appointments={doctorAppointments} openModal={openModal} />
       )}
 
       {isModalOpen && selectedAppointment && (

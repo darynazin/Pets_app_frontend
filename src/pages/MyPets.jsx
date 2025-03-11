@@ -67,9 +67,7 @@ function MyPets() {
   }, [location.key]);
 
   useEffect(() => {
-    console.log(appointments);
     categorizeAppointments();
-    console.log(appointments);
   }, [appointments]);
 
   if (isLoading) {
