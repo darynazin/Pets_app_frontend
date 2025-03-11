@@ -9,7 +9,6 @@ import {
   updateUser,
   deleteUser,
   getSession,
-  uploadUserImage,
 } from "../services/api";
 
 const UserContext = createContext();
