@@ -50,7 +50,6 @@ export const UserProvider = ({ children }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error(error);
         setUser(null);
         setLoading(false);
       }

@@ -56,7 +56,6 @@ export const DoctorProvider = ({ children }) => {
           setLoading(false);
         }
       } catch (error) {
-        console.error(error);
         setDoctor(null);
         setLoading(false);
       }

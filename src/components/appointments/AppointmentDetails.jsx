@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { FaClock, FaMapMarkerAlt, FaPaw } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAppointment } from "../../contexts/AppointmentContext";
 import AdditionalNotes from "./AdditionalNotes";
@@ -7,7 +6,7 @@ import Swal from "sweetalert2";
 
 function AppointmentDetails({ appointment }) {
   const [mapsUrl, setMapsUrl] = useState("");
-  const { removeAppointment } = useAppointment();
+  const { removeAppointment, fetchAppointments } = useAppointment();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +36,7 @@ function AppointmentDetails({ appointment }) {
     if (result.isConfirmed) {
       removeAppointment(appointment._id);
       Swal.fire("Canceled!", "Your appointment has been canceled.", "success");
+      fetchAppointments();
       navigate("/mypets");
     }
   };
