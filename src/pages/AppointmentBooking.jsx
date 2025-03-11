@@ -18,6 +18,7 @@ const AppointmentBooking = () => {
   const { fetchDoctors, doctors, loading: doctorLoading } = useDoctor();
   const { fetchPets, loading: petLoading } = usePet();
   const { addAppointment, loading: appointmentLoading } = useAppointment();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPetIds, setSelectedPetIds] = useState([]);
@@ -47,8 +48,9 @@ const AppointmentBooking = () => {
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
+
     try {
-      // Create appointment for each pet
       const appointmentPromises = selectedPetIds.map((petId) =>
         addAppointment({
           doctorId,
@@ -83,28 +85,11 @@ const AppointmentBooking = () => {
         icon: "error",
         confirmButtonText: "OK",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  if (doctorLoading || petLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8 flex justify-center">
-        <div className="loading loading-spinner loading-lg"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="alert alert-error">
-          <span>{error}</span>
-        </div>
-      </div>
-    );
-  }
-
-  // render current step
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -149,7 +134,7 @@ const AppointmentBooking = () => {
             doctorId={doctorId}
             handleSubmit={handleSubmit}
             prevStep={prevStep}
-            loading={appointmentLoading}
+            loading={isSubmitting}
           />
         );
       default:
