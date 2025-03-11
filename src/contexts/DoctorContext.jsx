@@ -144,6 +144,7 @@ export const DoctorProvider = ({ children }) => {
       "Failed to update profile";
       throw new Error(errorMessage);
     } finally {
+      fetchDoctor()
       setLoading(false);
     }
   };
