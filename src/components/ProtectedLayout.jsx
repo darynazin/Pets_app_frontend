@@ -1,33 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { getSession } from "../services/api";
+import { useUser } from "../contexts/UserContext.jsx";
+import { useDoctor } from "../contexts/DoctorContext.jsx";
+import Swal from "sweetalert2";
 
 function ProtectedLayout({ allowedRoles }) {
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user } = useUser();
+  const { doctor } = useDoctor();
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const response = await getSession();
-        setSession(response.data);
-      } catch (error) {
-        console.error("Error fetching session:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const showAlert = (title, message, icon) => {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: icon,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK"
+    });
+  };
 
-    fetchSession();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (user && allowedRoles.includes("user")) {
+    return <Outlet />;
+  }
+  
+  if (doctor && allowedRoles.includes("doctor")) {
+    return <Outlet />;
   }
 
-  const isAuthenticated = session && session.user && allowedRoles.includes(session.user.role);
-  console.log(session.user)
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  if (user && allowedRoles.includes("doctor")) {
+    showAlert(
+      "Access Denied",
+      "This page is only for doctors. Log in as a doctor if you are one.",
+      "warning"
+    );
+    return <Navigate to="/" />;
+  }
+
+  if (doctor && allowedRoles.includes("user")) {
+    showAlert(
+      "Access Denied",
+      "Please log in as a pet owner to access this page.",
+      "warning"
+    );
+    return <Navigate to="/" />;
+  }
+  
+  return <Navigate to="/login" />;
 }
 
 export default ProtectedLayout;
