@@ -25,8 +25,10 @@ function MyPets() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const sortedAppointments = JSON.parse(JSON.stringify(appointments)).sort(
-      (a, b) => new Date(a.date) - new Date(b.date)
+    const sortedAppointments = [...appointments].sort(
+      (a, b) =>
+        new Date(a.date) - new Date(b.date) ||
+        new Date(a.time) - new Date(b.time)
     );
 
     const upcoming = [];
@@ -100,109 +102,111 @@ function MyPets() {
   }
 
   return (
-    <div className="container mx-auto px-8 my-20">
-      <h2 className="text-3xl font-bold mb-6">My Pets & Appointments</h2>
+    !isLoading && (
+      <div className="container mx-auto px-8 my-20">
+        <h2 className="text-3xl font-bold mb-6">My Pets & Appointments</h2>
 
-      <div className="flex flex-col-reverse lg:flex-row gap-16 mx-auto flex-grow">
-        <div className="flex-1 flex flex-col items-start">
-          <div className="w-full">
-            <h2 className="text-2xl font-bold mb-6">My Pets</h2>
+        <div className="flex flex-col-reverse lg:flex-row gap-16 mx-auto flex-grow">
+          <div className="flex-1 flex flex-col items-start">
+            <div className="w-full">
+              <h2 className="text-2xl font-bold mb-6">My Pets</h2>
 
-            {pets && pets.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                  {pets.map((pet) => (
-                    <PetCard key={pet._id} pet={pet} />
-                  ))}
-                </div>
-                <div className="flex justify-start w-full">
+              {pets && pets.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                    {pets.map((pet) => (
+                      <PetCard key={pet._id} pet={pet} />
+                    ))}
+                  </div>
+                  <div className="flex justify-start w-full">
+                    <button
+                      className="btn btn-button w-fit my-10"
+                      onClick={() => {
+                        navigate("/mypets/register");
+                      }}
+                    >
+                      Add another Pet
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-gray-500">No pets registered yet.</p>
                   <button
                     className="btn btn-button w-fit my-10"
                     onClick={() => {
                       navigate("/mypets/register");
                     }}
                   >
-                    Add another Pet
+                    Add a Pet
                   </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-gray-500">No pets registered yet.</p>
-                <button
-                  className="btn btn-button w-fit my-10"
-                  onClick={() => {
-                    navigate("/mypets/register");
-                  }}
-                >
-                  Add a Pet
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className="appointmentside flex-2 space-y-8 items-start">
-          <div>
-            <h2 className="text-2xl font-bold mb-6">
-              Upcoming Appointments
-              <span className="text-sm text-gray-500 ml-2">
-                ({upcomingAppointments.length})
-              </span>
-            </h2>
-            {upcomingAppointments && upcomingAppointments.length > 0 ? (
-              <div className="space-y-4">
-                {upcomingAppointments.map((appointment) => (
-                  <AppointmentCard
-                    key={appointment._id}
-                    appointment={appointment}
-                    status="Upcoming"
-                  />
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500">No upcoming appointments.</p>
-            )}
+                </>
+              )}
+            </div>
           </div>
 
-          <div>
-            <div className="flex flex-col">
+          <div className="appointmentside flex-2 space-y-8 items-start">
+            <div>
               <h2 className="text-2xl font-bold mb-6">
-                Past Appointments
+                Upcoming Appointments
                 <span className="text-sm text-gray-500 ml-2">
-                  ({pastAppointments.length})
+                  ({upcomingAppointments.length})
                 </span>
               </h2>
-              {pastAppointments && pastAppointments.length > 0 ? (
+              {upcomingAppointments && upcomingAppointments.length > 0 ? (
                 <div className="space-y-4">
-                  {pastAppointments.map((appointment) => (
+                  {upcomingAppointments.map((appointment) => (
                     <AppointmentCard
                       key={appointment._id}
                       appointment={appointment}
-                      status="Past"
+                      status="Upcoming"
                     />
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500">No past appointments.</p>
+                <p className="text-gray-500">No upcoming appointments.</p>
               )}
-              <div className="flex justify-start w-full mt-5">
-                <button
-                  className="btn btn-button w-fit my-10"
-                  onClick={() => {
-                    navigate("/search");
-                  }}
-                >
-                  {appointments && appointments.length > 0
-                    ? "Create another Appointment"
-                    : "Create Appointment"}
-                </button>
+            </div>
+
+            <div>
+              <div className="flex flex-col">
+                <h2 className="text-2xl font-bold mb-6">
+                  Past Appointments
+                  <span className="text-sm text-gray-500 ml-2">
+                    ({pastAppointments.length})
+                  </span>
+                </h2>
+                {pastAppointments && pastAppointments.length > 0 ? (
+                  <div className="space-y-4">
+                    {pastAppointments.map((appointment) => (
+                      <AppointmentCard
+                        key={appointment._id}
+                        appointment={appointment}
+                        status="Past"
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No past appointments.</p>
+                )}
+                <div className="flex justify-start w-full mt-5">
+                  <button
+                    className="btn btn-button w-fit my-10"
+                    onClick={() => {
+                      navigate("/search");
+                    }}
+                  >
+                    {appointments && appointments.length > 0
+                      ? "Create another Appointment"
+                      : "Create Appointment"}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    )
   );
 }
 
