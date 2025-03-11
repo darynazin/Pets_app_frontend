@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PetCard from "../components/pets/PetCard";
 import AppointmentCard from "../components/appointments/AppointmentCard";
 import { usePet } from "../contexts/PetContext";
 import { useAppointment } from "../contexts/AppointmentContext";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function MyPets() {
   const { pets, fetchPets } = usePet();
   const { appointments, fetchAppointments } = useAppointment();
-  const today = new Date();
+  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [pastAppointments, setPastAppointments] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,19 +17,30 @@ function MyPets() {
     fetchAppointments();
   }, []);
 
-  today.setHours(0, 0, 0, 0);
-  const upcomingAppointments = [];
-  const pastAppointments = [];
+  useEffect(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  appointments.forEach((appointment) => {
-    const appointmentDate = new Date(appointment.date);
+    const sortedAppointments = [...appointments].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
 
-    if (appointmentDate >= today) {
-      upcomingAppointments.push(appointment);
-    } else {
-      pastAppointments.push(appointment);
-    }
-  });
+    const upcoming = [];
+    const past = [];
+
+    sortedAppointments.forEach((appointment) => {
+      const appointmentDate = new Date(appointment.date);
+
+      if (appointmentDate >= today) {
+        upcoming.push(appointment);
+      } else {
+        past.push(appointment);
+      }
+    });
+
+    setUpcomingAppointments(upcoming);
+    setPastAppointments(past);
+  }, [appointments]);
 
   return (
     <div className="container mx-auto px-8 my-20">
@@ -110,7 +121,6 @@ function MyPets() {
               )}
               {appointments.length > 0 ? (
                 <div className="flex justify-start w-full mt-5">
-                  {" "}
                   <button
                     className="btn btn-button w-fit my-10"
                     onClick={() => {
@@ -122,7 +132,6 @@ function MyPets() {
                 </div>
               ) : (
                 <div className="flex justify-start w-full mt-5">
-                  {" "}
                   <button
                     className="btn btn-button w-fit my-10"
                     onClick={() => {
