@@ -21,39 +21,22 @@ function MyPets() {
       setPastAppointments([]);
       return;
     }
-    
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+
+    const now = new Date();
 
     const sortedAppointments = [...appointments].sort((a, b) => {
-      const dateA = a.date ? new Date(a.date) : new Date();
-      const dateB = b.date ? new Date(b.date) : new Date();
-
-      if (dateA.getTime() !== dateB.getTime()) {
-        return dateA - dateB;
-      }
-
-      if (!a.timeSlot || !b.timeSlot) {
-        return a.timeSlot ? -1 : b.timeSlot ? 1 : 0;
-      }
-
-      const [hoursA, minutesA] = a.timeSlot.split(':').map(Number);
-      const [hoursB, minutesB] = b.timeSlot.split(':').map(Number);
-
-      if (hoursA !== hoursB) {
-        return hoursA - hoursB;
-      }
-
-      return minutesA - minutesB;
+      const dateA = new Date(`${a.date}T${a.timeSlot}`);
+      const dateB = new Date(`${b.date}T${b.timeSlot}`);
+      return dateA - dateB;
     });
 
     const upcoming = [];
     const past = [];
 
     sortedAppointments.forEach((appointment) => {
-      const appointmentDate = new Date(appointment.date);
+      const appointmentDate = new Date(`${appointment.date}T${appointment.timeSlot}`);
 
-      if (appointmentDate >= today) {
+      if (appointmentDate >= now) {
         upcoming.push(appointment);
       } else {
         past.push(appointment);
