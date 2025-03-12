@@ -31,7 +31,6 @@ const AppointmentBooking = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Fetching doctors and pets...");
     // fetchDoctors();
     fetchPets();
   }, []);
