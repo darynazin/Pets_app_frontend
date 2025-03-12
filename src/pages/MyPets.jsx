@@ -25,11 +25,27 @@ function MyPets() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const sortedAppointments = [...appointments].sort(
-      (a, b) =>
-        new Date(a.date) - new Date(b.date) ||
-        new Date(a.time) - new Date(b.time)
-    );
+    const sortedAppointments = [...appointments].sort((a, b) => {
+      const dateA = a.date ? new Date(a.date) : new Date();
+      const dateB = b.date ? new Date(b.date) : new Date();
+
+      if (dateA.getTime() !== dateB.getTime()) {
+        return dateA - dateB;
+      }
+
+      if (!a.timeSlot || !b.timeSlot) {
+        return a.timeSlot ? -1 : b.timeSlot ? 1 : 0;
+      }
+
+      const [hoursA, minutesA] = a.timeSlot.split(':').map(Number);
+      const [hoursB, minutesB] = b.timeSlot.split(':').map(Number);
+
+      if (hoursA !== hoursB) {
+        return hoursA - hoursB;
+      }
+
+      return minutesA - minutesB;
+    });
 
     const upcoming = [];
     const past = [];
