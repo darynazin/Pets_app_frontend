@@ -65,6 +65,8 @@ export const DoctorProvider = ({ children }) => {
 
   const fetchDoctors = async () => {
     try {
+      console.log("fetching doctors");
+
       setLoading(true);
       const { data } = await getDoctors();
       setDoctors(data);
@@ -94,9 +96,9 @@ export const DoctorProvider = ({ children }) => {
   const loginVet = async (credentials) => {
     try {
       setLoading(true);
-      const response = await loginDoctor(credentials);
+      await loginDoctor(credentials);
 
-      setDoctor(response.data.user);
+      await fetchDoctor();
       navigate("/vet/schedule");
     } catch (err) {
       setError(err.message || "Login failed");
