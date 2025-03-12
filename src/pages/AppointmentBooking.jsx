@@ -15,7 +15,7 @@ import ConfirmationStep from "../components/appointments/ConfirmationStep";
 const AppointmentBooking = () => {
   const { doctorId } = useParams();
   const navigate = useNavigate();
-  const { fetchDoctors, doctors, loading: doctorLoading } = useDoctor();
+  // const { fetchDoctors, doctors, loading: doctorLoading } = useDoctor();
   const { fetchPets, loading: petLoading } = usePet();
   const { addAppointment, loading: appointmentLoading } = useAppointment();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,7 +31,8 @@ const AppointmentBooking = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchDoctors();
+    console.log("Fetching doctors and pets...");
+    // fetchDoctors();
     fetchPets();
   }, []);
 
