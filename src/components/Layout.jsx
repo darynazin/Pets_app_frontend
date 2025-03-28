@@ -16,7 +16,7 @@ const Layout = () => {
     }
   }, [loading]);
 
-  if (1) {
+  if (!isReady) {
     return (
   <div className="flex items-center justify-center min-h-screen">
     <div className="text-lg text-gray-700 text-center p-5">
