@@ -7,8 +7,8 @@ function Footer() {
   };
   return (
     <div>
-      <footer className="footer sm:footer-horizontal bg-gray-100 text-base-content p-10">
-        <aside>
+      <footer className="footer sm:footer-horizontal bg-gray-100 text-base-content p-10 justify-items-center text-center sm:justify-items-start sm:text-left">
+        <aside className="justify-items-center sm:justify-items-start">
           <Link
             to="/"
             className="link w-20 h-auto"
@@ -26,7 +26,7 @@ function Footer() {
             </span>
           </p>
         </aside>
-        <nav>
+        <nav className="justify-items-center sm:justify-items-start">
           <h6 className="footer-title">Services</h6>
           <Link to="/ai" className="link link-hover">
             Ask VetAI
@@ -41,7 +41,7 @@ function Footer() {
             Emergency Contacts
           </Link>
         </nav>
-        <nav>
+        <nav className="justify-items-center sm:justify-items-start">
           <h6 className="footer-title">Company</h6>
           <Link to="/company/about" className="link link-hover">
             About us
@@ -53,7 +53,7 @@ function Footer() {
             Help
           </Link>
         </nav>
-        <nav>
+        <nav className="justify-items-center sm:justify-items-start">
           <h6 className="footer-title">Legal</h6>
           <a className="link link-hover">Terms of use</a>
           <a className="link link-hover">Privacy policy</a>
