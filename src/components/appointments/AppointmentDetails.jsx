@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 
 function AppointmentDetails({ appointment }) {
   const [mapsUrl, setMapsUrl] = useState("");
-  const { removeAppointment, fetchAppointments } = useAppointment();
+  const { removeAppointment } = useAppointment();
+  const [isCanceling, setIsCanceling] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +22,7 @@ function AppointmentDetails({ appointment }) {
 
   const handleRemove = async (e) => {
     e.preventDefault();
+    if (isCanceling) return;
 
     const result = await Swal.fire({
       title: "Cancel Appointment?",
@@ -30,14 +32,20 @@ function AppointmentDetails({ appointment }) {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#2463eb",
       confirmButtonText: "Yes, cancel appointment!",
-      cancelButtonText: "Kepp my booking",
+      cancelButtonText: "Keep my booking",
     });
 
     if (result.isConfirmed) {
-      removeAppointment(appointment._id);
-      Swal.fire("Canceled!", "Your appointment has been canceled.", "success");
-      fetchAppointments();
-      navigate("/mypets");
+      setIsCanceling(true);
+      try {
+        await removeAppointment(appointment._id);
+        Swal.fire("Canceled!", "Your appointment has been canceled.", "success");
+        navigate("/mypets");
+      } catch {
+        Swal.fire("Cancellation failed", "Your appointment could not be canceled. Please try again.", "error");
+      } finally {
+        setIsCanceling(false);
+      }
     }
   };
 
@@ -107,12 +115,14 @@ function AppointmentDetails({ appointment }) {
             </div>
 
             <div className="flex justify-end mt-6">
-              <p
+              <button
+                type="button"
                 className="text-error cursor-pointer hover:underline"
                 onClick={handleRemove}
+                disabled={isCanceling}
               >
-                Cancel Appointment
-              </p>
+                {isCanceling ? "Canceling..." : "Cancel Appointment"}
+              </button>
             </div>
           </div>
         </div>

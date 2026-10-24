@@ -5,7 +5,6 @@ import {
   createAppointment,
   updateAppointment,
   deleteAppointment,
-  getAppointmentById,
 } from "../services/api";
 
 const AppointmentContext = createContext();
@@ -13,7 +12,6 @@ const AppointmentContext = createContext();
 export const AppointmentProvider = ({ children }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [appointment, setAppointment] = useState(null);
   const [doctorAppointments, setDoctorAppointments] = useState([]);
 
   const fetchAppointments = async () => {
@@ -27,17 +25,6 @@ export const AppointmentProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  const fetchSingleAppointment = async (appointmentId) => {
-    try {
-      const { data } = await getAppointmentById(appointmentId);
-      setAppointment(data);
-    } catch (err) {
-      console.error("Failed to fetch appointment:", err);
-      return null;
-    }
-  }
-    
 
   const fetchDoctorAppointments = async () => {
     setLoading(true);
@@ -58,6 +45,7 @@ export const AppointmentProvider = ({ children }) => {
       await createAppointment(appointmentData);
     } catch (err) {
       console.error("Failed to create appointment:", err);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -78,12 +66,13 @@ export const AppointmentProvider = ({ children }) => {
     try {
       setLoading(true);
       await deleteAppointment(appointmentId);
+      setAppointments((previous) => previous.filter((item) => item._id !== appointmentId));
+      setDoctorAppointments((previous) => previous.filter((item) => item._id !== appointmentId));
     } catch (err) {
       console.error("Failed to delete appointment:", err);
+      throw err;
     } finally {
       setLoading(false);
-      fetchDoctorAppointments();
-      fetchAppointments();
     }
   };
 
@@ -97,8 +86,6 @@ export const AppointmentProvider = ({ children }) => {
         editAppointment,
         removeAppointment,
         fetchDoctorAppointments,
-        fetchSingleAppointment,
-        appointment,
         doctorAppointments
       }}
     >
@@ -116,8 +103,6 @@ export const useAppointment = () => {
     editAppointment,
     removeAppointment,
     fetchDoctorAppointments,
-    fetchSingleAppointment,
-    appointment,
     doctorAppointments
   } = useContext(AppointmentContext);
 
@@ -129,8 +114,6 @@ export const useAppointment = () => {
     editAppointment,
     removeAppointment,
     fetchDoctorAppointments,
-    fetchSingleAppointment,
-    appointment,
     doctorAppointments
   };
 };

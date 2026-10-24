@@ -9,6 +9,7 @@ function VetSchedule() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [isCanceling, setIsCanceling] = useState(false);
 
   useEffect(() => {
     fetchDoctorAppointments();
@@ -24,8 +25,9 @@ function VetSchedule() {
     setSelectedAppointment(null);
   };
 
-  const handleCancelAppointment = (appointmentId) => {
-    Swal.fire({
+  const handleCancelAppointment = async (appointmentId) => {
+    if (isCanceling) return;
+    const result = await Swal.fire({
       title: "Are you sure?",
       text: "You will not be able to recover this appointment!",
       icon: "warning",
@@ -33,18 +35,23 @@ function VetSchedule() {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, cancel it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        removeAppointment(appointmentId);
+    });
+    if (result.isConfirmed) {
+      setIsCanceling(true);
+      try {
+        await removeAppointment(appointmentId);
         Swal.fire(
           "Cancelled!",
           "The appointment has been cancelled.",
           "success"
         );
         closeModal();
-        fetchDoctorAppointments();
+      } catch {
+        Swal.fire("Cancellation failed", "The appointment could not be canceled. Please try again.", "error");
+      } finally {
+        setIsCanceling(false);
       }
-    });
+    }
   };
 
   return (
@@ -84,8 +91,9 @@ function VetSchedule() {
               <button
                 className="btn btn-outline btn-error"
                 onClick={() => handleCancelAppointment(selectedAppointment._id)}
+                disabled={isCanceling}
               >
-                Cancel Appointment
+                {isCanceling ? "Canceling..." : "Cancel Appointment"}
               </button>
               <button className="btn btn-primary ml-2" onClick={closeModal}>
                 Close
