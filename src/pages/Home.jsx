@@ -20,12 +20,12 @@ function Home() {
   };
 
   return (
-    <div className="container mx-auto px-8 mt-20">
-      <div className="flex flex-col gap-36 flex-grow">
+    <div className="container mx-auto px-4 mt-8 sm:px-6 sm:mt-12 lg:px-8 lg:mt-20">
+      <div className="flex flex-col gap-12 sm:gap-20 lg:gap-36 flex-grow">
         <div className="hero bg-base-100">
-          <div className="hero-content flex-col lg:flex-row-reverse">
-            <div className="ml-10">
-              <h1 className="text-5xl font-bold">
+          <div className="hero-content w-full max-w-none flex-col gap-8 p-0 lg:flex-row-reverse lg:gap-12">
+            <div className="w-full min-w-0 lg:flex-1">
+              <h1 className="text-3xl font-bold leading-tight break-words sm:text-4xl lg:text-5xl">
                 Book a Vet. Get Trusted Pet Care. Stress-Free.
               </h1>
               <p className="py-6">
@@ -33,17 +33,18 @@ function Home() {
                 first aid tips—all in one place. No more phone calls, no more
                 hassle.
               </p>
-              <form onSubmit={handleSubmit} className="flex items-center gap-2">
+              <form onSubmit={handleSubmit} className="flex flex-col items-stretch gap-3 sm:flex-row">
                 <input
                   type="text"
                   placeholder="Enter Your Location"
+                  aria-label="Location"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="input input-bordered w-full max-w-xs"
+                  className="input input-bordered w-full min-w-0 sm:flex-1"
                 />
                 <button
                   type="submit"
-                  className="btn btn-accent  hover:btn-primary transition-colors duration-300"
+                  className="btn btn-accent w-full shrink-0 hover:btn-primary transition-colors duration-300 sm:w-auto"
                 >
                   Find a Vet
                 </button>
@@ -55,8 +56,8 @@ function Home() {
             </div>
             <img
               src="/home.svg"
-              className="rounded-lg max-w-full max-h-full"
-              style={{ maxWidth: "480px", maxHeight: "480px" }}
+              alt="Veterinary care for pets"
+              className="h-auto w-full min-w-0 max-w-sm rounded-lg sm:max-w-md lg:w-1/2 lg:max-w-[480px]"
             />
           </div>
         </div>
