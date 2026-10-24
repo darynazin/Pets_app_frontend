@@ -28,7 +28,7 @@ function Footer() {
         </aside>
         <nav>
           <h6 className="footer-title">Services</h6>
-          <Link to="/" className="link link-hover">
+          <Link to="/ai" className="link link-hover">
             Ask VetAI
           </Link>
           <Link to="/search" className="link link-hover">
