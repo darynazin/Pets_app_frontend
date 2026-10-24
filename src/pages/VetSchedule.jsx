@@ -55,8 +55,8 @@ function VetSchedule() {
   };
 
   return (
-    <div className="container mx-auto px-8 my-20">
-      <h1 className="text-3xl font-bold mb-20">My Appointments</h1>
+    <div className="container mx-auto min-w-0 px-4 my-8 sm:px-6 lg:px-8 lg:my-20">
+      <h1 className="text-2xl font-bold mb-8 sm:text-3xl lg:mb-12">My Appointments</h1>
       {loading ? (
         <div className="flex justify-center items-center">
           <span className="loading loading-spinner text-primary"></span>
@@ -68,9 +68,9 @@ function VetSchedule() {
       )}
 
       {isModalOpen && selectedAppointment && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-            <h2 className="text-2xl font-bold mb-4">Appointment Details</h2>
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center p-4 z-50">
+          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg max-w-lg w-full min-w-0 max-h-[calc(100dvh-2rem)] overflow-y-auto break-words" role="dialog" aria-modal="true" aria-labelledby="appointment-details-title">
+            <h2 id="appointment-details-title" className="text-xl sm:text-2xl font-bold mb-4">Appointment Details</h2>
             <p>
               <strong>Date:</strong> {selectedAppointment.date}
             </p>
@@ -87,15 +87,15 @@ function VetSchedule() {
               <strong>Details:</strong> {selectedAppointment.additionalNotes}
             </p>
 
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-end">
               <button
-                className="btn btn-outline btn-error"
+                className="btn btn-outline btn-error w-full sm:w-auto"
                 onClick={() => handleCancelAppointment(selectedAppointment._id)}
                 disabled={isCanceling}
               >
                 {isCanceling ? "Canceling..." : "Cancel Appointment"}
               </button>
-              <button className="btn btn-primary ml-2" onClick={closeModal}>
+              <button className="btn btn-primary w-full sm:w-auto" onClick={closeModal}>
                 Close
               </button>
             </div>
