@@ -1,6 +1,20 @@
+// Calendar dates (including API birth dates) keep their written date in every timezone.
+export const parseCalendarDate = (date) => {
+  if (typeof date === "string" && /^\d{4}-\d{2}-\d{2}(?:T|$)/.test(date)) {
+    const [year, month, day] = date.slice(0, 10).split("-").map(Number);
+    return new Date(year, month - 1, day);
+  }
+  return new Date(date);
+};
+
 export const formatDateForInput = (date) => {
   if (!date) return null;
-  return new Date(date).toISOString().split("T")[0];
+  const localDate = parseCalendarDate(date);
+  return [
+    localDate.getFullYear(),
+    String(localDate.getMonth() + 1).padStart(2, "0"),
+    String(localDate.getDate()).padStart(2, "0"),
+  ].join("-");
 };
 
 export const formatDateForAPI = (date) => {
@@ -13,7 +27,7 @@ export const calculateAge = (birthDate) => {
 
   try {
     const today = new Date();
-    const birth = new Date(birthDate);
+    const birth = parseCalendarDate(birthDate);
 
     if (isNaN(birth.getTime())) return 0;
 

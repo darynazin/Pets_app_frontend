@@ -7,7 +7,9 @@ import { uploadPetImage } from "../../services/api";
 
 const PetEditForm = ({ pet }) => {
   const navigate = useNavigate();
-  const { editPet, deletePet, loading, setLoading, error, setError } = usePet();
+  const { editPet, deletePet, loading: petLoading, setLoading, setError } = usePet();
+  const [isSaving, setIsSaving] = useState(false);
+  const loading = petLoading || isSaving;
 
   const [formData, setFormData] = useState({
     _id: pet._id,
@@ -57,9 +59,10 @@ const PetEditForm = ({ pet }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
     try {
-      setLoading(true);
+      setIsSaving(true);
       setError(null);
 
       let finalImageUrl = formData.image;
@@ -79,7 +82,6 @@ const PetEditForm = ({ pet }) => {
             "Failed to upload image. Pet details were not updated.",
             "error"
           );
-          setLoading(false);
           return;
         }
       }
@@ -97,11 +99,11 @@ const PetEditForm = ({ pet }) => {
     } catch (err) {
       Swal.fire(
         "Update Failed",
-        err.message || "Failed to update pet",
+        err.response?.data?.error || err.message || "Failed to update pet",
         "error"
       );
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 

@@ -44,16 +44,14 @@ export const PetProvider = ({ children }) => {
 
   const editPet = async (petData) => {
     try {
-      setLoading(true);
       const { data } = await updatePet(petData);
       setPets((prevPets) =>
         prevPets.map((pet) => (pet._id === data._id ? data : pet))
       );
+      return data;
     } catch (err) {
-      setError(err.message || "Failed to edit pet");
-    } finally {
-      setLoading(false);
-      navigate("/mypets");
+      setError(err.response?.data?.error || err.message || "Failed to edit pet");
+      throw err;
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { formatTimeSlot } from "../../utils/dateUtils";
+import { formatDateForInput, formatTimeSlot, parseCalendarDate } from "../../utils/dateUtils";
 import { getAvailableTimeSlots } from "../../services/api";
 import Swal from "sweetalert2";
 
@@ -17,30 +17,18 @@ const DateTimeSelectionStep = ({
   const [error, setError] = useState(null);
 
   const isWeekend = (date) => {
-    const dayOfWeek = new Date(date).getDay();
+    const dayOfWeek = parseCalendarDate(date).getDay();
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
 
   const isPastTimeSlot = (timeSlot) => {
     const today = new Date();
-    const selectedDateObj = new Date(selectedDate);
-
-    if (
-      selectedDateObj > today &&
-      !(
-        selectedDateObj.getDate() === today.getDate() &&
-        selectedDateObj.getMonth() === today.getMonth() &&
-        selectedDateObj.getFullYear() === today.getFullYear()
-      )
-    ) {
-      return false;
-    }
 
     const [hours, minutes] = timeSlot
       .split(":")
       .map((num) => parseInt(num, 10));
 
-    const timeSlotDate = new Date(selectedDate);
+    const timeSlotDate = parseCalendarDate(selectedDate);
     timeSlotDate.setHours(hours, minutes, 0, 0);
 
     return timeSlotDate <= today;
@@ -106,7 +94,7 @@ const DateTimeSelectionStep = ({
   const isPastDate = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return new Date(date) < today;
+    return parseCalendarDate(date) < today;
   };
 
   const handleDateChange = (e) => {
@@ -139,7 +127,7 @@ const DateTimeSelectionStep = ({
           type="date"
           className="input input-bordered w-full"
           value={selectedDate}
-          min={new Date().toISOString().split("T")[0]}
+          min={formatDateForInput(new Date())}
           onChange={handleDateChange}
         />
         <label className="label">
@@ -201,7 +189,7 @@ const DateTimeSelectionStep = ({
         </button>
         <button
           className="btn btn-primary"
-          disabled={!selectedTime || !selectedDate || isWeekend(selectedDate)}
+          disabled={!selectedTime || !selectedDate || isWeekend(selectedDate) || isPastDate(selectedDate) || isPastTimeSlot(selectedTime)}
           onClick={nextStep}
         >
           Next

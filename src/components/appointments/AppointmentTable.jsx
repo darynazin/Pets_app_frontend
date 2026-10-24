@@ -1,12 +1,13 @@
 import React from "react";
+import { parseCalendarDate } from "../../utils/dateUtils";
 
 function AppointmentTable({ appointments, openModal }) {
   const sortedAppointments = [...appointments].sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
+    (a, b) => parseCalendarDate(a.date) - parseCalendarDate(b.date)
   );
   const groupedAppointments = sortedAppointments.reduce(
     (groups, appointment) => {
-      const date = new Date(appointment.date);
+      const date = parseCalendarDate(appointment.date);
       const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
 
       if (!groups[monthYear]) {

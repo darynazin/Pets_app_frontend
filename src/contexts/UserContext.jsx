@@ -58,13 +58,14 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
+    setError(null);
     try {
       setLoading(true);
       const response = await loginUser(credentials);
       setUser(response.data.user);
       navigate("/mypets");
-    } catch (err) {
-      setError("Invalid email or password", err);
+    } catch {
+      setError("Invalid email or password");
     } finally {
       setLoading(false);
     }

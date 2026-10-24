@@ -94,6 +94,7 @@ export const DoctorProvider = ({ children }) => {
   };
 
   const loginVet = async (credentials) => {
+    setError(null);
     try {
       setLoading(true);
       await loginDoctor(credentials);

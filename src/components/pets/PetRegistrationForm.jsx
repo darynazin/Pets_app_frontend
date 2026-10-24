@@ -217,7 +217,7 @@ const PetRegistrationForm = () => {
           value={formData.birthDate}
           onChange={handleInputChange}
           className="input input-bordered"
-          max={new Date().toISOString().split("T")[0]}
+          max={formatDateForInput(new Date())}
           required
         />
       </div>

@@ -6,6 +6,7 @@ const AuthForm = ({
   isVetRegistering,
   isVetLogIn,
   handleSubmit,
+  error,
 }) => {
   return (
     <Formik
@@ -20,6 +21,11 @@ const AuthForm = ({
     >
       {({ isSubmitting }) => (
         <Form className="space-y-6">
+          {error && (
+            <div role="alert" className="alert alert-error">
+              {error}
+            </div>
+          )}
           {isRegistering && (
             <>
               <div className="form-control">
