@@ -1,4 +1,3 @@
-import React from "react";
 import { MAPS_KEY } from "../config/googleMaps";
 import {
   APIProvider,
@@ -11,12 +10,13 @@ import { useDoctor } from "../contexts/DoctorContext";
 const DoctorsMap = () => {
   const { doctors, selectedDoctor, setSelectedDoctor } = useDoctor();
   return (
-    <div className="w-1/2 max-h-[600px]">
+    <div className="h-72 w-full min-w-0 overflow-hidden rounded-lg sm:h-96 lg:h-[564px]" role="region" aria-label="Vet locations map">
       <APIProvider
         apiKey={MAPS_KEY}
         onLoad={() => console.log("Maps API has loaded.")}
       >
         <Map
+          style={{ width: "100%", height: "100%" }}
           defaultZoom={11}
           defaultCenter={{ lat: 52.479562034898514, lng: 13.432348924266426 }}
           mapId="DEMO_MAP_ID"
