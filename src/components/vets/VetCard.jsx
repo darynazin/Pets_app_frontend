@@ -31,7 +31,7 @@ const VetCard = ({ doctor }) => {
       } rounded-lg mb-4 p-2 hover:bg-base-100 hover:border-base-200 transition-colors`}
       onClick={handleCardClick}
     >
-      <div className="card-body min-w-0 gap-4 p-2 sm:p-4">
+      <div className="card-body min-w-0 gap-4 p-2 sm:p-4 md:flex-row justify-between">
         <div className="flex min-w-0 items-start gap-3 sm:gap-4">
           <figure className="flex-shrink-0">
             <div className="avatar">
@@ -64,7 +64,7 @@ const VetCard = ({ doctor }) => {
             </p>
           </div>
         </div>
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-end items-end">
           <Link
             to={`/appointments/book/${doctor._id}`}
             className="btn btn-primary w-full hover:btn-accent transition-colors duration-300 sm:w-auto"
