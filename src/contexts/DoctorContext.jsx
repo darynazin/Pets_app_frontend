@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 import {
   getDoctor,
   loginDoctor,
@@ -8,14 +9,13 @@ import {
   getDoctors,
   updateDoctor,
   deleteDoctor,
-  getSession,
 } from "../services/api";
 
 const DoctorContext = createContext();
 
 export const DoctorProvider = ({ children }) => {
-  const [doctor, setDoctor] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { doctor, setDoctor, loading: sessionLoading } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [error, setError] = useState(null);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
@@ -24,15 +24,9 @@ export const DoctorProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const fetchDoctor = async () => {
+    if (!doctor) return;
     try {
       setLoading(true);
-
-      const sessionResponse = await getSession();
-      if (
-        !sessionResponse.data.authenticated && sessionResponse.data.user.role !== "doctor") {
-        setDoctor(null);
-        return;
-      }
 
       const { data } = await getDoctor();
       setDoctor(data);
@@ -43,25 +37,6 @@ export const DoctorProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await getSession();
-        if (response.data.authenticated && response.data.user.role === "doctor") {
-          
-          fetchDoctor();
-        } else {
-          setDoctor(null);
-          setLoading(false);
-        }
-      } catch (error) {
-        setDoctor(null);
-        setLoading(false);
-      }
-    };
-    checkSession();
-  }, []);
 
   const fetchDoctors = async () => {
     try {
@@ -99,7 +74,8 @@ export const DoctorProvider = ({ children }) => {
       setLoading(true);
       await loginDoctor(credentials);
 
-      await fetchDoctor();
+      const { data } = await getDoctor();
+      setDoctor(data);
       navigate("/vet/schedule");
     } catch (err) {
       setError(err.message || "Login failed");
@@ -169,7 +145,7 @@ export const DoctorProvider = ({ children }) => {
       value={{
         doctor,
         doctors,
-        loading,
+        loading: sessionLoading || loading,
         setLoading,
         error,
         setError,

@@ -20,62 +20,65 @@ import { UserProvider } from "./contexts/UserContext.jsx";
 import { DoctorProvider } from "./contexts/DoctorContext.jsx";
 import { PetProvider } from "./contexts/PetContext.jsx";
 import { AppointmentProvider } from "./contexts/AppointmentContext.jsx";
+import { AuthProvider } from "./contexts/AuthContext.jsx";
 import FindVet from "./pages/FindVet.jsx";
 import { About, Contact, Help } from "./pages/company/index.js";
 
 function App() {
   return (
-    <Router>
-      <UserProvider>
-        <DoctorProvider>
-          <PetProvider>
-            <AppointmentProvider>
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<Home />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/login" element={<LogIn />} />
-                  <Route path="/vet/login" element={<VetLogIn />} />
-                  <Route path="/vet/signup" element={<VetSignUp />} />
+    <AuthProvider>
+      <Router>
+        <UserProvider>
+          <DoctorProvider>
+            <PetProvider>
+              <AppointmentProvider>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/login" element={<LogIn />} />
+                    <Route path="/vet/login" element={<VetLogIn />} />
+                    <Route path="/vet/signup" element={<VetSignUp />} />
 
-                  <Route path="/search" element={<FindVet />} />
-                  <Route path="/emergency" element={<Emergency />} />
-                  <Route path="/ai" element={<VetAI />} />
+                    <Route path="/search" element={<FindVet />} />
+                    <Route path="/emergency" element={<Emergency />} />
+                    <Route path="/ai" element={<VetAI />} />
 
-                  <Route path="/company">
-                    <Route path="about" element={<About />} />
-                    <Route path="contact" element={<Contact />} />
-                    <Route path="help" element={<Help />} />
-                  </Route>
+                    <Route path="/company">
+                      <Route path="about" element={<About />} />
+                      <Route path="contact" element={<Contact />} />
+                      <Route path="help" element={<Help />} />
+                    </Route>
 
-                  <Route element={<ProtectedLayout allowedRoles={"doctor"} />}>
-                    <Route path="/vet/profile" element={<VetProfile />} />
-                    <Route path="/vet/schedule" element={<VetSchedule />} />
+                    <Route element={<ProtectedLayout allowedRoles={"doctor"} />}>
+                      <Route path="/vet/profile" element={<VetProfile />} />
+                      <Route path="/vet/schedule" element={<VetSchedule />} />
+                    </Route>
+                    <Route element={<ProtectedLayout allowedRoles={"user"} />}>
+                      <Route path="/mypets" element={<MyPets />} />
+                      <Route
+                        path="/mypets/register"
+                        element={<PetRegistrationPage />}
+                      />
+                      <Route path="/profile" element={<OwnerProfile />} />
+                      <Route path="/pets/:id/edit" element={<PetEditPage />} />
+                      <Route
+                        path="/appointments/:id"
+                        element={<AppointmentPage />}
+                      />
+                      <Route
+                        path="/appointments/book/:doctorId"
+                        element={<AppointmentBooking />}
+                      />
+                    </Route>
                   </Route>
-                  <Route element={<ProtectedLayout allowedRoles={"user"} />}>
-                    <Route path="/mypets" element={<MyPets />} />
-                    <Route
-                      path="/mypets/register"
-                      element={<PetRegistrationPage />}
-                    />
-                    <Route path="/profile" element={<OwnerProfile />} />
-                    <Route path="/pets/:id/edit" element={<PetEditPage />} />
-                    <Route
-                      path="/appointments/:id"
-                      element={<AppointmentPage />}
-                    />
-                    <Route
-                      path="/appointments/book/:doctorId"
-                      element={<AppointmentBooking />}
-                    />
-                  </Route>
-                </Route>
-              </Routes>
-            </AppointmentProvider>
-          </PetProvider>
-        </DoctorProvider>
-      </UserProvider>
-    </Router>
+                </Routes>
+              </AppointmentProvider>
+            </PetProvider>
+          </DoctorProvider>
+        </UserProvider>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 import {
   getUser,
@@ -8,26 +9,20 @@ import {
   registerUser,
   updateUser,
   deleteUser,
-  getSession,
 } from "../services/api";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, setUser, loading: sessionLoading } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const fetchUser = async () => {
+    if (!user) return;
     try {
       setLoading(true);
-
-      const sessionResponse = await getSession();
-      if (!sessionResponse.data.authenticated && sessionResponse.data.user.role !== "user") {
-        setUser(null);
-        return;
-      }
 
       const { data } = await getUser();
       setUser(data);
@@ -38,24 +33,6 @@ export const UserProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await getSession();
-        if (response.data.authenticated && response.data.user.role === "user") {
-          fetchUser();
-        } else {
-          setUser(null);
-          setLoading(false);
-        }
-      } catch (error) {
-        setUser(null);
-        setLoading(false);
-      }
-    };
-    checkSession();
-  }, []);
 
   const login = async (credentials) => {
     setError(null);
@@ -130,7 +107,7 @@ export const UserProvider = ({ children }) => {
       value={{
         fetchUser,
         user,
-        loading,
+        loading: sessionLoading || loading,
         login,
         register,
         logout,
